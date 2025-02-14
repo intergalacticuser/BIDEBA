@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BDB Coin Officiak</title>
+  <title>Welcome with Falling Letters</title>
   <style>
     body {
       margin: 0;
@@ -41,7 +41,7 @@
   </style>
 </head>
 <body>
-  <div class="welcome-container" id="welcome-text">Bideba Coin Official @BDBcoin</div> <!-- Removed the exclamation mark -->
+  <div class="welcome-container" id="welcome-text">Welcome</div> <!-- Removed the exclamation mark -->
   <canvas id="falling-letters"></canvas>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -77,7 +77,7 @@
           drops[i] = 1;
         }
 
-        // Function to draw falling letters
+        // Function to draw falling letters with glow
         function drawFallingLetters() {
           ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -92,7 +92,11 @@
             const r = Math.floor(Math.random() * 256);
             const g = Math.floor(Math.random() * 256);
             const b = Math.floor(Math.random() * 256);
-            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+
+            // Add glow effect
+            ctx.shadowBlur = 15; // Controls the size of the glow
+            ctx.shadowColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random bright color for glow
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`; // Main color of the letter
             ctx.fillText(text, x, y);
 
             // Reset the drop position when it goes off-screen or randomly
@@ -101,6 +105,10 @@
             }
             drops[i]++;
           }
+
+          // Clear the shadow after drawing to avoid affecting other elements
+          ctx.shadowBlur = 0;
+          ctx.shadowColor = 'transparent';
         }
 
         // Fade out the welcome text after 5 seconds and start the animation
