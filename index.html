@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visitor Counter with Falling Letters</title>
+  <title>Welcome with Falling Letters</title>
   <style>
-    /* Full-screen layout */
     body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: #000; /* Dark background for better visibility */
+      background-color: #000; /* Dark background */
       color: white;
       font-family: 'Arial', sans-serif;
       display: flex;
@@ -18,8 +17,7 @@
       align-items: center;
       height: 100vh;
     }
-
-    .counter-container {
+    .welcome-container {
       text-align: center;
       font-size: 4rem;
       font-weight: bold;
@@ -28,12 +26,10 @@
       opacity: 1;
       transition: opacity 1s ease-out;
     }
-
     .hidden {
       opacity: 0;
       pointer-events: none;
     }
-
     #falling-letters {
       position: absolute;
       top: 0;
@@ -45,98 +41,77 @@
   </style>
 </head>
 <body>
-  <div class="counter-container" id="visitor-counter">
-    Visitors: <span id="visitor-count">Loading...</span>
-  </div>
+  <div class="welcome-container" id="welcome-text">Welcome</div> <!-- Removed the exclamation mark -->
   <canvas id="falling-letters"></canvas>
   <script>
-    // Replace these with your Upstash Redis credentials
-    const UPSTASH_REDIS_REST_URL = "https://<your-upstash-url>.upstash.io";
-    const UPSTASH_REDIS_REST_TOKEN = "<your-upstash-token>";
-    const KEY_NAME = "total_visitors";
-
-    // Fetch and update the visitor count from Upstash Redis
-    async function fetchAndIncrementVisitorCount() {
+    document.addEventListener('DOMContentLoaded', () => {
       try {
-        // Increment the visitor count (atomic operation)
-        const response = await fetch(`${UPSTASH_REDIS_REST_URL}/incr/${KEY_NAME}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
-          },
-        });
-
-        const result = await response.json();
-        return parseInt(result.result); // Return the updated count
-      } catch (error) {
-        console.error("Error fetching and incrementing visitor count:", error);
-        return "Error";
-      }
-    }
-
-    // Display the visitor count
-    async function displayVisitorCount() {
-      const visitorCountElement = document.getElementById('visitor-count');
-      const count = await fetchAndIncrementVisitorCount();
-      visitorCountElement.textContent = count;
-    }
-
-    // Transition to Falling Letters Animation
-    const counterContainer = document.getElementById('visitor-counter');
-    const canvas = document.getElementById('falling-letters');
-    const ctx = canvas.getContext('2d');
-
-    // Set canvas size to full screen
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const fontSize = Math.max(10, Math.min(20, window.innerWidth / 50)); // Dynamic font size
-    const columns = Math.floor(canvas.width / fontSize);
-
-    const drops = [];
-    for (let i = 0; i < columns; i++) {
-      drops[i] = 1;
-    }
-
-    function drawFallingLetters() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.font = `${fontSize}px Arial`;
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)];
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-
-        // Randomize letter colors for vibrancy
-        const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);
-        const b = Math.floor(Math.random() * 256);
-        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-
-        ctx.fillText(text, x, y);
-
-        if (y > canvas.height || Math.random() > 0.95) {
-          drops[i] = 0;
+        const welcomeText = document.getElementById('welcome-text');
+        const canvas = document.getElementById('falling-letters');
+        if (!canvas || !welcomeText) {
+          console.error("Error: Missing required elements in the DOM.");
+          return;
         }
-        drops[i]++;
-      }
-    }
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          console.error("Error: Canvas context not supported.");
+          return;
+        }
 
-    // Start the falling letters animation after 5 seconds
-    setTimeout(async () => {
-      await displayVisitorCount(); // Display the visitor count before hiding the counter
-      counterContainer.classList.add('hidden'); // Hide the visitor counter
-      setInterval(drawFallingLetters, 30); // Start the falling letters animation
-    }, 5000); // 5 seconds delay
+        // Function to resize the canvas dynamically
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Define the letters for the falling effect
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const fontSize = Math.max(10, Math.min(20, window.innerWidth / 50));
+        const columns = Math.floor(canvas.width / (fontSize * 0.7)); // Increase density of columns
+        const drops = [];
+
+        // Initialize the drops array
+        for (let i = 0; i < columns; i++) {
+          drops[i] = 1;
+        }
+
+        // Function to draw falling letters
+        function drawFallingLetters() {
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.font = `${fontSize}px Arial`;
+
+          for (let i = 0; i < drops.length; i++) {
+            const text = letters[Math.floor(Math.random() * letters.length)];
+            const x = i * fontSize * 0.7; // Adjust spacing between columns
+            const y = drops[i] * fontSize;
+
+            // Randomize colors for each letter
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fillText(text, x, y);
+
+            // Reset the drop position when it goes off-screen or randomly
+            if (y > canvas.height || Math.random() > 0.97) { // Increased randomness threshold for more frequent resets
+              drops[i] = 0;
+            }
+            drops[i]++;
+          }
+        }
+
+        // Fade out the welcome text after 5 seconds and start the animation
+        setTimeout(() => {
+          welcomeText.classList.add('hidden'); // Fade out the welcome text
+          setInterval(drawFallingLetters, 20); // Start the falling letters animation at a faster interval
+        }, 5000); // 5 seconds delay
+      } catch (error) {
+        console.error("An error occurred in the script:", error);
+      }
+    });
   </script>
 </body>
 </html>
