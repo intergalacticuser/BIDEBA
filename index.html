@@ -56,10 +56,10 @@
     const KEY_NAME = "total_visitors";
 
     // Fetch and update the visitor count from Upstash Redis
-    async function fetchVisitorCount() {
+    async function fetchAndIncrementVisitorCount() {
       try {
-        // Get the current visitor count
-        const response = await fetch(`${UPSTASH_REDIS_REST_URL}/get/${KEY_NAME}`, {
+        // Increment the visitor count (atomic operation)
+        const response = await fetch(`${UPSTASH_REDIS_REST_URL}/incr/${KEY_NAME}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -68,20 +68,9 @@
         });
 
         const result = await response.json();
-        let count = parseInt(result.result) || 0;
-
-        // Increment the visitor count
-        await fetch(`${UPSTASH_REDIS_REST_URL}/incr/${KEY_NAME}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
-          },
-        });
-
-        return count + 1; // Return the updated count
+        return parseInt(result.result); // Return the updated count
       } catch (error) {
-        console.error("Error fetching visitor count:", error);
+        console.error("Error fetching and incrementing visitor count:", error);
         return "Error";
       }
     }
@@ -89,7 +78,7 @@
     // Display the visitor count
     async function displayVisitorCount() {
       const visitorCountElement = document.getElementById('visitor-count');
-      const count = await fetchVisitorCount();
+      const count = await fetchAndIncrementVisitorCount();
       visitorCountElement.textContent = count;
     }
 
