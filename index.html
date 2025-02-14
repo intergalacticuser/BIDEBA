@@ -46,21 +46,52 @@
 </head>
 <body>
   <div class="counter-container" id="visitor-counter">
-    Visitors: <span id="visitor-count">0</span>
+    Visitors: <span id="visitor-count">Loading...</span>
   </div>
   <canvas id="falling-letters"></canvas>
   <script>
-    // Visitor Counter Logic
-    let visitorCount = 0;
+    // Replace these with your Upstash Redis credentials
+    const UPSTASH_REDIS_REST_URL = "https://<your-upstash-url>.upstash.io";
+    const UPSTASH_REDIS_REST_TOKEN = "<your-upstash-token>";
+    const KEY_NAME = "total_visitors";
 
-    function updateCounter() {
-      const counterElement = document.getElementById('visitor-count');
-      visitorCount++;
-      counterElement.textContent = visitorCount;
+    // Fetch and update the visitor count from Upstash Redis
+    async function fetchVisitorCount() {
+      try {
+        // Get the current visitor count
+        const response = await fetch(`${UPSTASH_REDIS_REST_URL}/get/${KEY_NAME}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
+          },
+        });
+
+        const result = await response.json();
+        let count = parseInt(result.result) || 0;
+
+        // Increment the visitor count
+        await fetch(`${UPSTASH_REDIS_REST_URL}/incr/${KEY_NAME}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
+          },
+        });
+
+        return count + 1; // Return the updated count
+      } catch (error) {
+        console.error("Error fetching visitor count:", error);
+        return "Error";
+      }
     }
 
-    // Simulate visitor count increment every second
-    setInterval(updateCounter, 1000);
+    // Display the visitor count
+    async function displayVisitorCount() {
+      const visitorCountElement = document.getElementById('visitor-count');
+      const count = await fetchVisitorCount();
+      visitorCountElement.textContent = count;
+    }
 
     // Transition to Falling Letters Animation
     const counterContainer = document.getElementById('visitor-counter');
@@ -112,7 +143,8 @@
     }
 
     // Start the falling letters animation after 5 seconds
-    setTimeout(() => {
+    setTimeout(async () => {
+      await displayVisitorCount(); // Display the visitor count before hiding the counter
       counterContainer.classList.add('hidden'); // Hide the visitor counter
       setInterval(drawFallingLetters, 30); // Start the falling letters animation
     }, 5000); // 5 seconds delay
