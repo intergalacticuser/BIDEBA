@@ -71,39 +71,64 @@
         const fontSize = Math.max(10, Math.min(20, window.innerWidth / 50));
         const columns = Math.floor(canvas.width / (fontSize * 0.7)); // Increase density of columns
         const drops = [];
+        const trailLength = 5; // Length of the fading trail
+        const glowIntensity = 10; // Reduced glow intensity
+        let pulseFactor = 1; // Pulsating factor for glow
+        let pulseDirection = 1; // Direction of the pulse effect
 
         // Initialize the drops array
         for (let i = 0; i < columns; i++) {
-          drops[i] = 1;
+          drops[i] = { y: 1, trail: [] }; // Each drop now has a trail array
         }
 
-        // Function to draw falling letters with glow
+        // Function to draw falling letters with enhanced glow and trails
         function drawFallingLetters() {
           ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.font = `${fontSize}px Arial`;
 
+          // Update the pulsating glow effect
+          pulseFactor += pulseDirection * 0.05; // Gradually increase or decrease the pulse factor
+          if (pulseFactor >= 1.5 || pulseFactor <= 0.5) {
+            pulseDirection *= -1; // Reverse direction when reaching extremes
+          }
+
           for (let i = 0; i < drops.length; i++) {
             const text = letters[Math.floor(Math.random() * letters.length)];
             const x = i * fontSize * 0.7; // Adjust spacing between columns
-            const y = drops[i] * fontSize;
+            const y = drops[i].y * fontSize;
 
-            // Randomize colors for each letter
-            const r = Math.floor(Math.random() * 256);
-            const g = Math.floor(Math.random() * 256);
-            const b = Math.floor(Math.random() * 256);
+            // Generate soft pastel/neon colors
+            const h = Math.random() * 360; // Random hue
+            const s = 70 + Math.random() * 30; // Saturation (softer look)
+            const l = 50 + Math.random() * 20; // Lightness (not too bright)
 
-            // Add glow effect
-            ctx.shadowBlur = 15; // Controls the size of the glow
-            ctx.shadowColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random bright color for glow
-            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`; // Main color of the letter
+            // Add pulsating glow effect with gradient-like transition
+            const glowSize = glowIntensity * pulseFactor; // Pulsating glow size
+            ctx.shadowBlur = glowSize;
+            ctx.shadowColor = `hsl(${h}, ${s}%, ${l}%)`; // Soft neon glow
+            ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`; // Slightly darker main color
             ctx.fillText(text, x, y);
+
+            // Add fading trail effect with softer colors
+            drops[i].trail.push({ x, y, alpha: 1 }); // Add current position to the trail
+            while (drops[i].trail.length > trailLength) {
+              drops[i].trail.shift(); // Remove oldest trail point if exceeding length
+            }
+            drops[i].trail.forEach((point, index) => {
+              const alpha = 0.5 - (index / trailLength); // Fading alpha based on trail age
+              ctx.globalAlpha = alpha; // Set transparency
+              ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${alpha})`; // Trail color
+              ctx.fillText(text, point.x, point.y); // Draw trail points
+            });
+            ctx.globalAlpha = 1; // Reset transparency
 
             // Reset the drop position when it goes off-screen or randomly
             if (y > canvas.height || Math.random() > 0.97) { // Increased randomness threshold for more frequent resets
-              drops[i] = 0;
+              drops[i].y = 0;
+              drops[i].trail = []; // Clear the trail when resetting
             }
-            drops[i]++;
+            drops[i].y++;
           }
 
           // Clear the shadow after drawing to avoid affecting other elements
