@@ -20,13 +20,20 @@
         position: relative;
       }
       .welcome-container {
-        text-align: center;
+        text-align: center; /* Center-align the text */
         font-size: 4rem;
         font-weight: bold;
         letter-spacing: 2px;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         opacity: 1;
         transition: opacity 1s ease-out;
+        position: absolute; /* Center the text vertically and horizontally */
+        top: 50%;
+        left: 0; /* Span the full width */
+        right: 0;
+        transform: translateY(-50%);
+        width: 100%; /* Full width */
+        z-index: 5; /* Ensure it appears above the canvas but below the ticker */
       }
       .hidden {
         opacity: 0;
@@ -45,7 +52,7 @@
       }
       #ticker-container iframe {
         width: 100%; /* Make the iframe responsive */
-        max-width: 1400px; /* Limit the maximum width */
+        max-width: 1200px; /* Limit the maximum width */
         height: 60px; /* Set the height of the iframe */
         margin: 0 auto; /* Center the iframe horizontally */
         display: block;
@@ -71,13 +78,14 @@
       #menu button {
         background: rgba(255, 255, 255, 0.1);
         color: white;
-        font-size: 1.5rem;
+        font-size: 1.4rem; /* Reduced font size */
         font-weight: bold;
-        padding: 10px 20px;
+        padding: 10px 20px; /* Reduced padding for a smaller button */
         border: none;
         border-radius: 5px;
         cursor: pointer;
         transition: background 0.3s ease;
+        box-shadow: 0 2px 5px rgba(255, 255, 255, 0.2); /* Add subtle shadow for better visibility */
       }
       #menu button:hover {
         background: rgba(255, 255, 255, 0.2);
@@ -102,7 +110,7 @@
       ></iframe>
     </div>
 
-    <!-- Welcome Text -->
+    <!-- Welcome Text (Centered across full width) -->
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div>
 
     <!-- Falling Letters Canvas -->
