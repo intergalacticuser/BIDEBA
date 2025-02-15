@@ -1,152 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BDB Coin Official</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #000; /* Dark background */
-      color: white;
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-     .welcome-container {
-      text-align: center;
-      font-size: 4rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-    .hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #falling-letters {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div> <!-- Removed the exclamation mark -->
-  <canvas id="falling-letters"></canvas>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      try {
-        const welcomeText = document.getElementById('welcome-text');
-        const canvas = document.getElementById('falling-letters');
-        if (!canvas || !welcomeText) {
-          console.error("Error: Missing required elements in the DOM.");
-          return;
-        }
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          console.error("Error: Canvas context not supported.");
-          return;
-        }
-
-        // Function to resize the canvas dynamically
-        function resizeCanvas() {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        // Define the letters for the falling effect
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        const fontSize = Math.max(10, Math.min(20, window.innerWidth / 50));
-        const columns = Math.floor(canvas.width / (fontSize * 0.7)); // Increase density of columns
-        const drops = [];
-        const trailLength = 5; // Length of the fading trail
-        const glowIntensity = 10; // Reduced glow intensity
-        let pulseFactor = 1; // Pulsating factor for glow
-        let pulseDirection = 1; // Direction of the pulse effect
-
-        // Initialize the drops array
-        for (let i = 0; i < columns; i++) {
-          drops[i] = { y: 1, trail: [] }; // Each drop now has a trail array
-        }
-
-        // Function to draw falling letters with enhanced glow and trails
-        function drawFallingLetters() {
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.font = `${fontSize}px Arial`;
-
-          // Update the pulsating glow effect
-          pulseFactor += pulseDirection * 0.05; // Gradually increase or decrease the pulse factor
-          if (pulseFactor >= 1.5 || pulseFactor <= 0.5) {
-            pulseDirection *= -1; // Reverse direction when reaching extremes
-          }
-
-          for (let i = 0; i < drops.length; i++) {
-            const text = letters[Math.floor(Math.random() * letters.length)];
-            const x = i * fontSize * 0.7; // Adjust spacing between columns
-            const y = drops[i].y * fontSize;
-
-            // Generate soft pastel/neon colors
-            const h = Math.random() * 360; // Random hue
-            const s = 70 + Math.random() * 30; // Saturation (softer look)
-            const l = 50 + Math.random() * 20; // Lightness (not too bright)
-
-            // Add pulsating glow effect with gradient-like transition
-            const glowSize = glowIntensity * pulseFactor; // Pulsating glow size
-            ctx.shadowBlur = glowSize;
-            ctx.shadowColor = `hsl(${h}, ${s}%, ${l}%)`; // Soft neon glow
-            ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`; // Slightly darker main color
-            ctx.fillText(text, x, y);
-
-            // Add fading trail effect with softer colors
-            drops[i].trail.push({ x, y, alpha: 1 }); // Add current position to the trail
-            while (drops[i].trail.length > trailLength) {
-              drops[i].trail.shift(); // Remove oldest trail point if exceeding length
-            }
-            drops[i].trail.forEach((point, index) => {
-              const alpha = 0.5 - (index / trailLength); // Fading alpha based on trail age
-              ctx.globalAlpha = alpha; // Set transparency
-              ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${alpha})`; // Trail color
-              ctx.fillText(text, point.x, point.y); // Draw trail points
-            });
-            ctx.globalAlpha = 1; // Reset transparency
-
-            // Reset the drop position when it goes off-screen or randomly
-            if (y > canvas.height || Math.random() > 0.97) { // Increased randomness threshold for more frequent resets
-              drops[i].y = 0;
-              drops[i].trail = []; // Clear the trail when resetting
-            }
-            drops[i].y++;
-          }
-
-          // Clear the shadow after drawing to avoid affecting other elements
-          ctx.shadowBlur = 0;
-          ctx.shadowColor = 'transparent';
-        }
-
-        // Fade out the welcome text after 5 seconds and start the animation
-        setTimeout(() => {
-          welcomeText.classList.add('hidden'); // Fade out the welcome text
-          setInterval(drawFallingLetters, 20); // Start the falling letters animation at a faster interval
-        }, 5000); // 5 seconds delay
-      } catch (error) {
-        console.error("An error occurred in the script:", error);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDB Coin Official</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #000; /* Dark background */
+        color: white;
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
       }
-    });
-  </script>
+      .welcome-container {
+        text-align: center;
+        font-size: 4rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        opacity: 1;
+        transition: opacity 1s ease-out;
+      }
+      .hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #falling-letters {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 70px); /* Adjust height to leave space for the iframe */
+        display: block;
+      }
+      #ticker-container {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+        overflow: hidden;
+      }
+      #ticker-container iframe {
+        width: 100%; /* Make the iframe responsive */
+        max-width: 1200px; /* Limit the maximum width */
+        height: 60px; /* Set the height of the iframe */
+        margin: 0 auto; /* Center the iframe horizontally */
+        display: block;
+        border: none; /* Remove the border around the iframe */
+        background: black; /* Ensure the iframe blends with the dark background */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div>
+    <canvas id="falling-letters"></canvas>
+    <div id="ticker-container">
+      <!-- RSS Ticker as an iframe -->
+      <iframe 
+        width="100%" 
+        height="60" 
+        src="https://rss.app/embed/v1/ticker/_XzrDDuW8zJzoioSc" 
+        frameborder="0"
+        scrolling="no"
+        allowfullscreen
+      ></iframe>
+    </div>
 
-</body>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        try {
+          const welcomeText = document.getElementById('welcome-text');
+          const canvas = document.getElementById('falling-letters');
+          if (!canvas || !welcomeText) {
+            console.error("Error: Missing required elements in the DOM.");
+            return;
+          }
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            console.error("Error: Canvas context not supported.");
+            return;
+          }
 
+          // Function to resize the canvas dynamically
+          function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - 70; // Leave space for the iframe ticker
+          }
+          resizeCanvas();
+          window.addEventListener('resize', resizeCanvas);
+
+          // Define the letters for the falling effect
+          const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+          const fontSize = Math.max(10, Math.min(20, window.innerWidth / 50));
+          const columns = Math.floor(canvas.width / (fontSize * 0.7)); // Increase density of columns
+          const drops = [];
+          const trailLength = 5; // Length of the fading trail
+          const glowIntensity = 15; // Increased glow intensity slightly
+          let pulseFactor = 1; // Pulsating factor for glow
+          let pulseDirection = 1; // Direction of the pulse effect
+
+          // Initialize the drops array
+          for (let i = 0; i < columns; i++) {
+            drops[i] = { y: 1, trail: [] }; // Each drop now has a trail array
+          }
+
+          // Function to draw falling letters with enhanced glow and trails
+          function drawFallingLetters() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = `${fontSize}px Arial`;
+
+            // Update the pulsating glow effect
+            pulseFactor += pulseDirection * 0.05; // Gradually increase or decrease the pulse factor
+            if (pulseFactor >= 1.5 || pulseFactor <= 0.5) {
+              pulseDirection *= -1; // Reverse direction when reaching extremes
+            }
+
+            for (let i = 0; i < drops.length; i++) {
+              const text = letters[Math.floor(Math.random() * letters.length)];
+              const x = i * fontSize * 0.7; // Adjust spacing between columns
+              const y = drops[i].y * fontSize;
+
+              // Generate soft pastel/neon colors
+              const h = Math.random() * 360; // Random hue
+              const s = 70 + Math.random() * 30; // Saturation (softer look)
+              const l = 50 + Math.random() * 20; // Lightness (not too bright)
+
+              // Add pulsating glow effect with gradient-like transition
+              const glowSize = glowIntensity * pulseFactor; // Pulsating glow size
+              ctx.shadowBlur = glowSize;
+              ctx.shadowColor = `hsl(${h}, ${s}%, ${l}%)`; // Soft neon glow
+              ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`; // Slightly darker main color
+              ctx.fillText(text, x, y);
+
+              // Add fading trail effect with softer colors
+              drops[i].trail.push({ x, y, alpha: 1 }); // Add current position to the trail
+              while (drops[i].trail.length > trailLength) {
+                drops[i].trail.shift(); // Remove oldest trail point if exceeding length
+              }
+
+              drops[i].trail.forEach((point, index) => {
+                const alpha = 0.5 - (index / trailLength); // Fading alpha based on trail age
+                ctx.globalAlpha = alpha; // Set transparency
+                ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${alpha})`; // Trail color
+                ctx.fillText(text, point.x, point.y); // Draw trail points
+              });
+
+              ctx.globalAlpha = 1; // Reset transparency
+
+              // Reset the drop position when it goes off-screen or randomly
+              if (y > canvas.height || Math.random() > 0.97) { // Increased randomness threshold for more frequent resets
+                drops[i].y = 0;
+                drops[i].trail = []; // Clear the trail when resetting
+              }
+
+              drops[i].y++;
+            }
+
+            // Clear the shadow after drawing to avoid affecting other elements
+            ctx.shadowBlur = 0;
+            ctx.shadowColor = 'transparent';
+          }
+
+          // Start the falling letters animation immediately
+          setInterval(drawFallingLetters, 20);
+
+          // Fade out the welcome text after 5 seconds
+          setTimeout(() => {
+            welcomeText.classList.add('hidden'); // Fade out the welcome text
+          }, 5000); // 5 seconds delay
+        } catch (error) {
+          console.error("An error occurred in the script:", error);
+        }
+      });
+    </script>
+  </body>
 </html>
