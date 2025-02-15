@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDB Coin Magazine</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #000; /* Dark background */
+        color: white;
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      /* Back Button */
+      #back-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+      }
+      #back-button a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.2rem;
+        font-weight: bold;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+      #back-button a:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      /* Magazine Container */
+      #magazine-container {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* Aspect ratio: 16:9 */
+      }
+      #magazine-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Back Button -->
+    <div id="back-button">
+      <a href="index.html">Back</a>
+    </div>
+
+    <!-- Magazine Container -->
+    <div id="magazine-container">
+      <iframe 
+        src="https://rss.app/embed/v1/magazine/_XzrDDuW8zJzoioSc" 
+        frameborder="0"
+      ></iframe>
+    </div>
+  </body>
+</html>
