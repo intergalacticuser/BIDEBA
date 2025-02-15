@@ -60,6 +60,7 @@
         height: calc(100% - 70px); /* Adjust height to leave space for the ticker */
         display: block;
       }
+
       /* Menu Style */
       #menu {
         position: absolute;
@@ -67,16 +68,18 @@
         left: 10px;
         z-index: 10;
       }
-      #menu a {
-        color: white;
-        text-decoration: none;
-        font-size: 1.2rem;
-        font-weight: bold;
+      #menu button {
         background: rgba(255, 255, 255, 0.1);
-        padding: 5px 10px;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        border: none;
         border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
       }
-      #menu a:hover {
+      #menu button:hover {
         background: rgba(255, 255, 255, 0.2);
       }
     </style>
@@ -84,7 +87,7 @@
   <body>
     <!-- Menu -->
     <div id="menu">
-      <a href="magazine.html">Magazine</a>
+      <button onclick="location.href='magazine.html'">Magazine</button>
     </div>
 
     <!-- RSS Ticker -->
@@ -143,6 +146,10 @@
             drops[i] = { y: 1, trail: [] }; // Each drop now has a trail array
           }
 
+          // Speed states for falling letters
+          let speedState = 0; // 0: slow, 1: medium, 2: fast, 3: very fast, 4: slower
+          const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4]; // Define speed levels
+
           // Function to draw falling letters with enhanced glow and trails
           function drawFallingLetters() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
@@ -193,13 +200,19 @@
                 drops[i].trail = []; // Clear the trail when resetting
               }
 
-              drops[i].y += 0.6; // Further reduce the falling speed
+              drops[i].y += speedLevels[speedState]; // Use the current speed level
             }
 
             // Clear the shadow after drawing to avoid affecting other elements
             ctx.shadowBlur = 0;
             ctx.shadowColor = 'transparent';
           }
+
+          // Handle mouse click to adjust falling speed
+          canvas.addEventListener('mousedown', () => {
+            speedState = (speedState + 1) % speedLevels.length; // Cycle through speed levels
+            console.log(`Current speed state: ${speedState}`);
+          });
 
           // Fade out the welcome text after 5 seconds
           setTimeout(() => {
