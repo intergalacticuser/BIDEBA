@@ -64,16 +64,16 @@
         top: 70px; /* Adjust top to leave space for the ticker */
         left: 0;
         width: 100%;
-        height: calc(100% - 70px); /* Adjust height to leave space for the ticker */
+        height: calc(100% - 80px); /* Adjust height to leave space for the menu and ticker */
         display: block;
+        z-index: 5; /* Ensure the canvas is below the menu */
       }
-
       /* Menu Style */
       #menu {
         position: absolute;
         top: 10px;
         left: 10px;
-        z-index: 10;
+        z-index: 20; /* Ensure the menu is above the canvas */
       }
       #menu button {
         background: rgba(255, 255, 255, 0.1);
@@ -97,7 +97,6 @@
     <div id="menu">
       <button onclick="location.href='magazine.html'">Magazine</button>
     </div>
-
     <!-- RSS Ticker -->
     <div id="ticker-container">
       <iframe 
@@ -109,13 +108,10 @@
         allowfullscreen
       ></iframe>
     </div>
-
     <!-- Welcome Text (Centered across full width) -->
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div>
-
     <!-- Falling Letters Canvas -->
     <canvas id="falling-letters"></canvas>
-
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         try {
@@ -130,15 +126,13 @@
             console.error("Error: Canvas context not supported.");
             return;
           }
-
           // Function to resize the canvas dynamically
           function resizeCanvas() {
             canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight - 70; // Leave space for the ticker
+            canvas.height = window.innerHeight - 80; // Leave space for the ticker and menu
           }
           resizeCanvas();
           window.addEventListener('resize', resizeCanvas);
-
           // Define the letters for the falling effect
           const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
           const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40)); // Slightly larger font size
@@ -148,80 +142,65 @@
           const glowIntensity = 10; // Reduced glow intensity
           let pulseFactor = 1; // Pulsating factor for glow
           let pulseDirection = 1; // Direction of the pulse effect
-
           // Initialize the drops array
           for (let i = 0; i < columns; i++) {
             drops[i] = { y: 1, trail: [] }; // Each drop now has a trail array
           }
-
           // Speed states for falling letters
           let speedState = 0; // 0: slow, 1: medium, 2: fast, 3: very fast, 4: slower
           const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4]; // Define speed levels
-
           // Function to draw falling letters with enhanced glow and trails
           function drawFallingLetters() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.font = `${fontSize}px Arial`;
-
             // Update the pulsating glow effect
             pulseFactor += pulseDirection * 0.05; // Gradually increase or decrease the pulse factor
             if (pulseFactor >= 1.5 || pulseFactor <= 0.5) {
               pulseDirection *= -1; // Reverse direction when reaching extremes
             }
-
             for (let i = 0; i < drops.length; i++) {
               const text = letters[Math.floor(Math.random() * letters.length)];
               const x = i * fontSize * 0.7; // Adjust spacing between columns
               const y = drops[i].y * fontSize;
-
               // Generate soft pastel/neon colors
               const h = Math.random() * 360; // Random hue
               const s = 70 + Math.random() * 30; // Saturation (softer look)
               const l = 50 + Math.random() * 20; // Lightness (not too bright)
-
               // Add pulsating glow effect with gradient-like transition
               const glowSize = glowIntensity * pulseFactor; // Reduced glow size
               ctx.shadowBlur = glowSize;
               ctx.shadowColor = `hsl(${h}, ${s}%, ${l}%)`; // Soft neon glow
               ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`; // Slightly darker main color
               ctx.fillText(text, x, y);
-
               // Add fading trail effect with softer colors
               drops[i].trail.push({ x, y, alpha: 1 }); // Add current position to the trail
               while (drops[i].trail.length > trailLength) {
                 drops[i].trail.shift(); // Remove oldest trail point if exceeding length
               }
-
               drops[i].trail.forEach((point, index) => {
                 const alpha = 0.4 - (index / trailLength); // Reduced fading alpha for shorter trails
                 ctx.globalAlpha = alpha; // Set transparency
                 ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${alpha})`; // Trail color
                 ctx.fillText(text, point.x, point.y); // Draw trail points
               });
-
               ctx.globalAlpha = 1; // Reset transparency
-
               // Reset the drop position when it goes off-screen or randomly
               if (y > canvas.height || Math.random() > 0.97) { // Increased randomness threshold for more frequent resets
                 drops[i].y = 0;
                 drops[i].trail = []; // Clear the trail when resetting
               }
-
               drops[i].y += speedLevels[speedState]; // Use the current speed level
             }
-
             // Clear the shadow after drawing to avoid affecting other elements
             ctx.shadowBlur = 0;
             ctx.shadowColor = 'transparent';
           }
-
           // Handle mouse click to adjust falling speed
           canvas.addEventListener('mousedown', () => {
             speedState = (speedState + 1) % speedLevels.length; // Cycle through speed levels
             console.log(`Current speed state: ${speedState}`);
           });
-
           // Fade out the welcome text after 5 seconds
           setTimeout(() => {
             welcomeText.classList.add('hidden'); // Fade out the welcome text
