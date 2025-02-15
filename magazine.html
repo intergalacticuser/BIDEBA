@@ -13,8 +13,7 @@
         color: white;
         font-family: 'Arial', sans-serif;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
         height: 100vh;
       }
       /* Back Button */
@@ -24,23 +23,27 @@
         left: 10px;
         z-index: 10;
       }
-      #back-button a {
+      #back-button button {
+        background: rgba(255, 255, 255, 0.1);
         color: white;
-        text-decoration: none;
         font-size: 1.2rem;
         font-weight: bold;
-        background: rgba(255, 255, 255, 0.1);
         padding: 5px 10px;
+        border: none;
         border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
       }
-      #back-button a:hover {
+      #back-button button:hover {
         background: rgba(255, 255, 255, 0.2);
       }
+
       /* Magazine Container */
       #magazine-container {
         position: relative;
         width: 100%;
         padding-top: 56.25%; /* Aspect ratio: 16:9 */
+        margin-top: 20px; /* Add space at the top */
       }
       #magazine-container iframe {
         position: absolute;
@@ -55,7 +58,7 @@
   <body>
     <!-- Back Button -->
     <div id="back-button">
-      <a href="index.html">Back</a>
+      <button onclick="location.href='index.html'">Back</button>
     </div>
 
     <!-- Magazine Container -->
@@ -65,5 +68,7 @@
         frameborder="0"
       ></iframe>
     </div>
+  </body>
+</html>
   </body>
 </html>
