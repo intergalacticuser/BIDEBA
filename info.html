@@ -113,25 +113,28 @@
         font-size: 1.5rem;
         margin-bottom: 20px;
       }
-      .social-icons {
+      .social-links {
         display: flex;
         justify-content: center;
         gap: 20px;
         margin-bottom: 40px;
       }
-      .social-icons a {
+      .social-links a {
         display: inline-block;
-        width: 40px;
-        height: 40px;
-        transition: transform 0.3s ease;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 2px 5px rgba(255, 255, 255, 0.2);
       }
-      .social-icons a:hover {
-        transform: scale(1.2);
-      }
-      .social-icons a svg {
-        width: 100%;
-        height: 100%;
-        fill: white; /* Ensure the icons are white */
+      .social-links a:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
       }
     </style>
   </head>
@@ -160,20 +163,11 @@
     <div class="info-content">
       <h1>About BDB Coin</h1>
       <p>BDB Coin is a decentralized cryptocurrency designed for fast, secure, and affordable transactions.</p>
-      <div class="social-icons">
-        <!-- Official X Logo -->
-        <a href="https://x.com/bdbcoin" target="_blank" class="x-icon">
-          <svg viewBox="0 0 24 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M23 6.1c-.6-.6-1.5-.9-2.4-.9h-.1c-.8 0-1.5.3-2 .8l-2.4-2.4c-.3-.3-.9-.5-1.4-.5-1.3 0-2.4 1-2.4 2.4v1.2c0 .4.2.8.5 1l-2.1 2.1c-.4.4-.6 1-.6 1.6 0 1.6 1.3 2.9 2.9 2.9.8 0 1.5-.3 2-.8l2.4 2.4c.3.3.9.5 1.4.5 1.3 0 2.4-1 2.4-2.4v-1.2c0-.4-.2-.8-.5-1l2.1-2.1c.4-.4.6-1 .6-1.6 0-1.6-1.3-2.9-2.9-2.9zm-7.9 1.9l-5.1 5.1c-.2.2-.6.3-1 .3H6.3c-.4 0-.8-.2-1-.6s-.4-1-.4-1.6c0-.8.4-1.5 1-2l2.6-2.6c.5-.5 1.5-.5 2 0l2.0 2.0 5.6-5.6c.5-.5.5-1.5 0-2s-1.5-.5-2 0l-5.6 5.6z"/>
-          </svg>
-        </a>
-        <!-- Official Telegram Logo -->
-        <a href="https://t.me/bdbcoin" target="_blank" class="telegram-icon">
-          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-            <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 480c-123 0-224-101-224-224S133 112 256 112s224 101 224 224-101 224-224 224z"/>
-            <path d="M352 192L256 288 160 192l-32 32 96 96 96-96-32-32z"/>
-          </svg>
-        </a>
+      <div class="social-links">
+        <!-- X Link -->
+        <a href="https://x.com/bdbcoin" target="_blank" class="x-link">X</a>
+        <!-- Telegram Link -->
+        <a href="https://t.me/bdbcoin" target="_blank" class="telegram-link">Telegram</a>
       </div>
       <p>For more information, visit our <a href="https://bdbcoin.com" target="_blank">official website</a>.</p>
     </div>
