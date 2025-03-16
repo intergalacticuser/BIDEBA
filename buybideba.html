@@ -75,35 +75,41 @@
     </div>
 
     <script>
-        let tonConnectUI;
+        let tonConnect;
         const JETTON_WALLET_ADDRESS = "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw"; // Замените на реальный адрес
 
-        document.addEventListener("DOMContentLoaded", () => {
-            tonConnectUI = new TonConnectUI({
-                manifestUrl: "https://ton-connect.github.io/demo-dapp/tonconnect-manifest.json"
-            });
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                tonConnect = new TonConnect({
+                    manifestUrl: "https://ton-connect.github.io/demo-dapp/tonconnect-manifest.json"
+                });
 
-            // Проверяем состояние подключения при загрузке
-            tonConnectUI.onStatusChange((wallet) => {
-                const connectButton = document.getElementById("connectButton");
-                const buyButton = document.getElementById("buyButton");
-                if (wallet) {
-                    connectButton.textContent = "Wallet Connected";
-                    connectButton.disabled = true;
-                    buyButton.disabled = false;
-                } else {
-                    connectButton.textContent = "Connect TON Space Wallet";
-                    connectButton.disabled = false;
-                    buyButton.disabled = true;
-                }
-            });
+                // Проверяем состояние подключения при загрузке
+                tonConnect.onStatusChange((wallet) => {
+                    const connectButton = document.getElementById("connectButton");
+                    const buyButton = document.getElementById("buyButton");
+                    if (wallet && wallet.account) {
+                        connectButton.textContent = "Wallet Connected";
+                        connectButton.disabled = true;
+                        buyButton.disabled = false;
+                    } else {
+                        connectButton.textContent = "Connect TON Space Wallet";
+                        connectButton.disabled = false;
+                        buyButton.disabled = true;
+                    }
+                });
+            } catch (error) {
+                console.error("TonConnect initialization error:", error);
+                alert("Failed to initialize TonConnect. Please try again later.");
+            }
         });
 
         async function connectWallet() {
             try {
-                await tonConnectUI.connectWallet();
+                await tonConnect.connectWallet();
                 alert("TON Space Wallet connected!");
             } catch (error) {
+                console.error("Wallet connection error:", error);
                 alert("Wallet connection error: " + error.message);
             }
         }
@@ -117,8 +123,8 @@
                 return;
             }
 
-            const wallet = await tonConnectUI.getWallet();
-            if (!wallet) {
+            const wallet = tonConnect.wallet;
+            if (!wallet || !wallet.account) {
                 alert("Please connect your wallet first!");
                 return;
             }
@@ -129,15 +135,21 @@
             buyButton.disabled = true;
 
             const transaction = {
-                to: JETTON_WALLET_ADDRESS,
-                value: (amountTON * 1_000_000_000).toString(), // Конвертируем TON в nanoTON
-                payload: "buy_jetton" // Опционально, если контракт поддерживает кастомные сообщения
+                validUntil: Math.floor(Date.now() / 1000) + 300, // Время жизни транзакции (5 минут)
+                messages: [
+                    {
+                        address: JETTON_WALLET_ADDRESS,
+                        amount: (amountTON * 1_000_000_000).toString(), // Конвертируем TON в nanoTON
+                        payload: "te6ccgEBAQEAAgAAAA==" // Опционально, если контракт поддерживает кастомные сообщения
+                    }
+                ]
             };
 
             try {
-                await tonConnectUI.sendTransaction(transaction);
+                await tonConnect.send("ton_sendTransaction", transaction);
                 alert("Transaction sent! You will receive BIDEBA Coin soon.");
             } catch (error) {
+                console.error("Transaction error:", error);
                 alert("Transaction error: " + error.message);
             } finally {
                 // Восстанавливаем кнопку после завершения
