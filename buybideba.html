@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval';">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://unpkg.com 'unsafe-eval';">
     <title>Buy BIDEBA Coin</title>
+    <!-- Удалите эту строку, если favicon не нужен -->
     <link rel="icon" href="https://intergalacticuser.github.io/BIDEBA/favicon.ico" type="image/x-icon">
-    <script src="https://unpkg.com/@tonconnect/sdk@latest?cacheBuster=12345"></script>
+    <script src="https://unpkg.com/@tonconnect/sdk@2.0.0"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -71,9 +72,9 @@
 <body>
     <div class="container">
         <h2>Buy BIDEBA Coin</h2>
-        <button id="connectButton" onclick="connectWallet()">Connect TON Space Wallet</button>
+        <button id="connectButton">Connect TON Space Wallet</button>
         <input type="number" id="tonAmount" placeholder="Enter amount in TON" />
-        <button id="buyButton" onclick="buyBideba()" disabled>Buy BIDEBA</button>
+        <button id="buyButton" disabled>Buy BIDEBA</button>
     </div>
 
     <script>
@@ -105,6 +106,10 @@
                         buyButton.disabled = true;
                     }
                 });
+
+                // Добавляем обработчики событий
+                document.getElementById("connectButton").addEventListener("click", connectWallet);
+                document.getElementById("buyButton").addEventListener("click", buyBideba);
             } catch (error) {
                 console.error("TonConnect initialization error:", error);
                 alert("Failed to initialize TonConnect. Please try again later.");
