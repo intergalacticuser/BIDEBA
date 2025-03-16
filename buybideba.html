@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buy BIDEBA Coin</title>
-    <script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
+    <script src="https://unpkg.com/@tonconnect/sdk@latest?cacheBuster=12345"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -76,13 +76,18 @@
 
     <script>
         let tonConnect;
-        const JETTON_WALLET_ADDRESS = "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw"; // Замените на реальный адрес
 
         document.addEventListener("DOMContentLoaded", async () => {
             try {
+                if (typeof TonConnect === "undefined") {
+                    throw new Error("TonConnect SDK is not loaded.");
+                }
+
                 tonConnect = new TonConnect({
-                    manifestUrl: "https://ton-connect.github.io/demo-dapp/tonconnect-manifest.json"
+                    manifestUrl: "https://your-github-username.github.io/your-repo-name/tonconnect-manifest.json"
                 });
+
+                console.log("TonConnect initialized successfully.");
 
                 // Проверяем состояние подключения при загрузке
                 tonConnect.onStatusChange((wallet) => {
@@ -138,7 +143,7 @@
                 validUntil: Math.floor(Date.now() / 1000) + 300, // Время жизни транзакции (5 минут)
                 messages: [
                     {
-                        address: JETTON_WALLET_ADDRESS,
+                        address: "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw", // Замените на реальный адрес
                         amount: (amountTON * 1_000_000_000).toString(), // Конвертируем TON в nanoTON
                         payload: "te6ccgEBAQEAAgAAAA==" // Опционально, если контракт поддерживает кастомные сообщения
                     }
