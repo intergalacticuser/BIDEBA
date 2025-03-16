@@ -5,88 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buy BIDEBA Coin</title>
     <script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        button {
-            padding: 10px;
-            margin: 10px;
-            border: none;
-            background: #007bff;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Use the site's main stylesheet -->
 </head>
 <body>
     <div class="container">
         <h2>Buy BIDEBA Coin</h2>
-        <button onclick="connectWallet()">Connect TON Space Wallet</button>
+        <button id="connectWalletBtn">Connect TON Space Wallet</button>
         <input type="number" id="tonAmount" placeholder="Enter amount in TON" />
-        <button onclick="buyBideba()">Buy BIDEBA</button>
+        <button id="buyBidebaBtn">Buy BIDEBA</button>
     </div>
 
     <script>
         let tonConnectUI;
+
         document.addEventListener("DOMContentLoaded", () => {
-            tonConnectUI = new TonConnectUI({
-                manifestUrl: "https://ton-connect.github.io/demo-dapp/tonconnect-manifest.json"
-            });
+            try {
+                tonConnectUI = new TonConnectUI({
+                    manifestUrl: "https://ton-connect.github.io/demo-dapp/tonconnect-manifest.json"
+                });
+            } catch (error) {
+                console.error("TON Connect initialization error:", error);
+            }
         });
 
-        const JETTON_WALLET_ADDRESS = EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw; // Replace with your smart contract address
+        const JETTON_WALLET_ADDRESS = "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw"; // Replace with your smart contract address
 
-        async function connectWallet() {
+        document.getElementById("connectWalletBtn").addEventListener("click", async () => {
             try {
+                if (!tonConnectUI) {
+                    throw new Error("TON Connect UI is not initialized");
+                }
                 await tonConnectUI.connectWallet();
                 alert("TON Space Wallet connected!");
             } catch (error) {
                 alert("Wallet connection error: " + error.message);
             }
-        }
+        });
 
-        async function buyBideba() {
-            const amountTON = document.getElementById("tonAmount").value;
-            if (!amountTON || amountTON <= 0) {
-                alert("Enter a valid amount of TON");
-                return;
-            }
-
-            const wallet = await tonConnectUI.getWallet();
-            if (!wallet) {
-                alert("Please connect your wallet first!");
-                return;
-            }
-
-            const transaction = {
-                to: JETTON_WALLET_ADDRESS,
-                value: (amountTON * 1_000_000_000).toString(), // Convert TON to nanoTON
-                payload: "buy_jetton" // Optional, if the contract supports custom messages
-            };
-
+        document.getElementById("buyBidebaBtn").addEventListener("click", async () => {
             try {
+                if (!tonConnectUI) {
+                    throw new Error("TON Connect UI is not initialized");
+                }
+                const amountTON = document.getElementById("tonAmount").value;
+                if (!amountTON || amountTON <= 0) {
+                    alert("Enter a valid amount of TON");
+                    return;
+                }
+
+                const wallet = await tonConnectUI.getWallet();
+                if (!wallet) {
+                    alert("Please connect your wallet first!");
+                    return;
+                }
+
+                const transaction = {
+                    to: JETTON_WALLET_ADDRESS,
+                    value: (amountTON * 1_000_000_000).toString(), // Convert TON to nanoTON
+                    payload: "buy_jetton" // Optional, if the contract supports custom messages
+                };
+
                 await tonConnectUI.sendTransaction(transaction);
                 alert("Transaction sent! You will receive BIDEBA Coin soon.");
             } catch (error) {
                 alert("Transaction error: " + error.message);
             }
-        }
+        });
     </script>
 </body>
 </html>
