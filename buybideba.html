@@ -37,21 +37,22 @@
 <body>
     <div class="container">
         <h2>Купить BIDEBA Coin</h2>
-        <button onclick="connectWallet()">Подключить кошелек</button>
+        <button onclick="connectWallet()">Подключить кошелек TON Space</button>
         <input type="number" id="tonAmount" placeholder="Введите сумму TON" />
         <button onclick="buyBideba()">Купить BIDEBA</button>
     </div>
 
     <script>
         const tonConnect = new TonConnect();
-        const JETTON_WALLET_ADDRESS = "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw"; // Укажите ваш смарт-контракт
+        const JETTON_WALLET_ADDRESS = EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw; // Укажите ваш смарт-контракт
 
         async function connectWallet() {
             try {
-                const wallets = await tonConnect.getWallets();
-                const selectedWallet = wallets[0];
-                await tonConnect.connect(selectedWallet);
-                alert("Кошелек подключен!");
+                await tonConnect.connect({
+                    universalLink: "https://app.tonkeeper.com/ton-connect",
+                    bridgeUrl: "https://bridge.tonapi.io/bridge"
+                });
+                alert("Кошелек TON Space подключен!");
             } catch (error) {
                 alert("Ошибка подключения кошелька");
             }
