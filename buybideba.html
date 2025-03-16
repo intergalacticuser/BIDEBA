@@ -7,50 +7,97 @@
     <script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background-color: #f9fafb;
             padding: 20px;
+            margin: 0;
         }
         .container {
             max-width: 400px;
             margin: auto;
             background: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
         }
         button {
-            padding: 10px;
-            margin: 10px;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
             border: none;
             background: #007bff;
             color: white;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background 0.3s ease;
         }
         button:hover {
             background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Buy BIDEBA Coin</h2>
-        <button onclick="connectWallet()">Connect TON Space Wallet</button>
+        <button id="connectButton" onclick="connectWallet()">Connect TON Space Wallet</button>
         <input type="number" id="tonAmount" placeholder="Enter amount in TON" />
-        <button onclick="buyBideba()">Buy BIDEBA</button>
+        <button id="buyButton" onclick="buyBideba()" disabled>Buy BIDEBA</button>
     </div>
 
     <script>
         let tonConnectUI;
+        const JETTON_WALLET_ADDRESS = "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw"; // Замените на реальный адрес
+
         document.addEventListener("DOMContentLoaded", () => {
             tonConnectUI = new TonConnectUI({
                 manifestUrl: "https://ton-connect.github.io/demo-dapp/tonconnect-manifest.json"
             });
-        });
 
-        const JETTON_WALLET_ADDRESS = EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw; // Replace with your smart contract address
+            // Проверяем состояние подключения при загрузке
+            tonConnectUI.onStatusChange((wallet) => {
+                const connectButton = document.getElementById("connectButton");
+                const buyButton = document.getElementById("buyButton");
+                if (wallet) {
+                    connectButton.textContent = "Wallet Connected";
+                    connectButton.disabled = true;
+                    buyButton.disabled = false;
+                } else {
+                    connectButton.textContent = "Connect TON Space Wallet";
+                    connectButton.disabled = false;
+                    buyButton.disabled = true;
+                }
+            });
+        });
 
         async function connectWallet() {
             try {
@@ -63,8 +110,10 @@
 
         async function buyBideba() {
             const amountTON = document.getElementById("tonAmount").value;
+            const buyButton = document.getElementById("buyButton");
+
             if (!amountTON || amountTON <= 0) {
-                alert("Enter a valid amount of TON");
+                alert("Please enter a valid amount of TON.");
                 return;
             }
 
@@ -74,10 +123,15 @@
                 return;
             }
 
+            // Отключаем кнопку и показываем индикатор загрузки
+            buyButton.textContent = "Processing...";
+            buyButton.classList.add("loading");
+            buyButton.disabled = true;
+
             const transaction = {
                 to: JETTON_WALLET_ADDRESS,
-                value: (amountTON * 1_000_000_000).toString(), // Convert TON to nanoTON
-                payload: "buy_jetton" // Optional, if the contract supports custom messages
+                value: (amountTON * 1_000_000_000).toString(), // Конвертируем TON в nanoTON
+                payload: "buy_jetton" // Опционально, если контракт поддерживает кастомные сообщения
             };
 
             try {
@@ -85,6 +139,11 @@
                 alert("Transaction sent! You will receive BIDEBA Coin soon.");
             } catch (error) {
                 alert("Transaction error: " + error.message);
+            } finally {
+                // Восстанавливаем кнопку после завершения
+                buyButton.textContent = "Buy BIDEBA";
+                buyButton.classList.remove("loading");
+                buyButton.disabled = false;
             }
         }
     </script>
