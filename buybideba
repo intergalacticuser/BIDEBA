@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Купить BIDEBA Coin</title>
+    <script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Купить BIDEBA Coin</h2>
+        <button onclick="connectWallet()">Подключить кошелек</button>
+        <input type="number" id="tonAmount" placeholder="Введите сумму TON" />
+        <button onclick="buyBideba()">Купить BIDEBA</button>
+    </div>
+
+    <script>
+        const tonConnect = new TonConnect();
+        const JETTON_WALLET_ADDRESS = "ВАШ_АДРЕС_СМАРТ_КОНТРАКТА"; // Укажите ваш смарт-контракт
+
+        async function connectWallet() {
+            try {
+                const wallets = await tonConnect.getWallets();
+                const selectedWallet = wallets[0];
+                await tonConnect.connect(selectedWallet);
+                alert("Кошелек подключен!");
+            } catch (error) {
+                alert("Ошибка подключения кошелька");
+            }
+        }
+
+        async function buyBideba() {
+            const amountTON = document.getElementById("tonAmount").value;
+            if (!amountTON || amountTON <= 0) {
+                alert("Введите корректное количество TON");
+                return;
+            }
+
+            if (!tonConnect.wallet) {
+                alert("Сначала подключите кошелек!");
+                return;
+            }
+
+            const transaction = {
+                to: JETTON_WALLET_ADDRESS,
+                value: (amountTON * 1_000_000_000).toString(), // Переводим TON в нанотоны
+                payload: "buy_jetton" // Опционально, если контракт поддерживает кастомные сообщения
+            };
+
+            try {
+                await tonConnect.sendTransaction(transaction);
+                alert("Транзакция отправлена! Скоро вы получите BIDEBA Coin.");
+            } catch (error) {
+                alert("Ошибка при отправке транзакции");
+            }
+        }
+    </script>
+</body>
+</html>
