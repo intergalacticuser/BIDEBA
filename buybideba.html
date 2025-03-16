@@ -43,18 +43,17 @@
     </div>
 
     <script>
-        const tonConnect = new TonConnect();
-        const JETTON_WALLET_ADDRESS = EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw; // Укажите ваш смарт-контракт
+        const tonConnectUI = new TonConnectUI({
+            manifestUrl: "https://ton-connect.github.io/demo-dapp/tonconnect-manifest.json"
+        });
+        const JETTON_WALLET_ADDRESS = "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw"; // Укажите ваш смарт-контракт
 
         async function connectWallet() {
             try {
-                await tonConnect.connect({
-                    universalLink: "https://app.tonkeeper.com/ton-connect",
-                    bridgeUrl: "https://bridge.tonapi.io/bridge"
-                });
+                await tonConnectUI.connectWallet();
                 alert("Кошелек TON Space подключен!");
             } catch (error) {
-                alert("Ошибка подключения кошелька");
+                alert("Ошибка подключения кошелька: " + error.message);
             }
         }
 
@@ -65,7 +64,8 @@
                 return;
             }
 
-            if (!tonConnect.wallet) {
+            const wallet = await tonConnectUI.getWallet();
+            if (!wallet) {
                 alert("Сначала подключите кошелек!");
                 return;
             }
@@ -77,10 +77,10 @@
             };
 
             try {
-                await tonConnect.sendTransaction(transaction);
+                await tonConnectUI.sendTransaction(transaction);
                 alert("Транзакция отправлена! Скоро вы получите BIDEBA Coin.");
             } catch (error) {
-                alert("Ошибка при отправке транзакции");
+                alert("Ошибка при отправке транзакции: " + error.message);
             }
         }
     </script>
