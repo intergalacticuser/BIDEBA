@@ -1,168 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy BIDEBA Coin</title>
-    <script src="https://unpkg.com/@tonconnect/sdk@latest?cacheBuster=12345"></script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background-color: #f9fafb;
-            padding: 20px;
-            margin: 0;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            text-align: center;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: none;
-            background: #007bff;
-            color: white;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: background 0.3s ease;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .loading {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        try {
+            if (typeof TonConnect === "undefined") {
+                throw new Error("TonConnect SDK is not loaded.");
             }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Buy BIDEBA Coin</h2>
-        <button id="connectButton" onclick="connectWallet()">Connect TON Space Wallet</button>
-        <input type="number" id="tonAmount" placeholder="Enter amount in TON" />
-        <button id="buyButton" onclick="buyBideba()" disabled>Buy BIDEBA</button>
-    </div>
 
-    <script>
-        let tonConnect;
+            tonConnect = new TonConnect({
+                manifestUrl: "https://your-github-username.github.io/your-repo-name/tonconnect-manifest.json"
+            });
 
-        document.addEventListener("DOMContentLoaded", async () => {
-            try {
-                if (typeof TonConnect === "undefined") {
-                    throw new Error("TonConnect SDK is not loaded.");
+            console.log("TonConnect initialized successfully.");
+
+            // Проверяем состояние подключения при загрузке
+            tonConnect.onStatusChange((wallet) => {
+                const connectButton = document.getElementById("connectButton");
+                const buyButton = document.getElementById("buyButton");
+                if (wallet && wallet.account) {
+                    connectButton.textContent = "Wallet Connected";
+                    connectButton.disabled = true;
+                    buyButton.disabled = false;
+                } else {
+                    connectButton.textContent = "Connect TON Space Wallet";
+                    connectButton.disabled = false;
+                    buyButton.disabled = true;
                 }
-
-                tonConnect = new TonConnect({
-                    manifestUrl: "https://your-github-username.github.io/your-repo-name/tonconnect-manifest.json"
-                });
-
-                console.log("TonConnect initialized successfully.");
-
-                // Проверяем состояние подключения при загрузке
-                tonConnect.onStatusChange((wallet) => {
-                    const connectButton = document.getElementById("connectButton");
-                    const buyButton = document.getElementById("buyButton");
-                    if (wallet && wallet.account) {
-                        connectButton.textContent = "Wallet Connected";
-                        connectButton.disabled = true;
-                        buyButton.disabled = false;
-                    } else {
-                        connectButton.textContent = "Connect TON Space Wallet";
-                        connectButton.disabled = false;
-                        buyButton.disabled = true;
-                    }
-                });
-            } catch (error) {
-                console.error("TonConnect initialization error:", error);
-                alert("Failed to initialize TonConnect. Please try again later.");
-            }
-        });
-
-        async function connectWallet() {
-            try {
-                await tonConnect.connectWallet();
-                alert("TON Space Wallet connected!");
-            } catch (error) {
-                console.error("Wallet connection error:", error);
-                alert("Wallet connection error: " + error.message);
-            }
+            });
+        } catch (error) {
+            console.error("TonConnect initialization error:", error);
+            alert("Failed to initialize TonConnect. Please try again later.");
         }
-
-        async function buyBideba() {
-            const amountTON = document.getElementById("tonAmount").value;
-            const buyButton = document.getElementById("buyButton");
-
-            if (!amountTON || amountTON <= 0) {
-                alert("Please enter a valid amount of TON.");
-                return;
-            }
-
-            const wallet = tonConnect.wallet;
-            if (!wallet || !wallet.account) {
-                alert("Please connect your wallet first!");
-                return;
-            }
-
-            // Отключаем кнопку и показываем индикатор загрузки
-            buyButton.textContent = "Processing...";
-            buyButton.classList.add("loading");
-            buyButton.disabled = true;
-
-            const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 300, // Время жизни транзакции (5 минут)
-                messages: [
-                    {
-                        address: "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw", // Замените на реальный адрес
-                        amount: (amountTON * 1_000_000_000).toString(), // Конвертируем TON в nanoTON
-                        payload: "te6ccgEBAQEAAgAAAA==" // Опционально, если контракт поддерживает кастомные сообщения
-                    }
-                ]
-            };
-
-            try {
-                await tonConnect.send("ton_sendTransaction", transaction);
-                alert("Transaction sent! You will receive BIDEBA Coin soon.");
-            } catch (error) {
-                console.error("Transaction error:", error);
-                alert("Transaction error: " + error.message);
-            } finally {
-                // Восстанавливаем кнопку после завершения
-                buyButton.textContent = "Buy BIDEBA";
-                buyButton.classList.remove("loading");
-                buyButton.disabled = false;
-            }
-        }
-    </script>
-</body>
-</html>
+    });
+</script>
