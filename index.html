@@ -138,7 +138,111 @@
         color: #00ffff;
         text-decoration: underline;
       }
+      /* Buy Widget */
+      #buy-widget {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 30;
+        width: 90%;
+        max-width: 520px;
+        pointer-events: auto;
+      }
+      .buy-card {
+        background: rgba(0, 0, 0, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(6px);
+      }
+      .buy-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .buy-header img {
+        width: 42px;
+        height: 42px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+      .buy-title {
+        font-size: 1.6rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+      .currency-switch {
+        display: flex;
+        gap: 8px;
+        margin: 10px 0 16px;
+      }
+      .currency-switch button {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        padding: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .currency-switch button.active {
+        background: rgba(0, 255, 255, 0.18);
+        border-color: rgba(0, 255, 255, 0.5);
+      }
+      .input-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .input-row input {
+        flex: 1;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        font-size: 1.1rem;
+      }
+      .stats {
+        font-size: 0.95rem;
+        color: #ccc;
+        line-height: 1.6;
+        margin-bottom: 12px;
+      }
+      .action-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .buy-button {
+        flex: 1;
+        padding: 12px 16px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #000;
+        background: linear-gradient(90deg, #00ffff, #66ff66);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .buy-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .note {
+        font-size: 0.85rem;
+        color: #aaa;
+        margin-top: 6px;
+      }
     </style>
+    <script src="https://unpkg.com/@tonconnect/ui@2" defer></script>
   </head>
   <body>
     <!-- Home Page -->
@@ -160,6 +264,29 @@
     </div>
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div>
     <canvas id="falling-letters"></canvas>
+
+    <!-- Buy Widget -->
+    <div id="buy-widget">
+      <div class="buy-card">
+        <div class="buy-header">
+          <img src="bdb-icon.png" alt="BDB Icon" onerror="this.style.display='none'">
+          <div class="buy-title">Buy BDB</div>
+        </div>
+        <div class="currency-switch">
+          <button id="pay-ton" class="active">Pay with TON</button>
+          <button id="pay-usdt">Pay with USDT</button>
+        </div>
+        <div class="input-row">
+          <input type="number" id="bdb-amount" min="0" step="0.000001" placeholder="Amount of BDB">
+        </div>
+        <div class="stats" id="quote">Enter amount...</div>
+        <div class="action-row">
+          <div id="ton-connect-button"></div>
+          <button class="buy-button" id="buy-btn" disabled>Buy</button>
+        </div>
+        <div class="note">Rates via CoinGecko. USDT option will require USDT jettons in your wallet.</div>
+      </div>
+    </div>
 
     <!-- Info Page -->
     <div class="info-page" id="info-page" style="display: none;">
@@ -259,6 +386,115 @@
           console.error("An error occurred in the script:", error);
         }
       });
+    </script>
+    <script>
+      (function() {
+        const SALE_CONTRACT_ADDRESS = 'EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8'; // Your sale contract address
+        const BDB_PER_TON = 1000; // TODO: set your sale rate: how many BDB per 1 TON
+        const COINGECKO_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=the-open-network,tether&vs_currencies=usd';
+
+        let tonUsd = 0;
+        let usdtUsd = 1;
+        let payCurrency = 'TON';
+
+        const amountInput = document.getElementById('bdb-amount');
+        const quoteEl = document.getElementById('quote');
+        const btnTON = document.getElementById('pay-ton');
+        const btnUSDT = document.getElementById('pay-usdt');
+        const buyBtn = document.getElementById('buy-btn');
+
+        function format(num) {
+          return Number(num).toLocaleString(undefined, { maximumFractionDigits: 6 });
+        }
+
+        function updateQuote() {
+          const amount = parseFloat(amountInput.value || '0');
+          if (!amount || amount <= 0) {
+            quoteEl.textContent = 'Enter amount...';
+            buyBtn.disabled = true;
+            return;
+          }
+          const tonPerBdb = 1 / BDB_PER_TON;
+          const totalTon = amount * tonPerBdb;
+          const totalUsd = totalTon * tonUsd;
+          const totalUsdt = totalUsd / (usdtUsd || 1);
+          const oneBdbUsdt = tonPerBdb * tonUsd;
+          if (payCurrency === 'TON') {
+            quoteEl.innerHTML = `Price: 1 BDB ≈ ${format(tonPerBdb)} TON (~${format(oneBdbUsdt)} USDT)<br>` +
+              `You pay: ${format(totalTon)} TON (~${format(totalUsdt)} USDT, ~$${format(totalUsd)})`;
+          } else {
+            quoteEl.innerHTML = `Price: 1 BDB ≈ ${format(oneBdbUsdt)} USDT (~${format(tonPerBdb)} TON)<br>` +
+              `You pay: ${format(totalUsdt)} USDT (~${format(totalTon)} TON, ~$${format(totalUsd)})`;
+          }
+          buyBtn.disabled = false;
+        }
+
+        async function fetchRates() {
+          try {
+            const res = await fetch(COINGECKO_URL, { cache: 'no-store' });
+            const data = await res.json();
+            if (data['the-open-network']?.usd) tonUsd = data['the-open-network'].usd;
+            if (data['tether']?.usd) usdtUsd = data['tether'].usd || 1;
+            updateQuote();
+          } catch (e) {
+            console.warn('Rate fetch failed', e);
+          }
+        }
+
+        amountInput.addEventListener('input', updateQuote);
+        btnTON.addEventListener('click', () => {
+          payCurrency = 'TON';
+          btnTON.classList.add('active');
+          btnUSDT.classList.remove('active');
+          updateQuote();
+        });
+        btnUSDT.addEventListener('click', () => {
+          payCurrency = 'USDT';
+          btnUSDT.classList.add('active');
+          btnTON.classList.remove('active');
+          updateQuote();
+        });
+
+        let tonConnectUI;
+        document.addEventListener('DOMContentLoaded', () => {
+          if (window.TON_CONNECT_UI) {
+            tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+              manifestUrl: new URL('tonconnect-manifest.json', window.location.href).toString(),
+              buttonRootId: 'ton-connect-button'
+            });
+          }
+        });
+
+        buyBtn.addEventListener('click', async () => {
+          const amount = parseFloat(amountInput.value || '0');
+          if (!amount || amount <= 0) return;
+          const tonPerBdb = 1 / BDB_PER_TON;
+          const totalTon = amount * tonPerBdb;
+
+          if (payCurrency === 'TON') {
+            if (!tonConnectUI || !tonConnectUI.connected) {
+              try { await tonConnectUI?.openModal(); } catch {}
+              if (!tonConnectUI?.connected) { alert('Connect wallet first'); return; }
+            }
+            const nano = BigInt(Math.ceil(totalTon * 1e9));
+            try {
+              await tonConnectUI.sendTransaction({
+                validUntil: Math.floor(Date.now() / 1000) + 300,
+                messages: [{ address: SALE_CONTRACT_ADDRESS, amount: nano.toString() }]
+              });
+              alert('Transaction sent. You will receive BDB shortly.');
+            } catch (e) {
+              console.error(e);
+              alert('Transaction failed or was rejected.');
+            }
+          } else {
+            alert('USDT payment will be available soon. For now, please use TON.');
+          }
+        });
+
+        fetchRates();
+        setInterval(fetchRates, 60000);
+      })();
     </script>
   </body>
 </html>
