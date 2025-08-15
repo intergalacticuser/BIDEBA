@@ -1,7 +1,5 @@
 {
-  "url": "https://github.com/intergalacticuser/BIDEBA",
-  "name": "BIDEBA Token Sale",
-  "iconUrl": "https://github.com/intergalacticuser/BIDEBA/logo.png",
-  "termsUrl": "https://github.com/intergalacticuser/BIDEBA/terms.html",
-  "privacyPolicyUrl": "https://github.com/intergalacticuser/BIDEBA/privacy.html"
+  "url": "https://example.com",
+  "name": "BDB Coin",
+  "iconUrl": "https://raw.githubusercontent.com/placeholder/bdbcoin/main/bdb-icon.png"
 }
