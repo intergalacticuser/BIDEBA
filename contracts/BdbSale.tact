@@ -9,7 +9,7 @@ contract BdbSale {
 	priceUsdtPerBdb: Int as uint64;  // USDT base units per 1 BDB token unit
 	remainingSupply: Int as uint64;  // remaining BDB tokens for sale (in token base units)
 
-	// Jetton wallets owned by this sale contract; set after deploy via admin op
+	// Jetton wallets owned by this sale contract; store addr_none until set
 	bdbWallet: Address?;  // addr_none until set
 	usdtWallet: Address?; // addr_none until set
 
@@ -22,6 +22,8 @@ contract BdbSale {
 	const OP_UPDATE_TON_PRICE: Int = 0xbdb50002;
 	const OP_UPDATE_USDT_PRICE: Int = 0xbdb50003;
 	const OP_JETTON_NOTIFICATION: Int = 0x7362d09c; // transfer_notification
+
+
 
 	init(owner: Address,
 		 bdbMaster: Address,
@@ -42,7 +44,7 @@ contract BdbSale {
 	}
 
 	// Unified receiver: admin ops, USDT notifications, and TON purchases
-	receive(in_msg: slice) {
+	receive(in_msg: Slice) {
 		let ctx = context();
 
 		if (in_msg.bits() >= 32) {
@@ -96,8 +98,6 @@ contract BdbSale {
 		if (amount <= 0) { throw(101); }
 		if (amount > self.remainingSupply) { throw(102); }
 
-		let bdbWalletAddr = (self.bdbWallet!!);
-
 		// Build jetton transfer from our BDB wallet to buyer
 		let transferMsg = beginCell()
 			.storeUint(0x0f8a7ea5, 32) // op::transfer
@@ -107,12 +107,12 @@ contract BdbSale {
 			.storeAddress(self.owner)  // response_destination
 			.storeMaybeRef(null)       // custom_payload
 			.storeCoins(self.FORWARD_TON) // forward_ton_amount to buyer's wallet
-			.storeBit(1)               // forward_payload: 1 => by reference
+			.storeBit(false)           // forward_payload: false (by ref)
 			.storeRef(beginCell().endCell())
 			.endCell();
 
 		send(SendParameters {
-			to: bdbWalletAddr,
+			to: (self.bdbWallet!!),
 			value: self.WALLET_CALL_TON,
 			bounce: true,
 			body: transferMsg
@@ -128,19 +128,17 @@ contract BdbSale {
 		self.remainingSupply = self.remainingSupply - amount;
 	}
 
-	fn handleUsdtNotification(in_msg: slice) {
+	fun handleUsdtNotification(in_msg: Slice) {
 		let ctx = context();
 
 		if (self.usdtWallet == null) { throw(406); }
-		let usdtWalletAddr = (self.usdtWallet!!);
-		if (ctx.sender != usdtWalletAddr) { throw(407); }
+		if (ctx.sender != (self.usdtWallet!!)) { throw(407); }
 
 		// Parse TIP-3 transfer_notification payload
 		let _query = in_msg.loadUint(64);
 		let paidUsdt = in_msg.loadCoins();
 		let buyer = in_msg.loadAddress();
-		// forward_payload (Either Cell ^Cell) — ignored
-		// no need to parse further for our purposes
+		// forward_payload (Either Cell ^Cell) — ignore rest
 
 		if (self.priceUsdtPerBdb <= 0) { throw(400); }
 
@@ -149,7 +147,6 @@ contract BdbSale {
 		if (amountBdb > self.remainingSupply) { throw(102); }
 
 		if (self.bdbWallet == null) { throw(405); }
-		let bdbWalletAddr = (self.bdbWallet!!);
 
 		let bdbTransfer = beginCell()
 			.storeUint(0x0f8a7ea5, 32)
@@ -159,12 +156,12 @@ contract BdbSale {
 			.storeAddress(self.owner)
 			.storeMaybeRef(null)
 			.storeCoins(self.FORWARD_TON)
-			.storeBit(1)
+			.storeBit(false)
 			.storeRef(beginCell().endCell())
 			.endCell();
 
 		send(SendParameters {
-			to: bdbWalletAddr,
+			to: (self.bdbWallet!!),
 			value: self.WALLET_CALL_TON,
 			bounce: true,
 			body: bdbTransfer
@@ -179,12 +176,12 @@ contract BdbSale {
 			.storeAddress(self.owner)
 			.storeMaybeRef(null)
 			.storeCoins(self.FORWARD_TON)
-			.storeBit(1)
+			.storeBit(false)
 			.storeRef(beginCell().endCell())
 			.endCell();
 
 		send(SendParameters {
-			to: usdtWalletAddr,
+			to: (self.usdtWallet!!),
 			value: self.WALLET_CALL_TON,
 			bounce: true,
 			body: usdtForward

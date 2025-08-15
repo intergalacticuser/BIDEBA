@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@tact-lang/compiler": "^1.6.13",
     "@ton/core": "^0.61.0",
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^15.3.1",
