@@ -165,7 +165,7 @@
         border-radius: 18px;
         padding: 20px;
         width: 90%;
-        max-width: 462px; /* Увеличено на 5% (440px -> 462px) */
+        max-width: 462px;
         box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
         border: 1px solid rgba(0, 200, 255, 0.3);
         display: none;
@@ -404,7 +404,7 @@
       .purchase-button {
         position: absolute;
         top: 50%;
-        left: 5%; /* Перемещено влево на 95% от центра (50% - 45%) */
+        left: 95%; /* Перемещено вправо на 95% от центра */
         transform: translate(-50%, -50%);
         z-index: 12;
         background: linear-gradient(135deg, #00c6ff, #0072ff);
@@ -492,7 +492,7 @@
           height: 55px;
           font-size: 20px;
           top: 50%;
-          left: 5%; /* Сохраняем позицию на мобильных устройствах */
+          left: 95%; /* Сохраняем позицию на мобильных устройствах */
         }
       }
     </style>
@@ -641,7 +641,7 @@
           const contractAddress = "EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8";
           document.getElementById('payment-address').textContent = contractAddress;
           
-          // Текущие цены (в реальном приложении будут получены из API)
+          // Фиксированные цены (в реальном приложении будут получены из API)
           let bdbPriceInUSD = 0.000012;
           let tonPriceInUSD = 5.23;
           let bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
@@ -667,9 +667,9 @@
           async function fetchBDBPrice() {
             try {
               // Здесь будет ваш API для получения цены BDB
-              // Пока используем симуляцию
-              bdbPriceInUSD = (Math.random() * 0.00002 + 0.000005);
-              bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
+              // Пока используем фиксированную цену вместо случайной
+              // bdbPriceInUSD = (Math.random() * 0.00002 + 0.000005); // Старый случайный код
+              // Новая фиксированная цена (в реальном приложении будет из API)
               updatePrices();
               return true;
             } catch (error) {
@@ -823,7 +823,7 @@
           // Периодическое обновление цен (каждые 30 секунд)
           setInterval(async () => {
             await fetchTONPrice();
-            await fetchBDBPrice();
+            // await fetchBDBPrice(); // Закомментировано для стабильности цены
           }, 30000);
           
           // Wallet connection
