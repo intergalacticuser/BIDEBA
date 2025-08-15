@@ -56,17 +56,20 @@
       #magazine-container {
         position: relative;
         width: 100%;
-        height: calc(100vh - 60px);
-        margin-top: 20px;
+        height: 100vh;
         z-index: 5;
-        overflow: auto;
+        overflow: hidden;
         transition: all 0.3s ease;
       }
       
       #magazine-container iframe {
-        width: 100%;
-        height: 100%;
+        position: absolute;
+        top: -20px; /* Начальное смещение вверх */
+        left: -20px; /* Начальное смещение влево */
+        width: calc(100% + 40px); /* Увеличиваем ширину */
+        height: calc(100% + 40px); /* Увеличиваем высоту */
         border: none;
+        transform: scale(1);
         transform-origin: center center;
         transition: transform 0.3s ease;
       }
