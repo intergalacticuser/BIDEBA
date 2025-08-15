@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Official</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
       body {
         margin: 0;
@@ -18,24 +19,25 @@
         align-items: center;
         height: 100vh;
         position: relative;
-    
       }
+      
       .welcome-container {
-        text-align: center; /* Center-align the text */
+        text-align: center;
         font-size: 4rem;
         font-weight: bold;
         letter-spacing: 2px;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         opacity: 1;
         transition: opacity 1s ease-out;
-        position: absolute; /* Center the text vertically and horizontally */
+        position: absolute;
         top: 50%;
-        left: 0; /* Span the full width */
+        left: 0;
         right: 0;
         transform: translateY(-50%);
-        width: 100%; /* Full width */
-        z-index: 5; /* Ensure it appears above the canvas but below the ticker */
+        width: 100%;
+        z-index: 5;
       }
+      
       .hidden {
         opacity: 0;
         pointer-events: none;
@@ -43,7 +45,7 @@
      
       #ticker-container {
         position: absolute;
-        top: 10px; /* Position at the top with some padding */
+        top: 10px;
         left: 0;
         right: 0;
         z-index: 10;
@@ -52,49 +54,55 @@
         text-align: center;
         overflow: hidden;
       }
+      
       #ticker-container iframe {
-        width: 100%; /* Make the iframe responsive */
-        max-width: 1000px; /* Limit the maximum width */
-        height: 60px; /* Set the height of the iframe */
-        margin: 0 auto; /* Center the iframe horizontally */
+        width: 100%;
+        max-width: 1000px;
+        height: 60px;
+        margin: 0 auto;
         display: block;
-        border: none; /* Remove the border around the iframe */
-        background: transparent; /* Ensure the iframe blends with the dark background */
+        border: none;
+        background: transparent;
       }
+      
       #falling-letters {
         position: absolute;
-        top: 70px; /* Adjust top to leave space for the ticker */
+        top: 70px;
         left: 0;
         width: 100%;
-        height: calc(100% - 80px); /* Adjust height to leave space for the menu and ticker */
+        height: calc(100% - 80px);
         display: block;
-        z-index: 5; /* Ensure the canvas is below the menu */
+        z-index: 5;
       }
+      
       /* Menu Style */
       #menu {
         position: absolute;
         top: 75px;
         left: 10px;
-        z-index: 20; /* Ensure the menu is above the canvas */
+        z-index: 20;
       }
+      
       #info-button {
         position: absolute;
         top: 75px;
         right: 10px;
-        z-index: 20; /* Ensure the info button is above the canvas */
+        z-index: 20;
       }
+      
       #menu button, #info-button button {
         background: rgba(0, 0, 0, 0.8);
         color: white;
-        font-size: 1.4rem; /* Reduced font size */
+        font-size: 1.4rem;
         font-weight: bold;
-        padding: 10px 20px; /* Reduced padding for a smaller button */
+        padding: 10px 20px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         transition: background 0.3s ease;
-        box-shadow: 0 2px 5px rgba(255, 255, 255, 0.2); /* Add subtle shadow for better visibility */
+        box-shadow: 0 2px 5px rgba(255, 255, 255, 0.2);
       }
+      
       #menu button:hover, #info-button button:hover {
         background: rgba(255, 255, 255, 0.2);
       }
@@ -111,141 +119,274 @@
         color: white;
         font-family: 'Arial', sans-serif;
       }
+      
       .info-page h1 {
         font-size: 3rem;
         margin-bottom: 20px;
       }
+      
       .info-page p {
         font-size: 1.5rem;
         margin-bottom: 20px;
       }
+      
       .social-links {
         display: flex;
         justify-content: center;
         gap: 20px;
         margin-bottom: 40px;
       }
+      
       .social-links a {
         font-size: 2rem;
         color: white;
         text-decoration: none;
         transition: color 0.3s ease;
       }
+      
       .social-links a:hover {
         color: #ff0;
       }
+      
       .info-page a {
         color: #00ffff;
         text-decoration: underline;
       }
-      /* Buy Widget */
-      #buy-widget {
-        position: fixed;
+      
+      /* Purchase Interface */
+      .purchase-container {
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        z-index: 9;
-        width: 92%;
-        max-width: 420px;
-        transition: opacity 0.6s ease;
-        pointer-events: auto;
+        z-index: 15;
+        background: rgba(10, 10, 20, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
+        border: 1px solid rgba(0, 200, 255, 0.3);
+        display: none;
+        flex-direction: column;
+        gap: 20px;
       }
-      .buy-card {
-        background: rgba(0, 0, 0, 0.58);
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        border-radius: 14px;
-        padding: 16px;
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 255, 255, 0.12) inset;
-        backdrop-filter: blur(4px);
-      }
-      .buy-header {
+      
+      .purchase-header {
         display: flex;
         align-items: center;
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-      .buy-header img {
-        width: 32px;
-        height: 32px;
-        border-radius: 6px;
-        object-fit: cover;
-        filter: drop-shadow(0 0 6px rgba(0,255,255,0.25));
-      }
-      .buy-title {
-        font-size: 1.3rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-      }
-      .currency-switch {
-        display: flex;
-        gap: 8px;
-        margin: 8px 0 12px;
-      }
-      .currency-switch button {
-        flex: 1;
-        background: rgba(255, 255, 255, 0.06);
-        color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 8px;
-        padding: 8px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .currency-switch button.active {
-        background: rgba(0, 255, 255, 0.18);
-        border-color: rgba(0, 255, 255, 0.5);
-      }
-      .input-row {
-        display: flex;
-        gap: 10px;
-        align-items: center;
+        justify-content: center;
+        gap: 15px;
         margin-bottom: 10px;
       }
-      .input-row input {
+      
+      .coin-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      
+      .purchase-title {
+        font-size: 28px;
+        font-weight: bold;
+        background: linear-gradient(to right, #00c6ff, #0072ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+      }
+      
+      .price-display {
+        background: rgba(0, 30, 60, 0.7);
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      
+      .price-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .price-row:last-child {
+        border-bottom: none;
+      }
+      
+      .price-label {
+        color: #aaa;
+      }
+      
+      .price-value {
+        font-weight: bold;
+        color: #00c6ff;
+      }
+      
+      .purchase-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .form-label {
+        font-size: 16px;
+        color: #ddd;
+      }
+      
+      .input-group {
+        display: flex;
+        background: rgba(0, 20, 40, 0.7);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 200, 255, 0.3);
+      }
+      
+      .input-group input {
         flex: 1;
-        padding: 10px 12px;
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.04);
-        color: #fff;
-        font-size: 1rem;
+        background: transparent;
+        border: none;
+        padding: 15px;
+        color: white;
+        font-size: 18px;
         outline: none;
       }
-      .stats {
-        font-size: 0.9rem;
-        color: #ddd;
-        line-height: 1.5;
-        margin-bottom: 10px;
-      }
-      .action-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-      }
-      .buy-button {
-        flex: 1;
-        padding: 10px 14px;
-        font-size: 1rem;
-        font-weight: 700;
-        color: #000;
-        background: linear-gradient(90deg, #00ffff, #66ff66);
+      
+      .input-group select {
+        background: rgba(0, 40, 80, 0.7);
         border: none;
-        border-radius: 10px;
+        padding: 0 15px;
+        color: white;
+        font-size: 16px;
+        outline: none;
         cursor: pointer;
       }
-      .buy-button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+      
+      .wallet-info {
+        background: rgba(0, 30, 60, 0.7);
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        margin-top: 10px;
       }
-      .note {
-        font-size: 0.85rem;
+      
+      .wallet-address {
+        font-family: monospace;
+        font-size: 14px;
+        word-break: break-all;
+        margin: 10px 0;
+        color: #00c6ff;
+      }
+      
+      .connect-button, .buy-button {
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+      
+      .connect-button:hover, .buy-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 198, 255, 0.4);
+      }
+      
+      .connect-button:active, .buy-button:active {
+        transform: translateY(0);
+      }
+      
+      .swap-info {
+        background: rgba(0, 30, 60, 0.7);
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        font-size: 14px;
         color: #aaa;
-        margin-top: 6px;
+        margin-top: 10px;
+      }
+      
+      .swap-info i {
+        color: #00c6ff;
+        margin-right: 5px;
+      }
+      
+      .close-button {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 50, 50, 0.3);
+        color: white;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 30, 60, 0.9);
+        border: 1px solid rgba(0, 200, 255, 0.5);
+        border-radius: 10px;
+        padding: 15px 25px;
+        z-index: 100;
+        display: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+      
+      .notification.show {
+        display: block;
+        animation: fadeInOut 3s ease;
+      }
+      
+      @keyframes fadeInOut {
+        0% { opacity: 0; bottom: 0; }
+        10% { opacity: 1; bottom: 20px; }
+        90% { opacity: 1; bottom: 20px; }
+        100% { opacity: 0; bottom: 0; }
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .welcome-container {
+          font-size: 2.5rem;
+        }
+        
+        .purchase-container {
+          width: 95%;
+          padding: 20px;
+        }
+        
+        .purchase-title {
+          font-size: 24px;
+        }
       }
     </style>
-    <script src="https://unpkg.com/@tonconnect/ui@2" defer></script>
   </head>
   <body>
     <!-- Home Page -->
@@ -268,27 +409,73 @@
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div>
     <canvas id="falling-letters"></canvas>
 
-    <!-- Buy Widget -->
-    <div id="buy-widget" style="opacity:0;">
-      <div class="buy-card">
-        <div class="buy-header">
-          <img src="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/8ee899b19007a5f3628c87250de34a9d98fb98ac/logo.png" alt="BDB Icon" onerror="this.style.display='none'">
-          <div class="buy-title">Buy BDB</div>
+    <!-- Purchase Interface -->
+    <div class="purchase-container" id="purchase-container">
+      <button class="close-button" onclick="closePurchase()">×</button>
+      
+      <div class="purchase-header">
+        <div class="coin-icon">
+          <i class="fas fa-coins"></i>
         </div>
-        <div class="currency-switch">
-          <button id="pay-ton" class="active">Pay with TON</button>
-          <button id="pay-usdt">Pay with USDT</button>
-        </div>
-        <div class="input-row">
-          <input type="number" id="bdb-amount" min="0" step="0.000001" placeholder="Amount of BDB">
-        </div>
-        <div class="stats" id="quote">Enter amount...</div>
-        <div class="action-row">
-          <div id="ton-connect-button"></div>
-          <button class="buy-button" id="buy-btn" disabled>Buy</button>
-        </div>
-        <div class="note">Rates via CoinGecko. USDT option will require USDT jettons in your wallet.</div>
+        <h2 class="purchase-title">BDB Coin Purchase</h2>
       </div>
+      
+      <div class="price-display">
+        <div class="price-row">
+          <span class="price-label">BDB Coin Price:</span>
+          <span class="price-value" id="bdb-price">$0.000012</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">In TON:</span>
+          <span class="price-value" id="bdb-ton">0.00000012 TON</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">TON Price:</span>
+          <span class="price-value" id="ton-price">$5.23</span>
+        </div>
+      </div>
+      
+      <div class="purchase-form">
+        <div class="form-group">
+          <label class="form-label">Amount to Buy:</label>
+          <div class="input-group">
+            <input type="number" id="amount" placeholder="Enter amount" min="1" value="1000">
+            <select id="currency-select">
+              <option value="ton">TON</option>
+              <option value="usdt">USDT</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Your Wallet Address:</label>
+          <div class="input-group">
+            <input type="text" id="wallet-address" placeholder="Enter your TON wallet address">
+          </div>
+        </div>
+        
+        <button class="connect-button" id="connect-wallet">
+          <i class="fas fa-wallet"></i> Connect Wallet
+        </button>
+        
+        <button class="buy-button" id="buy-button">
+          <i class="fas fa-shopping-cart"></i> Buy BDB Coins
+        </button>
+        
+        <div class="swap-info">
+          <i class="fas fa-exchange-alt"></i> When paying with USDT, we'll automatically swap to TON using TonFi
+        </div>
+      </div>
+      
+      <div class="wallet-info">
+        <p>Send your payment to this address:</p>
+        <div class="wallet-address" id="payment-address">EQB3ncyBUTjZUA5pZY94gZJy9PqY7VQF3Vr5KkqJhD5q1234</div>
+        <p>After payment, your BDB coins will be sent to your wallet</p>
+      </div>
+    </div>
+    
+    <div class="notification" id="notification">
+      <span id="notification-text">Wallet connected successfully!</span>
     </div>
 
     <!-- Info Page -->
@@ -307,19 +494,63 @@
         try {
           const welcomeText = document.getElementById('welcome-text');
           const canvas = document.getElementById('falling-letters');
+          const purchaseContainer = document.getElementById('purchase-container');
+          const notification = document.getElementById('notification');
+          const connectButton = document.getElementById('connect-wallet');
+          const buyButton = document.getElementById('buy-button');
+          const amountInput = document.getElementById('amount');
+          const currencySelect = document.getElementById('currency-select');
+          const walletAddressInput = document.getElementById('wallet-address');
+          
           if (!canvas || !welcomeText) {
             console.error("Error: Missing required elements in the DOM.");
             return;
           }
+          
           const ctx = canvas.getContext('2d');
           if (!ctx) {
             console.error("Error: Canvas context not supported.");
             return;
           }
+          
+          // Create purchase button in the center
+          const purchaseButton = document.createElement('button');
+          purchaseButton.innerHTML = '<i class="fas fa-coins"></i>';
+          purchaseButton.style.position = 'absolute';
+          purchaseButton.style.top = '50%';
+          purchaseButton.style.left = '50%';
+          purchaseButton.style.transform = 'translate(-50%, -50%)';
+          purchaseButton.style.zIndex = '12';
+          purchaseButton.style.background = 'linear-gradient(135deg, #00c6ff, #0072ff)';
+          purchaseButton.style.color = 'white';
+          purchaseButton.style.border = 'none';
+          purchaseButton.style.borderRadius = '50%';
+          purchaseButton.style.width = '80px';
+          purchaseButton.style.height = '80px';
+          purchaseButton.style.fontSize = '30px';
+          purchaseButton.style.cursor = 'pointer';
+          purchaseButton.style.boxShadow = '0 0 20px rgba(0, 198, 255, 0.7)';
+          purchaseButton.style.transition = 'all 0.3s ease';
+          
+          purchaseButton.addEventListener('mouseenter', () => {
+            purchaseButton.style.transform = 'translate(-50%, -50%) scale(1.1)';
+          });
+          
+          purchaseButton.addEventListener('mouseleave', () => {
+            purchaseButton.style.transform = 'translate(-50%, -50%) scale(1)';
+          });
+          
+          purchaseButton.addEventListener('click', () => {
+            purchaseContainer.style.display = 'flex';
+          });
+          
+          document.body.appendChild(purchaseButton);
+          
           function resizeCanvas() {
             canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight - 80; // Leave space for the ticker and menu
+            canvas.height = window.innerHeight - 80;
           }
+          
           resizeCanvas();
           window.addEventListener('resize', resizeCanvas);
 
@@ -331,9 +562,11 @@
           const glowIntensity = 10;
           let pulseFactor = 1;
           let pulseDirection = 1;
+          
           for (let i = 0; i < columns; i++) {
             drops[i] = { y: 1, trail: [] };
           }
+          
           let speedState = 0;
           const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
 
@@ -377,135 +610,95 @@
             ctx.shadowBlur = 0;
             ctx.shadowColor = 'transparent';
           }
+          
           canvas.addEventListener('mousedown', () => {
             speedState = (speedState + 1) % speedLevels.length;
             console.log(`Current speed state: ${speedState}`);
           });
+          
           setTimeout(() => {
             welcomeText.classList.add('hidden');
-            const widget = document.getElementById('buy-widget');
-            if (widget) widget.style.opacity = '1';
             setInterval(drawFallingLetters, 30);
           }, 5000);
+          
+          // Simulate price updates
+          function updatePrices() {
+            // Simulated prices - in a real app, these would come from an API
+            const bdbPrice = (Math.random() * 0.00002 + 0.000005).toFixed(8);
+            const tonPrice = (Math.random() * 2 + 4).toFixed(2);
+            const bdbInTon = (bdbPrice / tonPrice).toFixed(10);
+            
+            document.getElementById('bdb-price').textContent = `$${bdbPrice}`;
+            document.getElementById('ton-price').textContent = `$${tonPrice}`;
+            document.getElementById('bdb-ton').textContent = `${bdbInTon} TON`;
+          }
+          
+          // Update prices every 5 seconds
+          updatePrices();
+          setInterval(updatePrices, 5000);
+          
+          // Wallet connection
+          connectButton.addEventListener('click', () => {
+            if (walletAddressInput.value.trim() === '') {
+              showNotification('Please enter your wallet address first');
+              return;
+            }
+            
+            // Simulate wallet connection
+            connectButton.innerHTML = '<i class="fas fa-check"></i> Connected';
+            connectButton.disabled = true;
+            showNotification('Wallet connected successfully!');
+          });
+          
+          // Purchase functionality
+          buyButton.addEventListener('click', () => {
+            const amount = amountInput.value;
+            const currency = currencySelect.value;
+            const walletAddress = walletAddressInput.value.trim();
+            
+            if (amount <= 0) {
+              showNotification('Please enter a valid amount');
+              return;
+            }
+            
+            if (walletAddress === '') {
+              showNotification('Please enter your wallet address');
+              return;
+            }
+            
+            if (connectButton.disabled === false) {
+              showNotification('Please connect your wallet first');
+              return;
+            }
+            
+            // Simulate purchase
+            showNotification(`Purchase initiated: ${amount} BDB coins for ${currency.toUpperCase()}`);
+            
+            // In a real app, this would initiate the transaction
+            setTimeout(() => {
+              showNotification('Transaction confirmed! Coins sent to your wallet.');
+            }, 3000);
+          });
+          
+          // Show notification
+          function showNotification(message) {
+            document.getElementById('notification-text').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+              notification.classList.remove('show');
+            }, 3000);
+          }
+          
+          // Close purchase interface
+          window.closePurchase = function() {
+            purchaseContainer.style.display = 'none';
+          };
+          
         } catch (error) {
           console.error("An error occurred in the script:", error);
         }
       });
-    </script>
-    <script>
-      (function() {
-        const SALE_CONTRACT_ADDRESS = 'EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8'; // Your sale contract address
-        const PRICE_NANOTON_PER_BDB = 4989; // price per 1 BDB in nanoTON from your sale contract
-        const BDB_PER_TON = 1e9 / PRICE_NANOTON_PER_BDB; // how many BDB per 1 TON
-        const COINGECKO_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=the-open-network,tether&vs_currencies=usd';
-
-        let tonUsd = 0;
-        let usdtUsd = 1;
-        let payCurrency = 'TON';
-
-        const amountInput = document.getElementById('bdb-amount');
-        const quoteEl = document.getElementById('quote');
-        const btnTON = document.getElementById('pay-ton');
-        const btnUSDT = document.getElementById('pay-usdt');
-        const buyBtn = document.getElementById('buy-btn');
-
-        function format(num) {
-          return Number(num).toLocaleString(undefined, { maximumFractionDigits: 6 });
-        }
-
-        function updateQuote() {
-          const amount = parseFloat(amountInput.value || '0');
-          if (!amount || amount <= 0) {
-            quoteEl.textContent = 'Enter amount...';
-            buyBtn.disabled = true;
-            return;
-          }
-          const tonPerBdb = 1 / BDB_PER_TON;
-          const totalTon = amount * tonPerBdb;
-          const totalUsd = totalTon * tonUsd;
-          const totalUsdt = totalUsd / (usdtUsd || 1);
-          const oneBdbUsdt = tonPerBdb * tonUsd;
-          if (payCurrency === 'TON') {
-            quoteEl.innerHTML = `Price: 1 BDB ≈ ${format(tonPerBdb)} TON (~${format(oneBdbUsdt)} USDT)<br>` +
-              `You pay: ${format(totalTon)} TON (~${format(totalUsdt)} USDT, ~$${format(totalUsd)})`;
-          } else {
-            quoteEl.innerHTML = `Price: 1 BDB ≈ ${format(oneBdbUsdt)} USDT (~${format(tonPerBdb)} TON)<br>` +
-              `You pay: ${format(totalUsdt)} USDT (~${format(totalTon)} TON, ~$${format(totalUsd)})`;
-          }
-          buyBtn.disabled = false;
-        }
-
-        async function fetchRates() {
-          try {
-            const res = await fetch(COINGECKO_URL, { cache: 'no-store' });
-            const data = await res.json();
-            if (data['the-open-network']?.usd) tonUsd = data['the-open-network'].usd;
-            if (data['tether']?.usd) usdtUsd = data['tether'].usd || 1;
-            updateQuote();
-          } catch (e) {
-            console.warn('Rate fetch failed', e);
-          }
-        }
-
-        amountInput.addEventListener('input', updateQuote);
-        btnTON.addEventListener('click', () => {
-          payCurrency = 'TON';
-          btnTON.classList.add('active');
-          btnUSDT.classList.remove('active');
-          updateQuote();
-        });
-        btnUSDT.addEventListener('click', () => {
-          payCurrency = 'USDT';
-          btnUSDT.classList.add('active');
-          btnTON.classList.remove('active');
-          updateQuote();
-        });
-
-        let tonConnectUI;
-        document.addEventListener('DOMContentLoaded', () => {
-          if (window.TON_CONNECT_UI) {
-            tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-              manifestUrl: new URL('tonconnect-manifest.json', window.location.href).toString(),
-              buttonRootId: 'ton-connect-button'
-            });
-          }
-        });
-
-        buyBtn.addEventListener('click', async () => {
-          const amount = parseFloat(amountInput.value || '0');
-          if (!amount || amount <= 0) return;
-          const tonPerBdb = 1 / BDB_PER_TON;
-          const totalTon = amount * tonPerBdb;
-
-          if (payCurrency === 'TON') {
-            if (!tonConnectUI || !tonConnectUI.connected) {
-              try { await tonConnectUI?.openModal(); } catch {}
-              if (!tonConnectUI?.connected) { alert('Connect wallet first'); return; }
-            }
-            const nano = BigInt(Math.ceil(totalTon * 1e9));
-            try {
-              await tonConnectUI.sendTransaction({
-                validUntil: Math.floor(Date.now() / 1000) + 300,
-                messages: [{ address: SALE_CONTRACT_ADDRESS, amount: nano.toString() }]
-              });
-              alert('Transaction sent. You will receive BDB shortly.');
-            } catch (e) {
-              console.error(e);
-              alert('Transaction failed or was rejected.');
-            }
-          } else {
-            // Build STON.fi pre-filled swap from USDT to TON for the required TON amount
-            const tonAmountStr = totalTon.toFixed(6);
-            // STON.fi supports deep links like: https://app.ston.fi/swap?from=USDT&to=TON&amount=123.45
-            const swapUrl = `https://app.ston.fi/swap?from=USDT&to=TON&amount=${encodeURIComponent(tonAmountStr)}`;
-            window.open(swapUrl, '_blank');
-            alert('We opened STON.fi in a new tab with the required TON amount. After swap, come back and press Buy with TON.');
-          }
-        });
-
-        fetchRates();
-        setInterval(fetchRates, 60000);
-      })();
     </script>
   </body>
 </html>
