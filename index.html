@@ -390,7 +390,8 @@
     <script>
       (function() {
         const SALE_CONTRACT_ADDRESS = 'EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8'; // Your sale contract address
-        const BDB_PER_TON = 1000; // TODO: set your sale rate: how many BDB per 1 TON
+        const PRICE_NANOTON_PER_BDB = 4989; // price per 1 BDB in nanoTON from your sale contract
+        const BDB_PER_TON = 1e9 / PRICE_NANOTON_PER_BDB; // how many BDB per 1 TON
         const COINGECKO_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=the-open-network,tether&vs_currencies=usd';
 
         let tonUsd = 0;
@@ -488,7 +489,12 @@
               alert('Transaction failed or was rejected.');
             }
           } else {
-            alert('USDT payment will be available soon. For now, please use TON.');
+            // Build STON.fi pre-filled swap from USDT to TON for the required TON amount
+            const tonAmountStr = totalTon.toFixed(6);
+            // STON.fi supports deep links like: https://app.ston.fi/swap?from=USDT&to=TON&amount=123.45
+            const swapUrl = `https://app.ston.fi/swap?from=USDT&to=TON&amount=${encodeURIComponent(tonAmountStr)}`;
+            window.open(swapUrl, '_blank');
+            alert('We opened STON.fi in a new tab with the required TON amount. After swap, come back and press Buy with TON.');
           }
         });
 
