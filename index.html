@@ -156,45 +156,44 @@
       /* Purchase Interface */
       .purchase-container {
         position: absolute;
-        top: 45%; /* Перемещено немного выше */
+        top: 40%; /* Перемещено еще выше */
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 15;
         background: rgba(10, 10, 20, 0.85);
         backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 25px; /* Уменьшено на 5px */
+        border-radius: 18px; /* Уменьшено */
+        padding: 20px; /* Уменьшено */
         width: 90%;
-        max-width: 470px; /* Уменьшено на 30px */
+        max-width: 440px; /* Уменьшено еще на 30px */
         box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
         border: 1px solid rgba(0, 200, 255, 0.3);
         display: none;
         flex-direction: column;
-        gap: 18px; /* Уменьшено немного */
+        gap: 15px; /* Уменьшено */
       }
       
       .purchase-header {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 15px;
-        margin-bottom: 10px;
+        gap: 12px; /* Уменьшено */
+        margin-bottom: 8px; /* Уменьшено */
       }
       
       .coin-icon {
-        width: 50px;
-        height: 50px;
+        width: 45px; /* Уменьшено */
+        height: 45px; /* Уменьшено */
         background: linear-gradient(135deg, #00c6ff, #0072ff);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
+        font-size: 22px; /* Уменьшено */
       }
       
       .purchase-title {
-        font-size: 26px; /* Уменьшено немного */
+        font-size: 24px; /* Уменьшено */
         font-weight: bold;
         background: linear-gradient(to right, #00c6ff, #0072ff);
         -webkit-background-clip: text;
@@ -204,16 +203,16 @@
       
       .price-display {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 15px;
-        padding: 18px; /* Уменьшено немного */
+        border-radius: 12px; /* Уменьшено */
+        padding: 15px; /* Уменьшено */
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 8px; /* Уменьшено */
       }
       
       .price-row {
         display: flex;
         justify-content: space-between;
-        padding: 8px 0; /* Уменьшено немного */
+        padding: 6px 0; /* Уменьшено */
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
       
@@ -223,34 +222,36 @@
       
       .price-label {
         color: #aaa;
+        font-size: 14px; /* Уменьшено */
       }
       
       .price-value {
         font-weight: bold;
         color: #00c6ff;
+        font-size: 14px; /* Уменьшено */
       }
       
       .purchase-form {
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 12px; /* Уменьшено */
       }
       
       .form-group {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px; /* Уменьшено */
       }
       
       .form-label {
-        font-size: 16px;
+        font-size: 14px; /* Уменьшено */
         color: #ddd;
       }
       
       .input-group {
         display: flex;
         background: rgba(0, 20, 40, 0.7);
-        border-radius: 12px;
+        border-radius: 10px; /* Уменьшено */
         overflow: hidden;
         border: 1px solid rgba(0, 200, 255, 0.3);
       }
@@ -259,35 +260,35 @@
         flex: 1;
         background: transparent;
         border: none;
-        padding: 14px; /* Уменьшено немного */
+        padding: 12px; /* Уменьшено */
         color: white;
-        font-size: 17px; /* Уменьшено немного */
+        font-size: 15px; /* Уменьшено */
         outline: none;
       }
       
       .input-group select {
         background: rgba(0, 40, 80, 0.7);
         border: none;
-        padding: 0 14px; /* Уменьшено немного */
+        padding: 0 12px; /* Уменьшено */
         color: white;
-        font-size: 15px; /* Уменьшено немного */
+        font-size: 14px; /* Уменьшено */
         outline: none;
         cursor: pointer;
       }
       
       .wallet-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 15px;
-        padding: 14px; /* Уменьшено немного */
+        border-radius: 12px; /* Уменьшено */
+        padding: 12px; /* Уменьшено */
         text-align: center;
-        margin-top: 10px;
+        margin-top: 8px; /* Уменьшено */
       }
       
       .wallet-address {
         font-family: monospace;
-        font-size: 13px; /* Уменьшено немного */
+        font-size: 11px; /* Уменьшено */
         word-break: break-all;
-        margin: 10px 0;
+        margin: 8px 0; /* Уменьшено */
         color: #00c6ff;
       }
       
@@ -295,18 +296,18 @@
         background: linear-gradient(135deg, #00c6ff, #0072ff);
         color: white;
         border: none;
-        padding: 15px; /* Уменьшено немного */
-        border-radius: 12px;
-        font-size: 17px; /* Уменьшено немного */
+        padding: 14px; /* Уменьшено */
+        border-radius: 10px; /* Уменьшено */
+        font-size: 15px; /* Уменьшено */
         font-weight: bold;
         cursor: pointer;
         transition: all 0.3s ease;
-        margin-top: 10px;
+        margin-top: 8px; /* Уменьшено */
       }
       
       .connect-button:hover, .buy-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 198, 255, 0.4);
+        transform: translateY(-2px); /* Уменьшено */
+        box-shadow: 0 4px 12px rgba(0, 198, 255, 0.4); /* Уменьшено */
       }
       
       .connect-button:active, .buy-button:active {
@@ -315,34 +316,35 @@
       
       .swap-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 15px;
-        padding: 14px; /* Уменьшено немного */
+        border-radius: 12px; /* Уменьшено */
+        padding: 12px; /* Уменьшено */
         text-align: center;
-        font-size: 13px; /* Уменьшено немного */
+        font-size: 12px; /* Уменьшено */
         color: #aaa;
-        margin-top: 10px;
+        margin-top: 8px; /* Уменьшено */
       }
       
       .swap-info i {
         color: #00c6ff;
-        margin-right: 5px;
+        margin-right: 4px; /* Уменьшено */
       }
       
       .close-button {
         position: absolute;
-        top: 15px;
-        right: 15px;
+        top: 12px; /* Уменьшено */
+        right: 12px; /* Уменьшено */
         background: rgba(255, 50, 50, 0.3);
         color: white;
         border: none;
-        width: 30px;
-        height: 30px;
+        width: 26px; /* Уменьшено */
+        height: 26px; /* Уменьшено */
         border-radius: 50%;
         cursor: pointer;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 16px; /* Уменьшено */
       }
       
       .notification {
@@ -374,7 +376,7 @@
       /* Purchase Button - More Visible */
       .purchase-button {
         position: absolute;
-        top: 45%; /* Перемещено немного выше */
+        top: 40%; /* Перемещено еще выше */
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 12;
@@ -382,9 +384,9 @@
         color: white;
         border: none;
         border-radius: 50%;
-        width: 70px; /* Уменьшен размер */
-        height: 70px; /* Уменьшен размер */
-        font-size: 26px; /* Уменьшен размер */
+        width: 65px; /* Уменьшено */
+        height: 65px; /* Уменьшено */
+        font-size: 24px; /* Уменьшено */
         cursor: pointer;
         box-shadow: 0 0 20px rgba(0, 198, 255, 0.7);
         transition: all 0.3s ease;
@@ -408,18 +410,18 @@
       /* Contract Info */
       .contract-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 15px;
-        padding: 14px; /* Уменьшено немного */
+        border-radius: 12px; /* Уменьшено */
+        padding: 12px; /* Уменьшено */
         text-align: center;
-        margin-top: 10px;
-        font-size: 13px; /* Уменьшено немного */
+        margin-top: 8px; /* Уменьшено */
+        font-size: 12px; /* Уменьшено */
       }
       
       .contract-address {
         font-family: monospace;
-        font-size: 11px; /* Уменьшено немного */
+        font-size: 10px; /* Уменьшено */
         word-break: break-all;
-        margin: 8px 0;
+        margin: 6px 0; /* Уменьшено */
         color: #00c6ff;
       }
       
@@ -431,18 +433,18 @@
         
         .purchase-container {
           width: 95%;
-          padding: 20px;
+          padding: 15px; /* Уменьшено */
         }
         
         .purchase-title {
-          font-size: 22px;
+          font-size: 20px; /* Уменьшено */
         }
         
         .purchase-button {
-          width: 60px;
-          height: 60px;
-          font-size: 22px;
-          top: 45%;
+          width: 55px; /* Уменьшено */
+          height: 55px; /* Уменьшено */
+          font-size: 20px; /* Уменьшено */
+          top: 40%; /* Перемещено выше */
         }
       }
     </style>
