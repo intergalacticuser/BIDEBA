@@ -451,6 +451,24 @@
       .purchase-container::-webkit-scrollbar-thumb:hover {
         background: rgba(0, 198, 255, 0.7);
       }
+      
+      /* Contract Info */
+      .contract-info {
+        background: rgba(0, 30, 60, 0.7);
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+        margin-top: 8px;
+        font-size: 12px;
+      }
+      
+      .contract-address {
+        font-family: monospace;
+        font-size: 10px;
+        word-break: break-all;
+        margin: 6px 0;
+        color: #00c6ff;
+      }
     </style>
   </head>
   <body>
@@ -626,8 +644,10 @@
           window.addEventListener('resize', resizeCanvas);
 
           // Purchase button event
-          purchaseButton.addEventListener('click', () => {
+          purchaseButton.addEventListener('click', async () => {
             purchaseContainer.style.display = 'flex';
+            // Обновляем цены при открытии окна покупки
+            await updateAllPrices();
           });
           
           // Close purchase interface
@@ -720,10 +740,55 @@
           // Start the falling letters animation immediately
           setInterval(drawFallingLetters, 30); // Start the animation slower (30ms interval)
           
-          // Фиксированные цены (в реальном приложении будут получены из API)
-          let bdbPriceInUSD = 0.000012;
-          let tonPriceInUSD = 5.23;
-          let bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
+          // Цены по умолчанию (будут обновлены при загрузке)
+          let bdbPriceInUSD = 0.000012; // Цена BDB в USD
+          let tonPriceInUSD = 5.23; // Цена TON в USD
+          let bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD; // Цена BDB в TON
+          
+          // Получение цены TON с CoinGecko
+          async function fetchTONPrice() {
+            try {
+              const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
+              const data = await response.json();
+              if (data['the-open-network'] && data['the-open-network'].usd) {
+                tonPriceInUSD = data['the-open-network'].usd;
+                console.log('TON Price (USD):', tonPriceInUSD);
+                return true;
+              }
+            } catch (error) {
+              console.error('Error fetching TON price from CoinGecko:', error);
+            }
+            return false;
+          }
+          
+          // Получение цены BDB (пока используем фиксированную цену, так как BDB может отсутствовать в CoinGecko)
+          // В реальном приложении здесь будет ваш API для получения цены BDB
+          async function fetchBDBPrice() {
+            try {
+              // Пока используем фиксированную цену
+              // В реальном приложении здесь будет запрос к вашему API
+              console.log('BDB Price (USD):', bdbPriceInUSD);
+              return true;
+            } catch (error) {
+              console.error('Error fetching BDB price:', error);
+            }
+            return false;
+          }
+          
+          // Обновление всех цен
+          async function updateAllPrices() {
+            const tonSuccess = await fetchTONPrice();
+            const bdbSuccess = await fetchBDBPrice();
+            
+            if (tonSuccess) {
+              // Пересчитываем цену BDB в TON
+              bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
+              console.log('BDB Price (TON):', bdbPriceInTON);
+            }
+            
+            // Обновляем отображение цен
+            updatePrices();
+          }
           
           // Обновляем отображение цен
           function updatePrices() {
@@ -768,6 +833,11 @@
           
           // Initial price update
           updatePrices();
+          
+          // Периодическое обновление цен (каждые 30 секунд)
+          setInterval(async () => {
+            await updateAllPrices();
+          }, 30000);
           
           // Wallet connection
           connectButton.addEventListener('click', () => {
