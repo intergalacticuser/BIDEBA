@@ -58,7 +58,13 @@
         width: 100%;
         padding-top: 56.25%; /* Aspect ratio: 16:9 */
         margin-top: 20px;
-        z-index: 5; /* Поверх фона */
+        z-index: 5;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+      }
+      
+      #magazine-container.loaded {
+        opacity: 1;
       }
       
       #magazine-container iframe {
@@ -68,6 +74,41 @@
         width: 100%;
         height: 100%;
         border: none;
+      }
+      
+      /* Loading indicator */
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 6;
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+      }
+      
+      .loading-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(0, 198, 255, 0.3);
+        border-top: 5px solid #00c6ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
     </style>
   </head>
@@ -82,13 +123,36 @@
 
     <!-- Magazine Container -->
     <div id="magazine-container">
+      <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
       <iframe 
         src="https://rss.app/embed/v1/magazine/_XzrDDuW8zJzoioSc" 
         frameborder="0"
+        scrolling="no"
+        onload="onIframeLoad()"
       ></iframe>
     </div>
 
     <script>
+      // Флаг для отслеживания загрузки iframe
+      let iframeLoaded = false;
+      
+      // Функция, вызываемая при загрузке iframe
+      function onIframeLoad() {
+        if (!iframeLoaded) {
+          iframeLoaded = true;
+          const container = document.getElementById('magazine-container');
+          const overlay = document.getElementById('loading-overlay');
+          
+          // Плавное появление контента
+          setTimeout(() => {
+            container.classList.add('loaded');
+            overlay.classList.add('hidden');
+          }, 300);
+        }
+      }
+      
       document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.getElementById('background-canvas');
         const ctx = canvas.getContext('2d');
@@ -170,6 +234,12 @@
         
         // Start animation
         setInterval(drawFallingLetters, 30);
+        
+        // Дополнительная проверка на случай, если iframe загрузился до DOMContentLoaded
+        const iframe = document.querySelector('#magazine-container iframe');
+        if (iframe && iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+          onIframeLoad();
+        }
       });
     </script>
   </body>
