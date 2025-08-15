@@ -165,7 +165,7 @@
         border-radius: 18px;
         padding: 20px;
         width: 90%;
-        max-width: 440px;
+        max-width: 462px; /* Увеличено на 5% (440px -> 462px) */
         box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
         border: 1px solid rgba(0, 200, 255, 0.3);
         display: none;
@@ -404,7 +404,7 @@
       .purchase-button {
         position: absolute;
         top: 50%;
-        left: 50%;
+        left: 5%; /* Перемещено влево на 95% от центра (50% - 45%) */
         transform: translate(-50%, -50%);
         z-index: 12;
         background: linear-gradient(135deg, #00c6ff, #0072ff);
@@ -492,6 +492,7 @@
           height: 55px;
           font-size: 20px;
           top: 50%;
+          left: 5%; /* Сохраняем позицию на мобильных устройствах */
         }
       }
     </style>
@@ -645,6 +646,38 @@
           let tonPriceInUSD = 5.23;
           let bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
           
+          // Получение цены TON с CoinGecko
+          async function fetchTONPrice() {
+            try {
+              const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
+              const data = await response.json();
+              if (data['the-open-network'] && data['the-open-network'].usd) {
+                tonPriceInUSD = data['the-open-network'].usd;
+                bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
+                updatePrices();
+                return true;
+              }
+            } catch (error) {
+              console.error('Error fetching TON price from CoinGecko:', error);
+            }
+            return false;
+          }
+          
+          // Получение цены BDB (в реальном приложении будет из вашего API)
+          async function fetchBDBPrice() {
+            try {
+              // Здесь будет ваш API для получения цены BDB
+              // Пока используем симуляцию
+              bdbPriceInUSD = (Math.random() * 0.00002 + 0.000005);
+              bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
+              updatePrices();
+              return true;
+            } catch (error) {
+              console.error('Error fetching BDB price:', error);
+            }
+            return false;
+          }
+          
           // Обновляем отображение цен
           function updatePrices() {
             document.getElementById('bdb-price').textContent = `$${bdbPriceInUSD.toFixed(8)}`;
@@ -779,13 +812,19 @@
           
           // Initial price update
           updatePrices();
-          setInterval(() => {
-            // Симуляция обновления цен (в реальном приложении будет API)
-            bdbPriceInUSD = (Math.random() * 0.00002 + 0.000005);
-            tonPriceInUSD = (Math.random() * 2 + 4);
-            bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
-            updatePrices();
-          }, 5000);
+          
+          // Получаем актуальные цены при открытии виджета
+          purchaseButton.addEventListener('click', async () => {
+            purchaseContainer.style.display = 'flex';
+            await fetchTONPrice();
+            await fetchBDBPrice();
+          });
+          
+          // Периодическое обновление цен (каждые 30 секунд)
+          setInterval(async () => {
+            await fetchTONPrice();
+            await fetchBDBPrice();
+          }, 30000);
           
           // Wallet connection
           connectButton.addEventListener('click', () => {
