@@ -10,7 +10,7 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background-color: #000; /* Dark background */
+        background-color: #000;
         color: white;
         font-family: 'Arial', sans-serif;
         display: flex;
@@ -371,6 +371,58 @@
         100% { opacity: 0; bottom: 0; }
       }
       
+      /* Purchase Button - More Visible */
+      .purchase-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 12;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        font-size: 30px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0, 198, 255, 0.7);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulse 2s infinite;
+      }
+      
+      .purchase-button:hover {
+        transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 0 30px rgba(0, 198, 255, 0.9);
+      }
+      
+      @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(0, 198, 255, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0); }
+      }
+      
+      /* Contract Info */
+      .contract-info {
+        background: rgba(0, 30, 60, 0.7);
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+      
+      .contract-address {
+        font-family: monospace;
+        font-size: 12px;
+        word-break: break-all;
+        margin: 8px 0;
+        color: #00c6ff;
+      }
+      
       /* Responsive adjustments */
       @media (max-width: 768px) {
         .welcome-container {
@@ -383,6 +435,12 @@
         }
         
         .purchase-title {
+          font-size: 24px;
+        }
+        
+        .purchase-button {
+          width: 70px;
+          height: 70px;
           font-size: 24px;
         }
       }
@@ -408,6 +466,11 @@
     </div>
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div>
     <canvas id="falling-letters"></canvas>
+
+    <!-- Purchase Button (More Visible) -->
+    <button class="purchase-button" id="purchase-button">
+      <i class="fas fa-coins"></i>
+    </button>
 
     <!-- Purchase Interface -->
     <div class="purchase-container" id="purchase-container">
@@ -469,8 +532,14 @@
       
       <div class="wallet-info">
         <p>Send your payment to this address:</p>
-        <div class="wallet-address" id="payment-address">EQB3ncyBUTjZUA5pZY94gZJy9PqY7VQF3Vr5KkqJhD5q1234</div>
+        <div class="wallet-address" id="payment-address">EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8</div>
         <p>After payment, your BDB coins will be sent to your wallet</p>
+      </div>
+      
+      <div class="contract-info">
+        <p>BDB Coin Smart Contract:</p>
+        <div class="contract-address">EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8</div>
+        <p><a href="https://tonviewer.com/EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8" target="_blank" style="color: #00c6ff;">View on TonViewer</a></p>
       </div>
     </div>
     
@@ -495,12 +564,17 @@
           const welcomeText = document.getElementById('welcome-text');
           const canvas = document.getElementById('falling-letters');
           const purchaseContainer = document.getElementById('purchase-container');
+          const purchaseButton = document.getElementById('purchase-button');
           const notification = document.getElementById('notification');
           const connectButton = document.getElementById('connect-wallet');
           const buyButton = document.getElementById('buy-button');
           const amountInput = document.getElementById('amount');
           const currencySelect = document.getElementById('currency-select');
           const walletAddressInput = document.getElementById('wallet-address');
+          
+          // Set the contract address
+          const contractAddress = "EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8";
+          document.getElementById('payment-address').textContent = contractAddress;
           
           if (!canvas || !welcomeText) {
             console.error("Error: Missing required elements in the DOM.");
@@ -513,38 +587,10 @@
             return;
           }
           
-          // Create purchase button in the center
-          const purchaseButton = document.createElement('button');
-          purchaseButton.innerHTML = '<i class="fas fa-coins"></i>';
-          purchaseButton.style.position = 'absolute';
-          purchaseButton.style.top = '50%';
-          purchaseButton.style.left = '50%';
-          purchaseButton.style.transform = 'translate(-50%, -50%)';
-          purchaseButton.style.zIndex = '12';
-          purchaseButton.style.background = 'linear-gradient(135deg, #00c6ff, #0072ff)';
-          purchaseButton.style.color = 'white';
-          purchaseButton.style.border = 'none';
-          purchaseButton.style.borderRadius = '50%';
-          purchaseButton.style.width = '80px';
-          purchaseButton.style.height = '80px';
-          purchaseButton.style.fontSize = '30px';
-          purchaseButton.style.cursor = 'pointer';
-          purchaseButton.style.boxShadow = '0 0 20px rgba(0, 198, 255, 0.7)';
-          purchaseButton.style.transition = 'all 0.3s ease';
-          
-          purchaseButton.addEventListener('mouseenter', () => {
-            purchaseButton.style.transform = 'translate(-50%, -50%) scale(1.1)';
-          });
-          
-          purchaseButton.addEventListener('mouseleave', () => {
-            purchaseButton.style.transform = 'translate(-50%, -50%) scale(1)';
-          });
-          
+          // Purchase button event
           purchaseButton.addEventListener('click', () => {
             purchaseContainer.style.display = 'flex';
           });
-          
-          document.body.appendChild(purchaseButton);
           
           function resizeCanvas() {
             canvas.width = window.innerWidth;
