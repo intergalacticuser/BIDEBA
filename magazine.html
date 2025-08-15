@@ -9,13 +9,25 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background-color: #000; /* Dark background */
+        background-color: #000;
         color: white;
         font-family: 'Arial', sans-serif;
         display: flex;
         flex-direction: column;
         height: 100vh;
+        position: relative;
       }
+      
+      /* Background Canvas */
+      #background-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+      
       /* Back Button */
       #back-button {
         position: absolute;
@@ -23,6 +35,7 @@
         left: 10px;
         z-index: 10;
       }
+      
       #back-button button {
         background: rgba(255, 255, 255, 0.1);
         color: white;
@@ -34,6 +47,7 @@
         cursor: pointer;
         transition: background 0.3s ease;
       }
+      
       #back-button button:hover {
         background: rgba(255, 255, 255, 0.2);
       }
@@ -43,8 +57,10 @@
         position: relative;
         width: 100%;
         padding-top: 56.25%; /* Aspect ratio: 16:9 */
-        margin-top: 20px; /* Add space at the top */
+        margin-top: 20px;
+        z-index: 5; /* Поверх фона */
       }
+      
       #magazine-container iframe {
         position: absolute;
         top: 0;
@@ -56,6 +72,9 @@
     </style>
   </head>
   <body>
+    <!-- Background Canvas -->
+    <canvas id="background-canvas"></canvas>
+    
     <!-- Back Button -->
     <div id="back-button">
       <button onclick="location.href='index.html'">Back</button>
@@ -68,7 +87,90 @@
         frameborder="0"
       ></iframe>
     </div>
-  </body>
-</html>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('background-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+          console.error("Canvas context not supported");
+          return;
+        }
+        
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
+        const columns = Math.floor(canvas.width / (fontSize * 0.7));
+        const drops = [];
+        const trailLength = 3;
+        const glowIntensity = 10;
+        let pulseFactor = 1;
+        let pulseDirection = 1;
+        
+        for (let i = 0; i < columns; i++) {
+          drops[i] = { y: 1, trail: [] };
+        }
+        
+        let speedState = 0;
+        const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
+        
+        function drawFallingLetters() {
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.font = `${fontSize}px Arial`;
+          pulseFactor += pulseDirection * 0.05;
+          if (pulseFactor >= 1.5 || pulseFactor <= 0.5) {
+            pulseDirection *= -1;
+          }
+          for (let i = 0; i < drops.length; i++) {
+            const text = letters[Math.floor(Math.random() * letters.length)];
+            const x = i * fontSize * 0.7;
+            const y = drops[i].y * fontSize;
+            const h = Math.random() * 360;
+            const s = 70 + Math.random() * 30;
+            const l = 50 + Math.random() * 20;
+            const glowSize = glowIntensity * pulseFactor;
+            ctx.shadowBlur = glowSize;
+            ctx.shadowColor = `hsl(${h}, ${s}%, ${l}%)`;
+            ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`;
+            ctx.fillText(text, x, y);
+            drops[i].trail.push({ x, y, alpha: 1 });
+            while (drops[i].trail.length > trailLength) {
+              drops[i].trail.shift();
+            }
+            drops[i].trail.forEach((point, index) => {
+              const alpha = 0.4 - (index / trailLength);
+              ctx.globalAlpha = alpha;
+              ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${alpha})`;
+              ctx.fillText(text, point.x, point.y);
+            });
+            ctx.globalAlpha = 1;
+            if (y > canvas.height || Math.random() > 0.97) {
+              drops[i].y = 0;
+              drops[i].trail = [];
+            }
+            drops[i].y += speedLevels[speedState];
+          }
+          ctx.shadowBlur = 0;
+          ctx.shadowColor = 'transparent';
+        }
+        
+        canvas.addEventListener('mousedown', () => {
+          speedState = (speedState + 1) % speedLevels.length;
+          console.log(`Current speed state: ${speedState}`);
+        });
+        
+        // Start animation
+        setInterval(drawFallingLetters, 30);
+      });
+    </script>
   </body>
 </html>
