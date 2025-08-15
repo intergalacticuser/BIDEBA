@@ -156,44 +156,46 @@
       /* Purchase Interface */
       .purchase-container {
         position: absolute;
-        top: 40%; /* Перемещено еще выше */
+        top: 55%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 15;
         background: rgba(10, 10, 20, 0.85);
         backdrop-filter: blur(10px);
-        border-radius: 18px; /* Уменьшено */
-        padding: 20px; /* Уменьшено */
+        border-radius: 18px;
+        padding: 20px;
         width: 90%;
-        max-width: 440px; /* Уменьшено еще на 30px */
+        max-width: 440px;
         box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
         border: 1px solid rgba(0, 200, 255, 0.3);
         display: none;
         flex-direction: column;
-        gap: 15px; /* Уменьшено */
+        gap: 15px;
+        max-height: 70vh;
+        overflow-y: auto;
       }
       
       .purchase-header {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px; /* Уменьшено */
-        margin-bottom: 8px; /* Уменьшено */
+        gap: 12px;
+        margin-bottom: 8px;
       }
       
       .coin-icon {
-        width: 45px; /* Уменьшено */
-        height: 45px; /* Уменьшено */
+        width: 45px;
+        height: 45px;
         background: linear-gradient(135deg, #00c6ff, #0072ff);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px; /* Уменьшено */
+        font-size: 22px;
       }
       
       .purchase-title {
-        font-size: 24px; /* Уменьшено */
+        font-size: 24px;
         font-weight: bold;
         background: linear-gradient(to right, #00c6ff, #0072ff);
         -webkit-background-clip: text;
@@ -203,16 +205,16 @@
       
       .price-display {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px; /* Уменьшено */
-        padding: 15px; /* Уменьшено */
+        border-radius: 12px;
+        padding: 15px;
         text-align: center;
-        margin-bottom: 8px; /* Уменьшено */
+        margin-bottom: 8px;
       }
       
       .price-row {
         display: flex;
         justify-content: space-between;
-        padding: 6px 0; /* Уменьшено */
+        padding: 6px 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
       
@@ -222,36 +224,36 @@
       
       .price-label {
         color: #aaa;
-        font-size: 14px; /* Уменьшено */
+        font-size: 14px;
       }
       
       .price-value {
         font-weight: bold;
         color: #00c6ff;
-        font-size: 14px; /* Уменьшено */
+        font-size: 14px;
       }
       
       .purchase-form {
         display: flex;
         flex-direction: column;
-        gap: 12px; /* Уменьшено */
+        gap: 12px;
       }
       
       .form-group {
         display: flex;
         flex-direction: column;
-        gap: 6px; /* Уменьшено */
+        gap: 6px;
       }
       
       .form-label {
-        font-size: 14px; /* Уменьшено */
+        font-size: 14px;
         color: #ddd;
       }
       
       .input-group {
         display: flex;
         background: rgba(0, 20, 40, 0.7);
-        border-radius: 10px; /* Уменьшено */
+        border-radius: 10px;
         overflow: hidden;
         border: 1px solid rgba(0, 200, 255, 0.3);
       }
@@ -260,35 +262,60 @@
         flex: 1;
         background: transparent;
         border: none;
-        padding: 12px; /* Уменьшено */
+        padding: 12px;
         color: white;
-        font-size: 15px; /* Уменьшено */
+        font-size: 15px;
         outline: none;
       }
       
       .input-group select {
         background: rgba(0, 40, 80, 0.7);
         border: none;
-        padding: 0 12px; /* Уменьшено */
+        padding: 0 12px;
         color: white;
-        font-size: 14px; /* Уменьшено */
+        font-size: 14px;
         outline: none;
         cursor: pointer;
       }
       
+      .result-display {
+        background: rgba(0, 30, 60, 0.7);
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        margin: 8px 0;
+      }
+      
+      .result-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+      }
+      
+      .result-label {
+        color: #aaa;
+        font-size: 14px;
+      }
+      
+      .result-value {
+        font-weight: bold;
+        color: #00c6ff;
+        font-size: 16px;
+      }
+      
       .wallet-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px; /* Уменьшено */
-        padding: 12px; /* Уменьшено */
+        border-radius: 12px;
+        padding: 12px;
         text-align: center;
-        margin-top: 8px; /* Уменьшено */
+        margin-top: 8px;
       }
       
       .wallet-address {
         font-family: monospace;
-        font-size: 11px; /* Уменьшено */
+        font-size: 11px;
         word-break: break-all;
-        margin: 8px 0; /* Уменьшено */
+        margin: 8px 0;
         color: #00c6ff;
       }
       
@@ -296,18 +323,18 @@
         background: linear-gradient(135deg, #00c6ff, #0072ff);
         color: white;
         border: none;
-        padding: 14px; /* Уменьшено */
-        border-radius: 10px; /* Уменьшено */
-        font-size: 15px; /* Уменьшено */
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 15px;
         font-weight: bold;
         cursor: pointer;
         transition: all 0.3s ease;
-        margin-top: 8px; /* Уменьшено */
+        margin-top: 8px;
       }
       
       .connect-button:hover, .buy-button:hover {
-        transform: translateY(-2px); /* Уменьшено */
-        box-shadow: 0 4px 12px rgba(0, 198, 255, 0.4); /* Уменьшено */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 198, 255, 0.4);
       }
       
       .connect-button:active, .buy-button:active {
@@ -316,35 +343,35 @@
       
       .swap-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px; /* Уменьшено */
-        padding: 12px; /* Уменьшено */
+        border-radius: 12px;
+        padding: 12px;
         text-align: center;
-        font-size: 12px; /* Уменьшено */
+        font-size: 12px;
         color: #aaa;
-        margin-top: 8px; /* Уменьшено */
+        margin-top: 8px;
       }
       
       .swap-info i {
         color: #00c6ff;
-        margin-right: 4px; /* Уменьшено */
+        margin-right: 4px;
       }
       
       .close-button {
         position: absolute;
-        top: 12px; /* Уменьшено */
-        right: 12px; /* Уменьшено */
+        top: 12px;
+        right: 12px;
         background: rgba(255, 50, 50, 0.3);
         color: white;
         border: none;
-        width: 26px; /* Уменьшено */
-        height: 26px; /* Уменьшено */
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
         cursor: pointer;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px; /* Уменьшено */
+        font-size: 16px;
       }
       
       .notification {
@@ -376,7 +403,7 @@
       /* Purchase Button - More Visible */
       .purchase-button {
         position: absolute;
-        top: 40%; /* Перемещено еще выше */
+        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 12;
@@ -384,9 +411,9 @@
         color: white;
         border: none;
         border-radius: 50%;
-        width: 65px; /* Уменьшено */
-        height: 65px; /* Уменьшено */
-        font-size: 24px; /* Уменьшено */
+        width: 65px;
+        height: 65px;
+        font-size: 24px;
         cursor: pointer;
         box-shadow: 0 0 20px rgba(0, 198, 255, 0.7);
         transition: all 0.3s ease;
@@ -410,19 +437,38 @@
       /* Contract Info */
       .contract-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px; /* Уменьшено */
-        padding: 12px; /* Уменьшено */
+        border-radius: 12px;
+        padding: 12px;
         text-align: center;
-        margin-top: 8px; /* Уменьшено */
-        font-size: 12px; /* Уменьшено */
+        margin-top: 8px;
+        font-size: 12px;
       }
       
       .contract-address {
         font-family: monospace;
-        font-size: 10px; /* Уменьшено */
+        font-size: 10px;
         word-break: break-all;
-        margin: 6px 0; /* Уменьшено */
+        margin: 6px 0;
         color: #00c6ff;
+      }
+      
+      /* Scrollbar styling */
+      .purchase-container::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      .purchase-container::-webkit-scrollbar-track {
+        background: rgba(0, 20, 40, 0.5);
+        border-radius: 4px;
+      }
+      
+      .purchase-container::-webkit-scrollbar-thumb {
+        background: rgba(0, 198, 255, 0.5);
+        border-radius: 4px;
+      }
+      
+      .purchase-container::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 198, 255, 0.7);
       }
       
       /* Responsive adjustments */
@@ -433,18 +479,19 @@
         
         .purchase-container {
           width: 95%;
-          padding: 15px; /* Уменьшено */
+          padding: 15px;
+          top: 60%;
         }
         
         .purchase-title {
-          font-size: 20px; /* Уменьшено */
+          font-size: 20px;
         }
         
         .purchase-button {
-          width: 55px; /* Уменьшено */
-          height: 55px; /* Уменьшено */
-          font-size: 20px; /* Уменьшено */
-          top: 40%; /* Перемещено выше */
+          width: 55px;
+          height: 55px;
+          font-size: 20px;
+          top: 50%;
         }
       }
     </style>
@@ -505,11 +552,23 @@
         <div class="form-group">
           <label class="form-label">Amount to Buy:</label>
           <div class="input-group">
-            <input type="number" id="amount" placeholder="Enter amount" min="1" value="1000">
+            <input type="number" id="amount" placeholder="Enter amount" min="1" value="10">
             <select id="currency-select">
               <option value="ton">TON</option>
               <option value="usdt">USDT</option>
             </select>
+          </div>
+        </div>
+        
+        <!-- Результат расчета -->
+        <div class="result-display">
+          <div class="result-row">
+            <span class="result-label">You will receive:</span>
+            <span class="result-value" id="bdb-amount">83,333 BDB</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Exchange rate:</span>
+            <span class="result-value" id="exchange-rate">1 TON = 8,333 BDB</span>
           </div>
         </div>
         
@@ -574,10 +633,58 @@
           const amountInput = document.getElementById('amount');
           const currencySelect = document.getElementById('currency-select');
           const walletAddressInput = document.getElementById('wallet-address');
+          const bdbAmountElement = document.getElementById('bdb-amount');
+          const exchangeRateElement = document.getElementById('exchange-rate');
           
           // Set the contract address
           const contractAddress = "EQCAwyYlz3E4l5vovfl3OXU_3OpgpL9tZUUjZYaOnrQFqz-8";
           document.getElementById('payment-address').textContent = contractAddress;
+          
+          // Текущие цены (в реальном приложении будут получены из API)
+          let bdbPriceInUSD = 0.000012;
+          let tonPriceInUSD = 5.23;
+          let bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
+          
+          // Обновляем отображение цен
+          function updatePrices() {
+            document.getElementById('bdb-price').textContent = `$${bdbPriceInUSD.toFixed(8)}`;
+            document.getElementById('ton-price').textContent = `$${tonPriceInUSD.toFixed(2)}`;
+            document.getElementById('bdb-ton').textContent = `${bdbPriceInTON.toFixed(10)} TON`;
+            updateExchangeRate();
+            calculateBDBAmount();
+          }
+          
+          // Обновляем курс обмена
+          function updateExchangeRate() {
+            const currency = currencySelect.value;
+            if (currency === 'ton') {
+              exchangeRateElement.textContent = `1 TON = ${Math.round(1 / bdbPriceInTON).toLocaleString()} BDB`;
+            } else {
+              exchangeRateElement.textContent = `1 USDT = ${Math.round(1 / bdbPriceInUSD).toLocaleString()} BDB`;
+            }
+          }
+          
+          // Расчет количества BDB
+          function calculateBDBAmount() {
+            const amount = parseFloat(amountInput.value) || 0;
+            const currency = currencySelect.value;
+            
+            let bdbAmount;
+            if (currency === 'ton') {
+              bdbAmount = amount / bdbPriceInTON;
+            } else {
+              bdbAmount = amount / bdbPriceInUSD;
+            }
+            
+            bdbAmountElement.textContent = `${Math.round(bdbAmount).toLocaleString()} BDB`;
+          }
+          
+          // Слушатели событий
+          amountInput.addEventListener('input', calculateBDBAmount);
+          currencySelect.addEventListener('change', () => {
+            updateExchangeRate();
+            calculateBDBAmount();
+          });
           
           if (!canvas || !welcomeText) {
             console.error("Error: Missing required elements in the DOM.");
@@ -670,21 +777,15 @@
             setInterval(drawFallingLetters, 30);
           }, 5000);
           
-          // Simulate price updates
-          function updatePrices() {
-            // Simulated prices - in a real app, these would come from an API
-            const bdbPrice = (Math.random() * 0.00002 + 0.000005).toFixed(8);
-            const tonPrice = (Math.random() * 2 + 4).toFixed(2);
-            const bdbInTon = (bdbPrice / tonPrice).toFixed(10);
-            
-            document.getElementById('bdb-price').textContent = `$${bdbPrice}`;
-            document.getElementById('ton-price').textContent = `$${tonPrice}`;
-            document.getElementById('bdb-ton').textContent = `${bdbInTon} TON`;
-          }
-          
-          // Update prices every 5 seconds
+          // Initial price update
           updatePrices();
-          setInterval(updatePrices, 5000);
+          setInterval(() => {
+            // Симуляция обновления цен (в реальном приложении будет API)
+            bdbPriceInUSD = (Math.random() * 0.00002 + 0.000005);
+            tonPriceInUSD = (Math.random() * 2 + 4);
+            bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
+            updatePrices();
+          }, 5000);
           
           // Wallet connection
           connectButton.addEventListener('click', () => {
@@ -721,7 +822,7 @@
             }
             
             // Simulate purchase
-            showNotification(`Purchase initiated: ${amount} BDB coins for ${currency.toUpperCase()}`);
+            showNotification(`Purchase initiated: ${amount} ${currency.toUpperCase()} for BDB coins`);
             
             // In a real app, this would initiate the transaction
             setTimeout(() => {
