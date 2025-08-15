@@ -56,17 +56,18 @@
       #magazine-container {
         position: relative;
         width: 100%;
-        height: calc(100vh - 60px); /* Высота с учетом отступа сверху */
+        height: calc(100vh - 60px);
         margin-top: 20px;
         z-index: 5;
-        overflow: hidden; /* Скрыть переполнение при увеличении */
-        transition: transform 0.3s ease;
+        overflow: auto;
+        transition: all 0.3s ease;
       }
       
       #magazine-container iframe {
         width: 100%;
         height: 100%;
         border: none;
+        transform-origin: center center;
         transition: transform 0.3s ease;
       }
       
@@ -82,13 +83,14 @@
         align-items: center;
         background: rgba(0, 0, 0, 0.7);
         z-index: 6;
-        opacity: 1;
-        transition: opacity 0.5s ease-in-out;
-      }
-      
-      .loading-overlay.hidden {
         opacity: 0;
         pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      
+      .loading-overlay.show {
+        opacity: 1;
+        pointer-events: all;
       }
       
       .loading-spinner {
@@ -105,7 +107,7 @@
         100% { transform: rotate(360deg); }
       }
       
-      /* Прокрутка для iframe */
+      /* Прокрутка для контейнера */
       #magazine-container::-webkit-scrollbar {
         width: 8px;
       }
@@ -142,39 +144,25 @@
         src="https://rss.app/embed/v1/magazine/_XzrDDuW8zJzoioSc" 
         frameborder="0"
         scrolling="yes"
-        onload="onIframeLoad()"
         id="magazine-iframe"
       ></iframe>
     </div>
 
     <script>
-      // Флаг для отслеживания загрузки iframe
-      let iframeLoaded = false;
-      
-      // Функция, вызываемая при загрузке iframe
-      function onIframeLoad() {
-        if (!iframeLoaded) {
-          iframeLoaded = true;
-          const container = document.getElementById('magazine-container');
-          const overlay = document.getElementById('loading-overlay');
-          
-          // Плавное появление контента
-          setTimeout(() => {
-            overlay.classList.add('hidden');
-          }, 300);
-        }
-      }
-      
       document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.getElementById('background-canvas');
         const ctx = canvas.getContext('2d');
         const container = document.getElementById('magazine-container');
         const iframe = document.getElementById('magazine-iframe');
+        const loadingOverlay = document.getElementById('loading-overlay');
         
         if (!ctx) {
           console.error("Canvas context not supported");
           return;
         }
+        
+        // Показываем индикатор загрузки
+        loadingOverlay.classList.add('show');
         
         function resizeCanvas() {
           canvas.width = window.innerWidth;
@@ -184,28 +172,98 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
         
-        // Обработка масштабирования
-        function handleZoom() {
-          const zoomLevel = window.devicePixelRatio || 1;
-          
-          // При увеличении масштаба увеличиваем iframe
-          if (zoomLevel > 1) {
-            const scale = zoomLevel;
-            iframe.style.transform = `scale(${scale})`;
-            iframe.style.transformOrigin = 'top center';
-            
-            // Разрешаем прокрутку при увеличении
-            container.style.overflow = 'auto';
-          } else {
-            iframe.style.transform = 'scale(1)';
-            container.style.overflow = 'hidden';
+        // Обработка масштабирования с фокусом в центр
+        let currentScale = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+        
+        function updateTransform() {
+          iframe.style.transform = `scale(${currentScale}) translate(${offsetX}px, ${offsetY}px)`;
+        }
+        
+        // Увеличение масштаба
+        function zoomIn() {
+          if (currentScale < 3) {
+            currentScale += 0.1;
+            updateTransform();
           }
         }
         
-        // Слушатель изменения масштаба
-        window.addEventListener('resize', handleZoom);
-        // Инициализация при загрузке
-        handleZoom();
+        // Уменьшение масштаба
+        function zoomOut() {
+          if (currentScale > 0.5) {
+            currentScale -= 0.1;
+            updateTransform();
+          }
+        }
+        
+        // Сброс масштаба
+        function resetZoom() {
+          currentScale = 1;
+          offsetX = 0;
+          offsetY = 0;
+          updateTransform();
+        }
+        
+        // Обработка колеса мыши для зума
+        container.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          
+          const rect = container.getBoundingClientRect();
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
+          
+          // Сохраняем текущую позицию
+          const oldScale = currentScale;
+          
+          // Изменяем масштаб
+          if (e.deltaY < 0) {
+            zoomIn();
+          } else {
+            zoomOut();
+          }
+          
+          // Корректируем позицию для фокусировки на курсоре
+          const scaleRatio = currentScale / oldScale;
+          offsetX = mouseX - (mouseX - offsetX) * scaleRatio;
+          offsetY = mouseY - (mouseY - offsetY) * scaleRatio;
+          
+          updateTransform();
+        });
+        
+        // Обработка перемещения при зуме
+        let isDragging = false;
+        let startX, startY, startOffsetX, startOffsetY;
+        
+        iframe.addEventListener('mousedown', (e) => {
+          if (currentScale > 1) {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startOffsetX = offsetX;
+            startOffsetY = offsetY;
+            iframe.style.cursor = 'grabbing';
+            e.preventDefault();
+          }
+        });
+        
+        window.addEventListener('mousemove', (e) => {
+          if (isDragging) {
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            offsetX = startOffsetX + dx / currentScale;
+            offsetY = startOffsetY + dy / currentScale;
+            updateTransform();
+          }
+        });
+        
+        window.addEventListener('mouseup', () => {
+          isDragging = false;
+          iframe.style.cursor = 'default';
+        });
+        
+        // Сброс зума при двойном клике
+        container.addEventListener('dblclick', resetZoom);
         
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
@@ -272,10 +330,10 @@
         // Start animation
         setInterval(drawFallingLetters, 30);
         
-        // Дополнительная проверка на случай, если iframe загрузился до DOMContentLoaded
-        if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
-          onIframeLoad();
-        }
+        // Скрываем индикатор загрузки через 1 секунду
+        setTimeout(() => {
+          loadingOverlay.classList.remove('show');
+        }, 1000);
       });
     </script>
   </body>
