@@ -56,24 +56,18 @@
       #magazine-container {
         position: relative;
         width: 100%;
-        padding-top: 56.25%; /* Aspect ratio: 16:9 */
+        height: calc(100vh - 60px); /* Высота с учетом отступа сверху */
         margin-top: 20px;
         z-index: 5;
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
-      }
-      
-      #magazine-container.loaded {
-        opacity: 1;
+        overflow: hidden; /* Скрыть переполнение при увеличении */
+        transition: transform 0.3s ease;
       }
       
       #magazine-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         border: none;
+        transition: transform 0.3s ease;
       }
       
       /* Loading indicator */
@@ -110,6 +104,24 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
+      
+      /* Прокрутка для iframe */
+      #magazine-container::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      #magazine-container::-webkit-scrollbar-track {
+        background: rgba(0, 20, 40, 0.5);
+      }
+      
+      #magazine-container::-webkit-scrollbar-thumb {
+        background: rgba(0, 198, 255, 0.5);
+        border-radius: 4px;
+      }
+      
+      #magazine-container::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 198, 255, 0.7);
+      }
     </style>
   </head>
   <body>
@@ -129,8 +141,9 @@
       <iframe 
         src="https://rss.app/embed/v1/magazine/_XzrDDuW8zJzoioSc" 
         frameborder="0"
-        scrolling="no"
+        scrolling="yes"
         onload="onIframeLoad()"
+        id="magazine-iframe"
       ></iframe>
     </div>
 
@@ -147,7 +160,6 @@
           
           // Плавное появление контента
           setTimeout(() => {
-            container.classList.add('loaded');
             overlay.classList.add('hidden');
           }, 300);
         }
@@ -156,6 +168,8 @@
       document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.getElementById('background-canvas');
         const ctx = canvas.getContext('2d');
+        const container = document.getElementById('magazine-container');
+        const iframe = document.getElementById('magazine-iframe');
         
         if (!ctx) {
           console.error("Canvas context not supported");
@@ -169,6 +183,29 @@
         
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
+        
+        // Обработка масштабирования
+        function handleZoom() {
+          const zoomLevel = window.devicePixelRatio || 1;
+          
+          // При увеличении масштаба увеличиваем iframe
+          if (zoomLevel > 1) {
+            const scale = zoomLevel;
+            iframe.style.transform = `scale(${scale})`;
+            iframe.style.transformOrigin = 'top center';
+            
+            // Разрешаем прокрутку при увеличении
+            container.style.overflow = 'auto';
+          } else {
+            iframe.style.transform = 'scale(1)';
+            container.style.overflow = 'hidden';
+          }
+        }
+        
+        // Слушатель изменения масштаба
+        window.addEventListener('resize', handleZoom);
+        // Инициализация при загрузке
+        handleZoom();
         
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
@@ -236,8 +273,7 @@
         setInterval(drawFallingLetters, 30);
         
         // Дополнительная проверка на случай, если iframe загрузился до DOMContentLoaded
-        const iframe = document.querySelector('#magazine-container iframe');
-        if (iframe && iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+        if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
           onIframeLoad();
         }
       });
