@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Magazine</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
-    <link rel="shortcut icon" type="image/x-icon" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png  ">
+    <link rel="shortcut icon" type="image/x-icon" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png  ">
     <style>
       body {
         margin: 0;
@@ -54,23 +54,22 @@
         background: rgba(255, 255, 255, 0.2);
       }
 
-      /* Magazine Container - Уменьшен размер на 5% */
+      /* Magazine Container */
       #magazine-container {
         position: relative;
         width: 100%;
-        height: 95vh; /* Уменьшено с 100vh */
+        height: 100vh;
         z-index: 5;
         overflow: hidden;
         transition: all 0.3s ease;
-        margin-top: 2.5vh; /* Центрирование по вертикали */
       }
       
       #magazine-container iframe {
         position: absolute;
-        top: -19px; /* Уменьшено на 5% (было -20px) */
-        left: -19px; /* Уменьшено на 5% (было -20px) */
-        width: calc(100% + 38px); /* Уменьшено на 5% (было 40px) */
-        height: calc(100% + 38px); /* Уменьшено на 5% (было 40px) */
+        top: -20px; /* Начальное смещение вверх */
+        left: -20px; /* Начальное смещение влево */
+        width: calc(100% + 40px); /* Увеличиваем ширину */
+        height: calc(100% + 40px); /* Увеличиваем высоту */
         border: none;
         transform: scale(1);
         transform-origin: center center;
@@ -100,8 +99,8 @@
       }
       
       .loading-spinner {
-        width: 48px; /* Уменьшено на 5% (было 50px) */
-        height: 48px; /* Уменьшено на 5% (было 50px) */
+        width: 50px;
+        height: 50px;
         border: 5px solid rgba(0, 198, 255, 0.3);
         border-top: 5px solid #00c6ff;
         border-radius: 50%;
@@ -147,7 +146,7 @@
         <div class="loading-spinner"></div>
       </div>
       <iframe 
-        src="https://rss.app/embed/v1/magazine/_XzrDDuW8zJzoioSc" 
+        src="https://rss.app/embed/v1/magazine/_XzrDDuW8zJzoioSc  " 
         frameborder="0"
         scrolling="yes"
         id="magazine-iframe"
