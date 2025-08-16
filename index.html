@@ -12,7 +12,6 @@
       body {
         margin: 0;
         padding: 0;
-        overflow: hidden;
         background-color: #000;
         color: white;
         font-family: 'Arial', sans-serif;
@@ -20,7 +19,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh;
         position: relative;
       }
       
@@ -117,7 +116,7 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-        height: 100vh;
+        min-height: 100vh;
         background-color: #000;
         color: white;
         font-family: 'Arial', sans-serif;
@@ -474,6 +473,35 @@
         background: rgba(0, 198, 255, 0.7);
       }
       
+      /* Добавляем прокрутку для всей страницы */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Стили для полосы прокрутки всей страницы */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: rgba(0, 10, 20, 0.5);
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: rgba(0, 150, 255, 0.5);
+        border-radius: 5px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 150, 255, 0.7);
+      }
+      
+      /* Добавляем контент для возможности прокрутки */
+      .content-spacer {
+        height: 100vh;
+        width: 100%;
+      }
+      
       /* Responsive adjustments */
       @media (max-width: 768px) {
         .welcome-container {
@@ -568,11 +596,11 @@
         <div class="result-display">
           <div class="result-row">
             <span class="result-label">You will receive:</span>
-            <span class="result-value" id="bdb-amount">83,333 BDB</span>
+            <span class="result-value" id="bdb-amount">83,333.00 BDB</span>
           </div>
           <div class="result-row">
             <span class="result-label">Exchange rate:</span>
-            <span class="result-value" id="exchange-rate">1 TON = 8,333 BDB</span>
+            <span class="result-value" id="exchange-rate">1 TON = 8,333.00 BDB</span>
           </div>
         </div>
         
@@ -623,6 +651,9 @@
       </div>
       <p>For more information, visit our <a href="https://bdbcoin.com" target="_blank">official website</a>.</p>
     </div>
+
+    <!-- Добавляем элемент для возможности прокрутки -->
+    <div class="content-spacer"></div>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -690,17 +721,19 @@
             calculateBDBAmount();
           }
           
-          // Обновляем курс обмена
+          // Обновляем курс обмена с двумя знаками после запятой
           function updateExchangeRate() {
             const currency = currencySelect.value;
             if (currency === 'ton') {
-              exchangeRateElement.textContent = `1 TON = ${Math.round(1 / bdbPriceInTON).toLocaleString()} BDB`;
+              // Форматируем курс с двумя знаками после запятой
+              exchangeRateElement.textContent = `1 TON = ${parseFloat((1 / bdbPriceInTON).toFixed(2)).toLocaleString()} BDB`;
             } else {
-              exchangeRateElement.textContent = `1 USDT = ${Math.round(1 / bdbPriceInUSD).toLocaleString()} BDB`;
+              // Форматируем курс с двумя знаками после запятой
+              exchangeRateElement.textContent = `1 USDT = ${parseFloat((1 / bdbPriceInUSD).toFixed(2)).toLocaleString()} BDB`;
             }
           }
           
-          // Расчет количества BDB
+          // Расчет количества BDB с двумя знаками после запятой
           function calculateBDBAmount() {
             const amount = parseFloat(amountInput.value) || 0;
             const currency = currencySelect.value;
@@ -712,7 +745,8 @@
               bdbAmount = amount / bdbPriceInUSD;
             }
             
-            bdbAmountElement.textContent = `${Math.round(bdbAmount).toLocaleString()} BDB`;
+            // Форматируем число с двумя знаками после запятой и разделителями тысяч
+            bdbAmountElement.textContent = `${bdbAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} BDB`;
           }
           
           // Слушатели событий
