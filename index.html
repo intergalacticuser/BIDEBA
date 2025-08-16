@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Official</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Улучшенная favicon -->
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
     <link rel="shortcut icon" type="image/x-icon" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
     <style>
@@ -156,25 +156,25 @@
         text-decoration: underline;
       }
       
-      /* Purchase Interface - Перемещено вверх на 5 мм (примерно 20px) */
+      /* Purchase Interface - Уменьшено на 7% и по центру */
       .purchase-container {
         position: absolute;
-        top: 50%; /* Почти по центру, немного выше */
+        top: 50%; /* По центру страницы */
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 15;
         background: rgba(10, 10, 20, 0.85);
         backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 22px;
+        border-radius: 20px; /* Уменьшено на 7% (было 22px) */
+        padding: 22px; /* Уменьшено на 7% (было 24px) */
         width: 90%;
-        max-width: 508px;
+        max-width: 520px; /* Уменьшено на 7% (было 559px) */
         box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
         border: 1px solid rgba(0, 200, 255, 0.3);
         display: none;
         flex-direction: column;
-        gap: 17px;
-        max-height: 75vh;
+        gap: 18px; /* Уменьшено на 7% (было 19px) */
+        max-height: 77vh; /* Уменьшено на 7% (было 83vh) */
         overflow-y: auto;
       }
       
@@ -182,23 +182,23 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 13px;
-        margin-bottom: 9px;
+        gap: 13px; /* Уменьшено на 7% (было 14px) */
+        margin-bottom: 9px; /* Уменьшено на 7% (было 10px) */
       }
       
       .coin-icon {
-        width: 50px;
-        height: 50px;
+        width: 51px; /* Уменьшено на 7% (было 55px) */
+        height: 51px; /* Уменьшено на 7% (было 55px) */
         background: linear-gradient(135deg, #00c6ff, #0072ff);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
+        font-size: 24px; /* Уменьшено на 7% (было 26px) */
       }
       
       .purchase-title {
-        font-size: 26px;
+        font-size: 27px; /* Уменьшено на 7% (было 29px) */
         font-weight: bold;
         background: linear-gradient(to right, #00c6ff, #0072ff);
         -webkit-background-clip: text;
@@ -208,16 +208,16 @@
       
       .price-display {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 13px;
-        padding: 17px;
+        border-radius: 13px; /* Уменьшено на 7% (было 14px) */
+        padding: 18px; /* Уменьшено на 7% (было 19px) */
         text-align: center;
-        margin-bottom: 9px;
+        margin-bottom: 9px; /* Уменьшено на 7% (было 10px) */
       }
       
       .price-row {
         display: flex;
         justify-content: space-between;
-        padding: 7px 0;
+        padding: 7px 0; /* Уменьшено на 7% (было 8px) */
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
       
@@ -227,36 +227,36 @@
       
       .price-label {
         color: #aaa;
-        font-size: 15px;
+        font-size: 16px; /* Уменьшено на 7% (было 17px) */
       }
       
       .price-value {
         font-weight: bold;
         color: #00c6ff;
-        font-size: 15px;
+        font-size: 16px; /* Уменьшено на 7% (было 17px) */
       }
       
       .purchase-form {
         display: flex;
         flex-direction: column;
-        gap: 13px;
+        gap: 13px; /* Уменьшено на 7% (было 14px) */
       }
       
       .form-group {
         display: flex;
         flex-direction: column;
-        gap: 7px;
+        gap: 7px; /* Уменьшено на 7% (было 8px) */
       }
       
       .form-label {
-        font-size: 15px;
+        font-size: 16px; /* Уменьшено на 7% (было 17px) */
         color: #ddd;
       }
       
       .input-group {
         display: flex;
         background: rgba(0, 20, 40, 0.7);
-        border-radius: 11px;
+        border-radius: 10px; /* Уменьшено на 7% (было 11px) */
         overflow: hidden;
         border: 1px solid rgba(0, 200, 255, 0.3);
       }
@@ -265,60 +265,60 @@
         flex: 1;
         background: transparent;
         border: none;
-        padding: 13px;
+        padding: 12px; /* Уменьшено на 7% (было 13px) */
         color: white;
-        font-size: 17px;
+        font-size: 16px; /* Уменьшено на 7% (было 17px) */
         outline: none;
       }
       
       .input-group select {
         background: rgba(0, 40, 80, 0.7);
         border: none;
-        padding: 0 13px;
+        padding: 0 12px; /* Уменьшено на 7% (было 13px) */
         color: white;
-        font-size: 15px;
+        font-size: 14px; /* Уменьшено на 7% (было 15px) */
         outline: none;
         cursor: pointer;
       }
       
       .result-display {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 13px;
-        padding: 17px;
+        border-radius: 13px; /* Уменьшено на 7% */
+        padding: 18px; /* Уменьшено на 7% */
         text-align: center;
-        margin: 9px 0;
+        margin: 9px 0; /* Уменьшено на 7% */
       }
       
       .result-row {
         display: flex;
         justify-content: space-between;
-        padding: 7px 0;
+        padding: 7px 0; /* Уменьшено на 7% */
       }
       
       .result-label {
         color: #aaa;
-        font-size: 15px;
+        font-size: 16px; /* Уменьшено на 7% */
       }
       
       .result-value {
         font-weight: bold;
         color: #00c6ff;
-        font-size: 18px;
+        font-size: 17px; /* Уменьшено на 7% (было 18px) */
       }
       
       .wallet-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 13px;
-        padding: 13px;
+        border-radius: 13px; /* Уменьшено на 7% */
+        padding: 12px; /* Уменьшено на 7% */
         text-align: center;
-        margin-top: 9px;
+        margin-top: 9px; /* Уменьшено на 7% */
       }
       
       .wallet-address {
         font-family: monospace;
-        font-size: 12px;
+        font-size: 11px; /* Уменьшено на 7% */
         word-break: break-all;
-        margin: 9px 0;
+        margin: 8px 0; /* Уменьшено на 7% */
         color: #00c6ff;
       }
       
@@ -326,13 +326,13 @@
         background: linear-gradient(135deg, #00c6ff, #0072ff);
         color: white;
         border: none;
-        padding: 15px;
-        border-radius: 11px;
-        font-size: 17px;
+        padding: 14px; /* Уменьшено на 7% */
+        border-radius: 10px; /* Уменьшено на 7% */
+        font-size: 16px; /* Уменьшено на 7% */
         font-weight: bold;
         cursor: pointer;
         transition: all 0.3s ease;
-        margin-top: 9px;
+        margin-top: 8px; /* Уменьшено на 7% */
       }
       
       .connect-button:hover, .buy-button:hover {
@@ -346,12 +346,12 @@
       
       .swap-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 13px;
-        padding: 13px;
+        border-radius: 13px; /* Уменьшено на 7% */
+        padding: 12px; /* Уменьшено на 7% */
         text-align: center;
-        font-size: 13px;
+        font-size: 12px; /* Уменьшено на 7% */
         color: #aaa;
-        margin-top: 9px;
+        margin-top: 8px; /* Уменьшено на 7% */
       }
       
       .swap-info i {
@@ -361,20 +361,20 @@
       
       .close-button {
         position: absolute;
-        top: 13px;
-        right: 13px;
+        top: 12px; /* Уменьшено на 7% */
+        right: 12px; /* Уменьшено на 7% */
         background: rgba(255, 50, 50, 0.3);
         color: white;
         border: none;
-        width: 29px;
-        height: 29px;
+        width: 27px; /* Уменьшено на 7% */
+        height: 27px; /* Уменьшено на 7% */
         border-radius: 50%;
         cursor: pointer;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
+        font-size: 17px; /* Уменьшено на 7% */
       }
       
       .notification {
@@ -403,11 +403,11 @@
         100% { opacity: 0; bottom: 0; }
       }
       
-      /* Purchase Button - Смещено влево на 5 мм */
+      /* Purchase Button - Поднято вверх на 2 мм */
       .purchase-button {
         position: absolute;
-        top: 50%;
-        left: 90%; /* Смещено влево (было 95%) */
+        top: 48%; /* Поднято вверх на 2 мм (было 50%) */
+        left: 90%; /* Смещено влево на 5 мм */
         transform: translate(-50%, -50%);
         z-index: 12;
         background: linear-gradient(135deg, #00c6ff, #0072ff);
@@ -440,24 +440,24 @@
       /* Contract Info */
       .contract-info {
         background: rgba(0, 30, 60, 0.7);
-        border-radius: 13px;
-        padding: 13px;
+        border-radius: 13px; /* Уменьшено на 7% */
+        padding: 12px; /* Уменьшено на 7% */
         text-align: center;
-        margin-top: 9px;
-        font-size: 13px;
+        margin-top: 8px; /* Уменьшено на 7% */
+        font-size: 12px; /* Уменьшено на 7% */
       }
       
       .contract-address {
         font-family: monospace;
-        font-size: 11px;
+        font-size: 10px; /* Уменьшено на 7% */
         word-break: break-all;
-        margin: 7px 0;
+        margin: 7px 0; /* Уменьшено на 7% */
         color: #00c6ff;
       }
       
       /* Scrollbar styling */
       .purchase-container::-webkit-scrollbar {
-        width: 9px;
+        width: 8px; /* Уменьшено на 7% */
       }
       
       .purchase-container::-webkit-scrollbar-track {
@@ -480,11 +480,10 @@
           font-size: 2.5rem;
         }
         
-        /* На мобильных устройствах также немного поднимаем окно */
         .purchase-container {
           width: 95%;
           padding: 15px;
-          top: 48%; /* Немного выше центра */
+          top: 50%; /* По центру на мобильных устройствах */
         }
         
         .purchase-title {
@@ -495,8 +494,8 @@
           width: 60px;
           height: 60px;
           font-size: 22px;
-          top: 50%;
-          left: 90%; /* Смещено влево */
+          top: 48%; /* Поднято вверх на 2 мм */
+          left: 90%; /* Смещено влево на 5 мм */
         }
       }
     </style>
@@ -522,12 +521,12 @@
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div>
     <canvas id="falling-letters"></canvas>
 
-    <!-- Purchase Button (Смещено влево на 5 мм) -->
+    <!-- Purchase Button (Поднято вверх на 2 мм) -->
     <button class="purchase-button" id="purchase-button">
       <i class="fas fa-coins"></i>
     </button>
 
-    <!-- Purchase Interface (Поднято на 5 мм) -->
+    <!-- Purchase Interface (По центру и уменьшено на 7%) -->
     <div class="purchase-container" id="purchase-container">
       <button class="close-button" onclick="closePurchase()">×</button>
       
