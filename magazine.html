@@ -60,18 +60,16 @@
         width: 100%;
         height: 100vh;
         z-index: 5;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        /* Добавляем transform для анимации */
-        transform: translate(0, 0);
+        overflow: auto; /* Разрешаем прокрутку */
+        transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); /* Плавный переход */
       }
       
       #magazine-container iframe {
         position: absolute;
-        top: -20px; /* Начальное смещение вверх */
-        left: -20px; /* Начальное смещение влево */
-        width: calc(100% + 40px); /* Увеличиваем ширину */
-        height: calc(100% + 40px); /* Увеличиваем высоту */
+        top: -20px;
+        left: -20px;
+        width: calc(100% + 40px);
+        height: calc(100% + 40px);
         border: none;
         transform: scale(1);
         transform-origin: center center;
@@ -183,7 +181,6 @@
         let currentScale = 1;
         let offsetX = 0;
         let offsetY = 0;
-        let isAnimating = false; // Флаг для анимации
         
         function updateTransform() {
           iframe.style.transform = `scale(${currentScale}) translate(${offsetX}px, ${offsetY}px)`;
@@ -274,47 +271,30 @@
         container.addEventListener('dblclick', resetZoom);
         
         // Добавляем эффект "пружинки" при прокрутке
-        let startYPosition = 0;
-        let isScrolling = false;
+        let isAnimating = false;
         
-        // Обработка начала прокрутки
         container.addEventListener('scroll', () => {
-          if (!isScrolling) {
-            isScrolling = true;
-            startYPosition = container.scrollTop;
-          }
-        });
-        
-        // Обработка окончания прокрутки
-        let scrollEndTimer;
-        container.addEventListener('scroll', () => {
-          clearTimeout(scrollEndTimer);
-          scrollEndTimer = setTimeout(() => {
-            isScrolling = false;
-            // Проверяем позицию прокрутки
-            checkScrollPosition();
-          }, 150); // Задержка после окончания прокрутки
-        });
-        
-        // Функция проверки позиции прокрутки
-        function checkScrollPosition() {
+          // Если уже анимируем, пропускаем
+          if (isAnimating) return;
+          
           const scrollTop = container.scrollTop;
           const scrollHeight = container.scrollHeight;
           const clientHeight = container.clientHeight;
           
-          // Если прокрутка достигла верха
-          if (scrollTop === 0) {
-            animateBounce('top');
+          // Проверяем, достигли ли мы верха или низа
+          if (scrollTop <= 0) {
+            // Верх страницы - применяем эффект
+            bounceEffect('top');
+          } else if (scrollTop + clientHeight >= scrollHeight) {
+            // Низ страницы - применяем эффект
+            bounceEffect('bottom');
           }
-          // Если прокрутка достигла низа
-          else if (scrollTop + clientHeight >= scrollHeight) {
-            animateBounce('bottom');
-          }
-        }
+        });
         
-        // Анимация "пружинки"
-        function animateBounce(direction) {
-          if (isAnimating) return; // Предотвращаем множественные анимации
+        // Функция эффекта "пружинки"
+        function bounceEffect(direction) {
+          // Предотвращаем множественные срабатывания
+          if (isAnimating) return;
           
           isAnimating = true;
           
@@ -325,7 +305,7 @@
           const startTime = performance.now();
           
           // Функция анимации
-          function bounceAnimation(currentTime) {
+          function animate(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
             
@@ -350,39 +330,22 @@
             
             // Продолжаем анимацию или завершаем
             if (progress < 1) {
-              requestAnimationFrame(bounceAnimation);
+              requestAnimationFrame(animate);
             } else {
               // Возвращаем в исходное положение
               container.style.transform = 'translateY(0)';
               isAnimating = false;
+              
+              // Сбрасываем scrollTop, если это верх
+              if (direction === 'top') {
+                container.scrollTop = 0;
+              }
             }
           }
           
           // Запускаем анимацию
-          requestAnimationFrame(bounceAnimation);
+          requestAnimationFrame(animate);
         }
-        
-        // Обработка прокрутки колесом мыши для эффекта "пружинки"
-        let wheelDeltaY = 0;
-        let lastWheelTime = 0;
-        
-        container.addEventListener('wheel', (e) => {
-          const now = Date.now();
-          
-          // Если это быстрая прокрутка, активируем эффект
-          if (now - lastWheelTime < 100) {
-            wheelDeltaY += e.deltaY;
-          } else {
-            wheelDeltaY = e.deltaY;
-          }
-          
-          lastWheelTime = now;
-          
-          // Проверяем позицию прокрутки
-          setTimeout(() => {
-            checkScrollPosition();
-          }, 10);
-        });
         
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
@@ -399,7 +362,7 @@
         
         let speedState = 0;
         const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
-        
+
         function drawFallingLetters() {
           ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
