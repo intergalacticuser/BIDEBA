@@ -156,10 +156,10 @@
         text-decoration: underline;
       }
       
-      /* Purchase Interface - Перемещено вверх на 5 см (примерно 150px) */
+      /* Purchase Interface - Перемещено вверх на 5 мм (примерно 20px) */
       .purchase-container {
         position: absolute;
-        top: 35%; /* Перемещено вверх (было 55%) */
+        top: 50%; /* Почти по центру, немного выше */
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 15;
@@ -403,11 +403,11 @@
         100% { opacity: 0; bottom: 0; }
       }
       
-      /* Purchase Button - По центру страницы */
+      /* Purchase Button - Смещено влево на 5 мм */
       .purchase-button {
         position: absolute;
-        top: 50%; /* По центру по вертикали */
-        left: 95%; /* Справа */
+        top: 50%;
+        left: 90%; /* Смещено влево (было 95%) */
         transform: translate(-50%, -50%);
         z-index: 12;
         background: linear-gradient(135deg, #00c6ff, #0072ff);
@@ -480,11 +480,11 @@
           font-size: 2.5rem;
         }
         
-        /* На мобильных устройствах также перемещаем окно вверх */
+        /* На мобильных устройствах также немного поднимаем окно */
         .purchase-container {
           width: 95%;
           padding: 15px;
-          top: 35%; /* Перемещено вверх (было 60%) */
+          top: 48%; /* Немного выше центра */
         }
         
         .purchase-title {
@@ -495,8 +495,8 @@
           width: 60px;
           height: 60px;
           font-size: 22px;
-          top: 50%; /* По центру по вертикали */
-          left: 95%;
+          top: 50%;
+          left: 90%; /* Смещено влево */
         }
       }
     </style>
@@ -522,12 +522,12 @@
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official @BDBcoin</div>
     <canvas id="falling-letters"></canvas>
 
-    <!-- Purchase Button (По центру страницы) -->
+    <!-- Purchase Button (Смещено влево на 5 мм) -->
     <button class="purchase-button" id="purchase-button">
       <i class="fas fa-coins"></i>
     </button>
 
-    <!-- Purchase Interface (Перемещено вверх на 5 см) -->
+    <!-- Purchase Interface (Поднято на 5 мм) -->
     <div class="purchase-container" id="purchase-container">
       <button class="close-button" onclick="closePurchase()">×</button>
       
