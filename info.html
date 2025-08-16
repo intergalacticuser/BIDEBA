@@ -104,6 +104,8 @@
         padding: 30px;
         border-radius: 10px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+        max-height: 70vh; /* Ограничиваем высоту */
+        overflow-y: auto; /* Добавляем вертикальную прокрутку */
       }
       .info-content h1 {
         font-size: 3rem;
@@ -152,322 +154,34 @@
         box-shadow: 0 0 20px rgba(0, 198, 255, 0.3);
       }
       
-      /* Purchase Button - More Visible */
-      .purchase-button {
-        position: absolute;
-        top: 50%;
-        left: 95%; /* Перемещено вправо на 95% от центра */
-        transform: translate(-50%, -50%);
-        z-index: 12;
-        background: linear-gradient(135deg, #00c6ff, #0072ff);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 65px;
-        height: 65px;
-        font-size: 24px;
-        cursor: pointer;
-        box-shadow: 0 0 20px rgba(0, 198, 255, 0.7);
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        animation: pulse 2s infinite;
-      }
-      
-      .purchase-button:hover {
-        transform: translate(-50%, -50%) scale(1.1);
-        box-shadow: 0 0 30px rgba(0, 198, 255, 0.9);
-      }
-      
-      @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0.7); }
-        70% { box-shadow: 0 0 0 15px rgba(0, 198, 255, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0); }
-      }
-      
-      /* Purchase Interface */
-      .purchase-container {
-        position: absolute;
-        top: 55%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 25;
-        background: rgba(10, 10, 20, 0.85);
-        backdrop-filter: blur(10px);
-        border-radius: 18px;
-        padding: 20px;
-        width: 90%;
-        max-width: 462px;
-        box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
-        border: 1px solid rgba(0, 200, 255, 0.3);
-        display: none;
-        flex-direction: column;
-        gap: 15px;
-        max-height: 70vh;
-        overflow-y: auto;
-      }
-      
-      .purchase-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        margin-bottom: 8px;
-      }
-      
-      .coin-icon {
-        width: 45px;
-        height: 45px;
-        background: linear-gradient(135deg, #00c6ff, #0072ff);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 22px;
-      }
-      
-      .purchase-title {
-        font-size: 24px;
-        font-weight: bold;
-        background: linear-gradient(to right, #00c6ff, #0072ff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-align: center;
-      }
-      
-      .price-display {
-        background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px;
-        padding: 15px;
-        text-align: center;
-        margin-bottom: 8px;
-      }
-      
-      .price-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      .price-row:last-child {
-        border-bottom: none;
-      }
-      
-      .price-label {
-        color: #aaa;
-        font-size: 14px;
-      }
-      
-      .price-value {
-        font-weight: bold;
-        color: #00c6ff;
-        font-size: 14px;
-      }
-      
-      .purchase-form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      
-      .form-label {
-        font-size: 14px;
-        color: #ddd;
-      }
-      
-      .input-group {
-        display: flex;
-        background: rgba(0, 20, 40, 0.7);
-        border-radius: 10px;
-        overflow: hidden;
-        border: 1px solid rgba(0, 200, 255, 0.3);
-      }
-      
-      .input-group input {
-        flex: 1;
-        background: transparent;
-        border: none;
-        padding: 12px;
-        color: white;
-        font-size: 15px;
-        outline: none;
-      }
-      
-      .input-group select {
-        background: rgba(0, 40, 80, 0.7);
-        border: none;
-        padding: 0 12px;
-        color: white;
-        font-size: 14px;
-        outline: none;
-        cursor: pointer;
-      }
-      
-      .result-display {
-        background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px;
-        padding: 15px;
-        text-align: center;
-        margin: 8px 0;
-      }
-      
-      .result-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0;
-      }
-      
-      .result-label {
-        color: #aaa;
-        font-size: 14px;
-      }
-      
-      .result-value {
-        font-weight: bold;
-        color: #00c6ff;
-        font-size: 16px;
-      }
-      
-      .wallet-info {
-        background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px;
-        padding: 12px;
-        text-align: center;
-        margin-top: 8px;
-      }
-      
-      .wallet-address {
-        font-family: monospace;
-        font-size: 11px;
-        word-break: break-all;
-        margin: 8px 0;
-        color: #00c6ff;
-      }
-      
-      .connect-button, .buy-button {
-        background: linear-gradient(135deg, #00c6ff, #0072ff);
-        color: white;
-        border: none;
-        padding: 14px;
-        border-radius: 10px;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 8px;
-      }
-      
-      .connect-button:hover, .buy-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 198, 255, 0.4);
-      }
-      
-      .connect-button:active, .buy-button:active {
-        transform: translateY(0);
-      }
-      
-      .swap-info {
-        background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px;
-        padding: 12px;
-        text-align: center;
-        font-size: 12px;
-        color: #aaa;
-        margin-top: 8px;
-      }
-      
-      .swap-info i {
-        color: #00c6ff;
-        margin-right: 4px;
-      }
-      
-      .close-button {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: rgba(255, 50, 50, 0.3);
-        color: white;
-        border: none;
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-      }
-      
-      .notification {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 30, 60, 0.9);
-        border: 1px solid rgba(0, 200, 255, 0.5);
-        border-radius: 10px;
-        padding: 15px 25px;
-        z-index: 100;
-        display: none;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      }
-      
-      .notification.show {
-        display: block;
-        animation: fadeInOut 3s ease;
-      }
-      
-      @keyframes fadeInOut {
-        0% { opacity: 0; bottom: 0; }
-        10% { opacity: 1; bottom: 20px; }
-        90% { opacity: 1; bottom: 20px; }
-        100% { opacity: 0; bottom: 0; }
-      }
-      
       /* Scrollbar styling */
-      .purchase-container::-webkit-scrollbar {
+      .info-content::-webkit-scrollbar {
         width: 8px;
       }
       
-      .purchase-container::-webkit-scrollbar-track {
+      .info-content::-webkit-scrollbar-track {
         background: rgba(0, 20, 40, 0.5);
         border-radius: 4px;
       }
       
-      .purchase-container::-webkit-scrollbar-thumb {
+      .info-content::-webkit-scrollbar-thumb {
         background: rgba(0, 198, 255, 0.5);
         border-radius: 4px;
       }
       
-      .purchase-container::-webkit-scrollbar-thumb:hover {
+      .info-content::-webkit-scrollbar-thumb:hover {
         background: rgba(0, 198, 255, 0.7);
       }
       
-      /* Contract Info */
-      .contract-info {
-        background: rgba(0, 30, 60, 0.7);
-        border-radius: 12px;
-        padding: 12px;
-        text-align: center;
-        margin-top: 8px;
-        font-size: 12px;
-      }
-      
+      /* Contract address styling */
       .contract-address {
         font-family: monospace;
-        font-size: 10px;
+        font-size: 1.2rem;
         word-break: break-all;
-        margin: 6px 0;
-        color: #00c6ff;
+        background: rgba(0, 30, 60, 0.7);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
       }
     </style>
   </head>
@@ -492,98 +206,6 @@
     <!-- Falling Letters Canvas -->
     <canvas id="falling-letters"></canvas>
 
-    <!-- Purchase Button (More Visible) -->
-    <button class="purchase-button" id="purchase-button">
-      <i class="fas fa-coins"></i>
-    </button>
-
-    <!-- Purchase Interface -->
-    <div class="purchase-container" id="purchase-container">
-      <button class="close-button" onclick="closePurchase()">×</button>
-      
-      <div class="purchase-header">
-        <div class="coin-icon">
-          <i class="fas fa-coins"></i>
-        </div>
-        <h2 class="purchase-title">BDB Coin Purchase</h2>
-      </div>
-      
-      <div class="price-display">
-        <div class="price-row">
-          <span class="price-label">BDB Coin Price:</span>
-          <span class="price-value" id="bdb-price">$0.000012</span>
-        </div>
-        <div class="price-row">
-          <span class="price-label">In TON:</span>
-          <span class="price-value" id="bdb-ton">0.00000012 TON</span>
-        </div>
-        <div class="price-row">
-          <span class="price-label">TON Price:</span>
-          <span class="price-value" id="ton-price">$5.23</span>
-        </div>
-      </div>
-      
-      <div class="purchase-form">
-        <div class="form-group">
-          <label class="form-label">Amount to Buy:</label>
-          <div class="input-group">
-            <input type="number" id="amount" placeholder="Enter amount" min="1" value="10">
-            <select id="currency-select">
-              <option value="ton">TON</option>
-              <option value="usdt">USDT</option>
-            </select>
-          </div>
-        </div>
-        
-        <!-- Результат расчета -->
-        <div class="result-display">
-          <div class="result-row">
-            <span class="result-label">You will receive:</span>
-            <span class="result-value" id="bdb-amount">83,333 BDB</span>
-          </div>
-          <div class="result-row">
-            <span class="result-label">Exchange rate:</span>
-            <span class="result-value" id="exchange-rate">1 TON = 8,333 BDB</span>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Your Wallet Address:</label>
-          <div class="input-group">
-            <input type="text" id="wallet-address" placeholder="Enter your TON wallet address">
-          </div>
-        </div>
-        
-        <button class="connect-button" id="connect-wallet">
-          <i class="fas fa-wallet"></i> Connect Wallet
-        </button>
-        
-        <button class="buy-button" id="buy-button">
-          <i class="fas fa-shopping-cart"></i> Buy BDB Coins
-        </button>
-        
-        <div class="swap-info">
-          <i class="fas fa-exchange-alt"></i> When paying with USDT, we'll automatically swap to TON using TonFi
-        </div>
-      </div>
-      
-      <div class="wallet-info">
-        <p>Send your payment to this address:</p>
-        <div class="wallet-address" id="payment-address">EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw</div>
-        <p>After payment, your BDB coins will be sent to your wallet</p>
-      </div>
-      
-      <div class="contract-info">
-        <p>BDB Coin Smart Contract:</p>
-        <div class="contract-address">EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw</div>
-        <p><a href="https://tonviewer.com/EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw" target="_blank" style="color: #00c6ff;">View on TonViewer</a></p>
-      </div>
-    </div>
-    
-    <div class="notification" id="notification">
-      <span id="notification-text">Wallet connected successfully!</span>
-    </div>
-
     <!-- Info Content -->
     <div class="info-content">
       <!-- Логотип в верхней части -->
@@ -593,38 +215,44 @@
       
       <h1>About BIDEBA Coin</h1>
       <p>BIDEBA Coin (BDB) is a mem coin cryptocurrency in TON Network designed for fun, thrill, and positive emotions. <br> <br> BIDEBA is a friend that everybody has. A friend that is always ready with that helping hand.</p>
-      <br>
-      <p>Contract Address: EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw </p>
-       <br>
+      
+      <div class="contract-address">
+        Contract Address: EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw
+      </div>
+      
       <div class="social-links">
         <!-- X Link -->
         <a href="https://x.com/bdbcoin?s=21" target="_blank" class="x-link">X</a>
         <!-- Telegram Link -->
         <a href="https://t.me/BIDEBAcoin" target="_blank" class="telegram-link">Telegram</a>
       </div>
-      <p>Buy BIDEBA (BDB) coin now at #1 rated official Dex Exchange in TON ecosystem  <a href="https://app.ston.fi/swap?chartVisible=false&ft=EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw&tt=TON" target="_blank">STON FI</a>.</p>
-     <br>
+      
+      <p>Buy BIDEBA (BDB) coin now at #1 rated official Dex Exchange in TON ecosystem  
+        <a href="https://app.ston.fi/swap?chartVisible=false&ft=EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw&tt=TON" target="_blank">STON FI</a>.
+      </p>
+      
+      <p>BIDEBA Coin is built on the TON (The Open Network) blockchain, ensuring fast transactions, low fees, and high scalability. Our community-driven approach makes BIDEBA more than just a cryptocurrency - it's a symbol of friendship and support in the digital world.</p>
+      
+      <p>Join our growing community and be part of the BIDEBA family. Whether you're new to crypto or an experienced trader, BIDEBA offers a welcoming environment for everyone.</p>
+      
+      <p>Key Features:<br>
+      • Fast and secure transactions on TON blockchain<br>
+      • Low transaction fees<br>
+      • Community-driven development<br>
+      • Positive and inclusive ecosystem<br>
+      • Easy to use and trade</p>
+      
+      <p>Get started today by purchasing BDB coins on STON.fi, the leading DEX in the TON ecosystem. Simply connect your wallet and swap TON for BDB tokens.</p>
+      
+      <p>Stay updated with our latest news and announcements by following us on X (Twitter) and joining our Telegram community.</p>
+      
+      <p>Contract Address: EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw</p>
     </div>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         try {
           const canvas = document.getElementById('falling-letters');
-          const purchaseButton = document.getElementById('purchase-button');
-          const purchaseContainer = document.getElementById('purchase-container');
-          const notification = document.getElementById('notification');
-          const connectButton = document.getElementById('connect-wallet');
-          const buyButton = document.getElementById('buy-button');
-          const amountInput = document.getElementById('amount');
-          const currencySelect = document.getElementById('currency-select');
-          const walletAddressInput = document.getElementById('wallet-address');
-          const bdbAmountElement = document.getElementById('bdb-amount');
-          const exchangeRateElement = document.getElementById('exchange-rate');
-          
-          // Set the contract address
-          const contractAddress = "EQAcB3z-Eggn9SblOqy5OEf0GAmVGs0kSHICwpwjRPIPpwIw";
-          document.getElementById('payment-address').textContent = contractAddress;
-          
           if (!canvas) {
             console.error("Error: Missing required elements in the DOM.");
             return;
@@ -642,18 +270,6 @@
           }
           resizeCanvas();
           window.addEventListener('resize', resizeCanvas);
-
-          // Purchase button event
-          purchaseButton.addEventListener('click', async () => {
-            purchaseContainer.style.display = 'flex';
-            // Обновляем цены при открытии окна покупки
-            await updateAllPrices();
-          });
-          
-          // Close purchase interface
-          window.closePurchase = function() {
-            purchaseContainer.style.display = 'none';
-          };
 
           const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
           const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40)); // Slightly larger font size
@@ -739,158 +355,6 @@
 
           // Start the falling letters animation immediately
           setInterval(drawFallingLetters, 30); // Start the animation slower (30ms interval)
-          
-          // Цены по умолчанию (будут обновлены при загрузке)
-          let bdbPriceInUSD = 0.000012; // Цена BDB в USD
-          let tonPriceInUSD = 5.23; // Цена TON в USD
-          let bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD; // Цена BDB в TON
-          
-          // Получение цены TON с CoinGecko
-          async function fetchTONPrice() {
-            try {
-              const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
-              const data = await response.json();
-              if (data['the-open-network'] && data['the-open-network'].usd) {
-                tonPriceInUSD = data['the-open-network'].usd;
-                console.log('TON Price (USD):', tonPriceInUSD);
-                return true;
-              }
-            } catch (error) {
-              console.error('Error fetching TON price from CoinGecko:', error);
-            }
-            return false;
-          }
-          
-          // Получение цены BDB (пока используем фиксированную цену, так как BDB может отсутствовать в CoinGecko)
-          // В реальном приложении здесь будет ваш API для получения цены BDB
-          async function fetchBDBPrice() {
-            try {
-              // Пока используем фиксированную цену
-              // В реальном приложении здесь будет запрос к вашему API
-              console.log('BDB Price (USD):', bdbPriceInUSD);
-              return true;
-            } catch (error) {
-              console.error('Error fetching BDB price:', error);
-            }
-            return false;
-          }
-          
-          // Обновление всех цен
-          async function updateAllPrices() {
-            const tonSuccess = await fetchTONPrice();
-            const bdbSuccess = await fetchBDBPrice();
-            
-            if (tonSuccess) {
-              // Пересчитываем цену BDB в TON
-              bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
-              console.log('BDB Price (TON):', bdbPriceInTON);
-            }
-            
-            // Обновляем отображение цен
-            updatePrices();
-          }
-          
-          // Обновляем отображение цен
-          function updatePrices() {
-            document.getElementById('bdb-price').textContent = `$${bdbPriceInUSD.toFixed(8)}`;
-            document.getElementById('ton-price').textContent = `$${tonPriceInUSD.toFixed(2)}`;
-            document.getElementById('bdb-ton').textContent = `${bdbPriceInTON.toFixed(10)} TON`;
-            updateExchangeRate();
-            calculateBDBAmount();
-          }
-          
-          // Обновляем курс обмена
-          function updateExchangeRate() {
-            const currency = currencySelect.value;
-            if (currency === 'ton') {
-              exchangeRateElement.textContent = `1 TON = ${Math.round(1 / bdbPriceInTON).toLocaleString()} BDB`;
-            } else {
-              exchangeRateElement.textContent = `1 USDT = ${Math.round(1 / bdbPriceInUSD).toLocaleString()} BDB`;
-            }
-          }
-          
-          // Расчет количества BDB
-          function calculateBDBAmount() {
-            const amount = parseFloat(amountInput.value) || 0;
-            const currency = currencySelect.value;
-            
-            let bdbAmount;
-            if (currency === 'ton') {
-              bdbAmount = amount / bdbPriceInTON;
-            } else {
-              bdbAmount = amount / bdbPriceInUSD;
-            }
-            
-            bdbAmountElement.textContent = `${Math.round(bdbAmount).toLocaleString()} BDB`;
-          }
-          
-          // Слушатели событий
-          amountInput.addEventListener('input', calculateBDBAmount);
-          currencySelect.addEventListener('change', () => {
-            updateExchangeRate();
-            calculateBDBAmount();
-          });
-          
-          // Initial price update
-          updatePrices();
-          
-          // Периодическое обновление цен (каждые 30 секунд)
-          setInterval(async () => {
-            await updateAllPrices();
-          }, 30000);
-          
-          // Wallet connection
-          connectButton.addEventListener('click', () => {
-            if (walletAddressInput.value.trim() === '') {
-              showNotification('Please enter your wallet address first');
-              return;
-            }
-            
-            // Simulate wallet connection
-            connectButton.innerHTML = '<i class="fas fa-check"></i> Connected';
-            connectButton.disabled = true;
-            showNotification('Wallet connected successfully!');
-          });
-          
-          // Purchase functionality
-          buyButton.addEventListener('click', () => {
-            const amount = amountInput.value;
-            const currency = currencySelect.value;
-            const walletAddress = walletAddressInput.value.trim();
-            
-            if (amount <= 0) {
-              showNotification('Please enter a valid amount');
-              return;
-            }
-            
-            if (walletAddress === '') {
-              showNotification('Please enter your wallet address');
-              return;
-            }
-            
-            if (connectButton.disabled === false) {
-              showNotification('Please connect your wallet first');
-              return;
-            }
-            
-            // Simulate purchase
-            showNotification(`Purchase initiated: ${amount} ${currency.toUpperCase()} for BDB coins`);
-            
-            // In a real app, this would initiate the transaction
-            setTimeout(() => {
-              showNotification('Transaction confirmed! Coins sent to your wallet.');
-            }, 3000);
-          });
-          
-          // Show notification
-          function showNotification(message) {
-            document.getElementById('notification-text').textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-              notification.classList.remove('show');
-            }, 3000);
-          }
         } catch (error) {
           console.error("An error occurred in the script:", error);
         }
