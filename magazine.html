@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
- <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-N8MXJRMB');</script>
-<!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Magazine</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png  ">
-    <link rel="shortcut icon" type="image/x-icon" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png  ">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
+    <link rel="shortcut icon" type="image/x-icon" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
     <style>
       body {
         margin: 0;
@@ -26,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         height: 100vh;
         position: relative;
       }
-      
+
       /* Background Canvas */
       #background-canvas {
         position: fixed;
@@ -36,7 +29,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         height: 100%;
         z-index: 1;
       }
-      
+
       /* Back Button */
       #back-button {
         position: absolute;
@@ -44,7 +37,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         left: 10px;
         z-index: 10;
       }
-      
+
       #back-button button {
         background: rgba(255, 255, 255, 0.1);
         color: white;
@@ -56,9 +49,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         cursor: pointer;
         transition: background 0.3s ease;
       }
-      
+
       #back-button button:hover {
         background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Круглое изображение */
+      #logo-link {
+        position: absolute;
+        top: 60px; /* чуть ниже кнопки "Back" */
+        left: 10px;
+        z-index: 10;
+        width: 60px;
+        height: 60px;
+      }
+
+      #logo-link img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        transition: transform 0.3s ease;
+      }
+
+      #logo-link img:hover {
+        transform: scale(1.1);
       }
 
       /* Magazine Container */
@@ -70,19 +86,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         overflow: hidden;
         transition: all 0.3s ease;
       }
-      
+
       #magazine-container iframe {
         position: absolute;
-        top: -20px; /* Начальное смещение вверх */
-        left: -20px; /* Начальное смещение влево */
-        width: calc(100% + 40px); /* Увеличиваем ширину */
-        height: calc(100% + 40px); /* Увеличиваем высоту */
+        top: -20px;
+        left: -20px;
+        width: calc(100% + 40px);
+        height: calc(100% + 40px);
         border: none;
         transform: scale(1);
         transform-origin: center center;
         transition: transform 0.3s ease;
       }
-      
+
       /* Loading indicator */
       .loading-overlay {
         position: absolute;
@@ -99,12 +115,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         pointer-events: none;
         transition: opacity 0.3s ease;
       }
-      
+
       .loading-overlay.show {
         opacity: 1;
         pointer-events: all;
       }
-      
+
       .loading-spinner {
         width: 50px;
         height: 50px;
@@ -113,43 +129,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
-      
+
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
-      
+
       /* Прокрутка для контейнера */
       #magazine-container::-webkit-scrollbar {
         width: 8px;
       }
-      
+
       #magazine-container::-webkit-scrollbar-track {
         background: rgba(0, 20, 40, 0.5);
       }
-      
+
       #magazine-container::-webkit-scrollbar-thumb {
         background: rgba(0, 198, 255, 0.5);
         border-radius: 4px;
       }
-      
+
       #magazine-container::-webkit-scrollbar-thumb:hover {
         background: rgba(0, 198, 255, 0.7);
       }
     </style>
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8MXJRMB"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
     <!-- Background Canvas -->
     <canvas id="background-canvas"></canvas>
-    
+
     <!-- Back Button -->
     <div id="back-button">
       <button onclick="location.href='index.html'">Back</button>
     </div>
+
+    <!-- Круглое изображение -->
+    <a id="logo-link" href="https://t.me/cwc_network" target="_blank">
+      <img src="https://github.com/intergalacticuser/BIDEBA/blob/4370b9ff2f68a70dbef987324ee0990ad9d870ca/image_0Beg3SIa_1724276448994_512.png?raw=true" alt="Crypto World Logo">
+    </a>
 
     <!-- Magazine Container -->
     <div id="magazine-container">
@@ -157,7 +174,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="loading-spinner"></div>
       </div>
       <iframe 
-        src="https://rss.app/embed/v1/magazine/_XzrDDuW8zJzoioSc  " 
+        src="https://rss.app/embed/v1/magazine/_XzrDDuW8zJzoioSc" 
         frameborder="0"
         scrolling="yes"
         id="magazine-iframe"
@@ -171,86 +188,77 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         const container = document.getElementById('magazine-container');
         const iframe = document.getElementById('magazine-iframe');
         const loadingOverlay = document.getElementById('loading-overlay');
-        
+
         if (!ctx) {
           console.error("Canvas context not supported");
           return;
         }
-        
+
         // Показываем индикатор загрузки
         loadingOverlay.classList.add('show');
-        
+
         function resizeCanvas() {
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
         }
-        
+
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
-        
-        // Обработка масштабирования с фокусом в центр
+
         let currentScale = 1;
         let offsetX = 0;
         let offsetY = 0;
-        
+
         function updateTransform() {
           iframe.style.transform = `scale(${currentScale}) translate(${offsetX}px, ${offsetY}px)`;
         }
-        
-        // Увеличение масштаба
+
         function zoomIn() {
           if (currentScale < 3) {
             currentScale += 0.1;
             updateTransform();
           }
         }
-        
-        // Уменьшение масштаба
+
         function zoomOut() {
           if (currentScale > 0.5) {
             currentScale -= 0.1;
             updateTransform();
           }
         }
-        
-        // Сброс масштаба
+
         function resetZoom() {
           currentScale = 1;
           offsetX = 0;
           offsetY = 0;
           updateTransform();
         }
-        
-        // Обработка колеса мыши для зума
+
         container.addEventListener('wheel', (e) => {
           e.preventDefault();
-          
+
           const rect = container.getBoundingClientRect();
           const mouseX = e.clientX - rect.left;
           const mouseY = e.clientY - rect.top;
-          
-          // Сохраняем текущую позицию
+
           const oldScale = currentScale;
-          
-          // Изменяем масштаб
+
           if (e.deltaY < 0) {
             zoomIn();
           } else {
             zoomOut();
           }
-          
-          // Корректируем позицию для фокусировки на курсоре
+
           const scaleRatio = currentScale / oldScale;
           offsetX = mouseX - (mouseX - offsetX) * scaleRatio;
           offsetY = mouseY - (mouseY - offsetY) * scaleRatio;
-          
+
           updateTransform();
         });
-        
-        // Обработка перемещения при зуме
+
         let isDragging = false;
         let startX, startY, startOffsetX, startOffsetY;
-        
+
         iframe.addEventListener('mousedown', (e) => {
           if (currentScale > 1) {
             isDragging = true;
@@ -262,7 +270,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             e.preventDefault();
           }
         });
-        
+
         window.addEventListener('mousemove', (e) => {
           if (isDragging) {
             const dx = e.clientX - startX;
@@ -272,15 +280,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             updateTransform();
           }
         });
-        
+
         window.addEventListener('mouseup', () => {
           isDragging = false;
           iframe.style.cursor = 'default';
         });
-        
-        // Сброс зума при двойном клике
+
         container.addEventListener('dblclick', resetZoom);
-        
+
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
         const columns = Math.floor(canvas.width / (fontSize * 0.7));
@@ -289,14 +296,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         const glowIntensity = 10;
         let pulseFactor = 1;
         let pulseDirection = 1;
-        
+
         for (let i = 0; i < columns; i++) {
           drops[i] = { y: 1, trail: [] };
         }
-        
+
         let speedState = 0;
         const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
-        
+
         function drawFallingLetters() {
           ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -337,77 +344,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           ctx.shadowBlur = 0;
           ctx.shadowColor = 'transparent';
         }
-        
+
         canvas.addEventListener('mousedown', () => {
           speedState = (speedState + 1) % speedLevels.length;
           console.log(`Current speed state: ${speedState}`);
         });
-        
-        // Start animation
+
         setInterval(drawFallingLetters, 30);
-        
-        // Скрываем индикатор загрузки через 1 секунду
+
         setTimeout(() => {
           loadingOverlay.classList.remove('show');
         }, 1000);
       });
     </script>
-    <!-- GDPR + Crypto Disclaimer Consent Banner with Checkbox -->
-<div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; right: 0; background: #222; color: #fff; padding: 15px; font-size: 14px; z-index: 10000; display: none;">
-  <div style="max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
-
-    <div style="line-height: 1.5;">
-      This website uses cookies to enhance your experience and provide basic analytics in compliance with the <strong>General Data Protection Regulation (GDPR)</strong>.<br><br>
-      <strong>Disclaimer:</strong> The token available on this site, <strong>BIDEBA Coin (BDB)</strong>, is a <strong>meme token</strong> created purely for <strong>fun, humor, and educational purposes</strong>.  
-      It has <strong>no financial utility, no intrinsic value, and is not a security, investment, or digital asset regulated under MiCA</strong>.<br>
-      All transactions made are <strong>voluntary and irreversible</strong>. Use this website at your own risk.
-      See full details in our <a href="/privacy-policy" style="color: #0bf;">Privacy & Disclaimer Policy</a>.
-    </div>
-
-    <label style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
-      <input type="checkbox" id="investment-checkbox" style="transform: scale(1.2);">
-      <span>I confirm that I am <strong>not making an investment</strong> and understand that this is a meme token.</span>
-    </label>
-
-    <button id="accept-cookies" disabled style="background: #0bf; color: #000; border: none; padding: 10px 15px; cursor: not-allowed; border-radius: 3px;">
-      I Agree
-    </button>
-
-  </div>
-</div>
-
-<script>
-  (function () {
-    const cookieBanner = document.getElementById('cookie-banner');
-    const acceptBtn = document.getElementById('accept-cookies');
-    const investmentCheckbox = document.getElementById('investment-checkbox');
-
-    if (!localStorage.getItem('cookiesAccepted')) {
-      cookieBanner.style.display = 'block';
-    }
-
-    investmentCheckbox.addEventListener('change', function () {
-      acceptBtn.disabled = !this.checked;
-      acceptBtn.style.cursor = this.checked ? 'pointer' : 'not-allowed';
-    });
-
-    acceptBtn.addEventListener('click', function () {
-      if (!investmentCheckbox.checked) return;
-
-      localStorage.setItem('cookiesAccepted', 'true');
-      cookieBanner.style.display = 'none';
-
-      // ✅ Enable analytics or Tag Manager after consent
-      const gtmScript = document.createElement('script');
-      gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N8MXJRMB';
-      gtmScript.async = true;
-      document.head.appendChild(gtmScript);
-
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ 'event': 'cookie_consent_given' });
-    });
-  })();
-</script>
-<!-- End GDPR + Crypto Disclaimer Banner -->
   </body>
 </html>
