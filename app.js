@@ -33,21 +33,6 @@
     var infoContent = document.querySelector('.info-content');
     if (!infoContent) return;
 
-    // Insert TON price card after logo-container
-    var logo = infoContent.querySelector('.logo-container');
-    if (logo) {
-      var card = document.createElement('div');
-      card.className = 'card';
-      card.id = 'ton-price-card';
-      card.style.marginBottom = '16px';
-      card.style.padding = '16px';
-      card.style.display = 'flex';
-      card.style.alignItems = 'center';
-      card.style.justifyContent = 'space-between';
-      card.innerHTML = '<span style="opacity:.9;">TON Price (USD)</span><strong id="ton-usd-price">$—</strong>';
-      logo.insertAdjacentElement('afterend', card);
-    }
-
     // Add copy button after contract address
     var contract = infoContent.querySelector('.contract-address');
     if (contract) {
@@ -57,6 +42,19 @@
       copyBtn.textContent = 'Copy address';
       copyBtn.style.marginTop = '10px';
       contract.insertAdjacentElement('afterend', copyBtn);
+
+      // Insert TON price card after copy button
+      var card = document.createElement('div');
+      card.className = 'card';
+      card.id = 'ton-price-card';
+      card.style.marginTop = '12px';
+      card.style.marginBottom = '16px';
+      card.style.padding = '16px';
+      card.style.display = 'flex';
+      card.style.alignItems = 'center';
+      card.style.justifyContent = 'space-between';
+      card.innerHTML = '<span style="opacity:.9;">TON Price (USD)</span><strong id="ton-usd-price">$—</strong>';
+      copyBtn.insertAdjacentElement('afterend', card);
 
       copyBtn.addEventListener('click', function () {
         try {

@@ -98,6 +98,17 @@ iframe[loading="lazy"].loaded {
   opacity: 1;
 }
 
+/* Normalize embedded RSS iframes to blend with dark theme */
+#ticker-container iframe,
+#magazine-container iframe {
+  background: transparent !important;
+  border: none !important;
+}
+
+#ticker-container { 
+  text-align: center;
+}
+
 /* Buttons */
 .btn {
   background: linear-gradient(135deg, var(--accent), #0072ff);

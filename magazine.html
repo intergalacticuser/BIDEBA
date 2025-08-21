@@ -100,14 +100,15 @@
 
       #magazine-container iframe {
         position: absolute;
-        top: -20px;
-        left: -20px;
-        width: calc(100% + 40px);
-        height: calc(100% + 40px);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         border: none;
-        transform: scale(1);
+        transform: scale(0.92); /* leave side space to show falling letters */
         transform-origin: center center;
         transition: transform 0.3s ease;
+        background: transparent;
       }
 
       /* Loading indicator */
@@ -181,6 +182,11 @@
     
     <!-- Background Canvas -->
     <canvas id="background-canvas"></canvas>
+    
+    <!-- Telegram floating button (restore) -->
+    <a id="logo-link" href="https://t.me/cwc_network" target="_blank" aria-label="Telegram channel">
+      <img src="https://github.com/intergalacticuser/BIDEBA/blob/4370b9ff2f68a70dbef987324ee0990ad9d870ca/image_0Beg3SIa_1724276448994_512.png?raw=true" alt="Telegram">
+    </a>
 
     
 
