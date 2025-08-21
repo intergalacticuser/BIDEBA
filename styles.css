@@ -1,0 +1,113 @@
+/* Base high-tech theme */
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --accent: #00c6ff;
+  --accent-2: #7c4dff;
+  --card-bg: rgba(10, 10, 20, 0.85);
+  --border: rgba(0, 200, 255, 0.3);
+  --shadow: 0 0 24px rgba(0, 200, 255, 0.15);
+}
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar a.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--fg);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar a.brand img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+}
+
+.nav-links a {
+  color: var(--fg);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background: rgba(0, 200, 255, 0.12);
+  color: var(--accent);
+}
+
+/* Utilities */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+/* Spacing helper to offset fixed navbar */
+.nav-spacer { height: 56px; }
+
+/* Iframe enhancements */
+iframe[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+iframe[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Buttons */
+.btn {
+  background: linear-gradient(135deg, var(--accent), #0072ff);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 198, 255, 0.4); }
+.btn:active { transform: translateY(0); }
+

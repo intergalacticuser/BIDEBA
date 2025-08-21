@@ -5,8 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Magazine</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
-    <link rel="shortcut icon" type="image/x-icon" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://rss.app">
+    <link rel="preconnect" href="https://rss.app" crossorigin>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="canonical" href="https://bideba.com/magazine">
+    <meta name="description" content="Лента новостей BIDEBA (BDB) из Telegram и RSS.">
+    <meta property="og:title" content="BIDEBA (BDB) — Magazine">
+    <meta property="og:description" content="Новости и апдейты сообщества BIDEBA.">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:url" content="https://bideba.com/magazine">
+    <meta name="theme-color" content="#00c6ff">
     <style>
       body {
         margin: 0;
@@ -154,8 +164,20 @@
         background: rgba(0, 198, 255, 0.7);
       }
     </style>
+    <script defer src="app.js"></script>
   </head>
   <body>
+    <nav class="navbar">
+      <a class="brand" href="index.html"><img src="logo.png" alt="BDB">BIDEBA</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="magazine.html">Magazine</a>
+        <a href="info.html">Info</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="Terms.html">Terms</a>
+      </div>
+    </nav>
+    <div class="nav-spacer"></div>
     
     <!-- Background Canvas -->
     <canvas id="background-canvas"></canvas>
@@ -180,6 +202,7 @@
         frameborder="0"
         scrolling="yes"
         id="magazine-iframe"
+        loading="lazy"
       ></iframe>
     </div>
 

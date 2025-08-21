@@ -5,7 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Info</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://rss.app">
+    <link rel="preconnect" href="https://rss.app" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="canonical" href="https://bideba.com/info">
+    <meta name="description" content="О проекте BIDEBA (BDB) — мем‑койн на TON и его цели.">
+    <meta property="og:title" content="BIDEBA (BDB) — Info">
+    <meta property="og:description" content="Мем‑койн на TON для фана и обучения. Не инвестиция.">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:url" content="https://bideba.com/info">
+    <meta name="theme-color" content="#00c6ff">
     <style>
       body {
          margin: 0;
@@ -185,8 +197,20 @@
         margin: 20px 0;
       }
     </style>
+    <script defer src="app.js"></script>
   </head>
   <body>
+    <nav class="navbar">
+      <a class="brand" href="index.html"><img src="logo.png" alt="BDB">BIDEBA</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="magazine.html">Magazine</a>
+        <a href="info.html">Info</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="Terms.html">Terms</a>
+      </div>
+    </nav>
+    <div class="nav-spacer"></div>
     
     <!-- Back Button -->
     <div id="back-button">
@@ -199,6 +223,7 @@
         width="100%" 
         height="60" 
         src="https://rss.app/embed/v1/ticker/_XzrDDuW8zJzoioSc  " 
+        loading="lazy"
         frameborder="0"
         scrolling="no"
         allowfullscreen
