@@ -7,6 +7,7 @@
   --card-bg: rgba(10, 10, 20, 0.85);
   --border: rgba(0, 200, 255, 0.3);
   --shadow: 0 0 24px rgba(0, 200, 255, 0.15);
+  --nav-h: 56px;
 }
 
 html { color-scheme: dark; }
@@ -110,4 +111,28 @@ iframe[loading="lazy"].loaded {
 }
 .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 198, 255, 0.4); }
 .btn:active { transform: translateY(0); }
+
+/* Place the top ticker below fixed navbar on pages that use it */
+#ticker-container { top: calc(var(--nav-h) + 8px) !important; }
+
+/* Adjust canvas area to account for navbar + ticker */
+#falling-letters {
+  top: calc(var(--nav-h) + 8px + 60px + 10px) !important;
+  height: calc(100% - (var(--nav-h) + 8px + 60px + 20px)) !important;
+}
+
+/* Reposition floating purchase button to bottom-right, above content */
+.purchase-button {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  z-index: 900 !important;
+}
+
+@media (max-width: 768px) {
+  .purchase-button { bottom: 18px !important; right: 18px !important; width: 60px; height: 60px; font-size: 22px; }
+}
 

@@ -24,3 +24,67 @@
   } catch (e) {}
 })();
 
+// Enhance info.html: add TON price card and copy button without editing HTML
+(function () {
+  try {
+    var isInfo = (location.pathname || '').split('/').pop() === 'info.html';
+    if (!isInfo) return;
+
+    var infoContent = document.querySelector('.info-content');
+    if (!infoContent) return;
+
+    // Insert TON price card after logo-container
+    var logo = infoContent.querySelector('.logo-container');
+    if (logo) {
+      var card = document.createElement('div');
+      card.className = 'card';
+      card.id = 'ton-price-card';
+      card.style.marginBottom = '16px';
+      card.style.padding = '16px';
+      card.style.display = 'flex';
+      card.style.alignItems = 'center';
+      card.style.justifyContent = 'space-between';
+      card.innerHTML = '<span style="opacity:.9;">TON Price (USD)</span><strong id="ton-usd-price">$—</strong>';
+      logo.insertAdjacentElement('afterend', card);
+    }
+
+    // Add copy button after contract address
+    var contract = infoContent.querySelector('.contract-address');
+    if (contract) {
+      var copyBtn = document.createElement('button');
+      copyBtn.className = 'btn';
+      copyBtn.id = 'copy-contract';
+      copyBtn.textContent = 'Copy address';
+      copyBtn.style.marginTop = '10px';
+      contract.insertAdjacentElement('afterend', copyBtn);
+
+      copyBtn.addEventListener('click', function () {
+        try {
+          var text = contract.textContent.replace('Contract Address:', '').trim();
+          navigator.clipboard.writeText(text).then(function(){
+            var prev = copyBtn.textContent; copyBtn.textContent = 'Copied!';
+            setTimeout(function(){ copyBtn.textContent = prev; }, 1500);
+          });
+        } catch (e) {}
+      });
+    }
+
+    // Fetch TON price
+    function fetchTONPrice() {
+      try {
+        fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd')
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            var v = data && data['the-open-network'] && data['the-open-network'].usd;
+            if (v) {
+              var t = document.getElementById('ton-usd-price');
+              if (t) t.textContent = '$' + Number(v).toFixed(2);
+            }
+          })
+          .catch(function(){});
+      } catch (e) {}
+    }
+    fetchTONPrice();
+    setInterval(fetchTONPrice, 30000);
+  } catch (e) {}
+})();
