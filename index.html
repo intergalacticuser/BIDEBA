@@ -524,13 +524,6 @@
     <script defer src="app.js"></script>
   </head>
   <body>
-    <script>
-      try {
-        if (!localStorage.getItem('TONCENTER_API_KEY')) {
-          localStorage.setItem('TONCENTER_API_KEY', 'bc8d3e2b68f76c5af4626adc6280d6e983e843791eaec3903508bdc32fb9195e');
-        }
-      } catch (e) {}
-    </script>
     <nav class="navbar">
       <a class="brand" href="index.html"><img src="logo.png" alt="BDB">BIDEBA</a>
       <div class="nav-links">
@@ -554,26 +547,6 @@
         scrolling="no"
         allowfullscreen
       ></iframe>
-    </div>
-
-    <!-- Contracts widget (embedded) -->
-    <div id="contracts-widget" style="position: relative; z-index: 12; margin-top: 90px; width: 100%; max-width: 1000px;">
-      <div style="font-family: sans-serif; background:#111; color:#fff; text-align:center; padding: 1em; border: 1px solid rgba(0,200,255,0.3); border-radius: 12px; box-shadow: 0 0 24px rgba(0,200,255,0.15);">
-        <h2 style="color:#40e0d0; margin: 0 0 10px;">🧠 Последние 5 Smart Контрактов в TON</h2>
-        <div class="loading" id="loading" style="margin-top: .5em; color:#999;">Загрузка...</div>
-        <div style="overflow:auto;">
-          <table id="table" style="display:none; margin:1em auto; border-collapse: collapse; width: 96%; max-width: 1000px; background:#222; border-radius:8px; overflow:hidden;">
-            <thead>
-              <tr>
-                <th style="padding:12px; border-bottom:1px solid #333; background:#333;">#</th>
-                <th style="padding:12px; border-bottom:1px solid #333; background:#333;">Адрес</th>
-                <th style="padding:12px; border-bottom:1px solid #333; background:#333;">Баланс (TON)</th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
-      </div>
     </div>
 
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official <br> @BDBcoin</div>
