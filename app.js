@@ -190,18 +190,26 @@
       tonCard.insertAdjacentElement('afterend', bdbCard);
     }
 
-    function fetchTONPrice() {
+    async function fetchTONPrice() {
       try {
-        fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd')
-          .then(function(r){ return r.json(); })
-          .then(function(data){
-            var v = data && data['the-open-network'] && data['the-open-network'].usd;
-            if (v) {
-              var t = document.getElementById('ton-usd-price');
-              if (t) t.textContent = '$' + Number(v).toFixed(2);
-            }
-          })
-          .catch(function(){});
+        // Try TonAPI first
+        var r1 = await fetch('https://tonapi.io/v2/rates?tokens=ton&currencies=usd');
+        var d1 = await r1.json();
+        var v1 = d1 && d1.rates && (d1.rates.TON || d1.rates.ton) && ((d1.rates.TON||d1.rates.ton).prices || (d1.rates.TON||d1.rates.ton).PRICES);
+        var usd1 = v1 && (v1.USD || v1.usd);
+        if (usd1) {
+          var t1 = document.getElementById('ton-usd-price'); if (t1) t1.textContent = '$' + Number(usd1).toFixed(2);
+          return;
+        }
+      } catch (e) {}
+      try {
+        // Fallback to CoinGecko
+        var r2 = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
+        var d2 = await r2.json();
+        var usd2 = d2 && d2['the-open-network'] && d2['the-open-network'].usd;
+        if (usd2) {
+          var t2 = document.getElementById('ton-usd-price'); if (t2) t2.textContent = '$' + Number(usd2).toFixed(2);
+        }
       } catch (e) {}
     }
     fetchTONPrice();
