@@ -17,7 +17,10 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: Arial, sans-serif;
+  overflow-x: hidden;
 }
+
+html { overflow-x: hidden; }
 
 /* Navbar */
 .navbar {
@@ -153,7 +156,10 @@ iframe[loading="lazy"].loaded {
   top: auto !important;
   transform: none !important;
   z-index: 900 !important;
+  box-shadow: 0 0 12px rgba(0, 198, 255, 0.5) !important; /* softer glow to avoid edge artifacts */
 }
+
+.purchase-button:focus { outline: none; }
 
 @media (max-width: 768px) {
   .purchase-button { bottom: 18px !important; right: 18px !important; width: 60px; height: 60px; font-size: 22px; }
