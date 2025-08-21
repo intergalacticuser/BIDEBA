@@ -36,6 +36,15 @@
   <meta name="theme-color" content="#00c6ff">
 </head>
 <body>
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('cookiesAccepted')) {
+          var s=document.createElement('script'); s.src='https://www.googletagmanager.com/gtm.js?id=GTM-N8MXJRMB'; s.async=true; document.head.appendChild(s);
+        }
+      } catch(e){}
+    })();
+  </script>
   <nav class="navbar">
     <a class="brand" href="index.html"><img src="logo.png" alt="BDB">BIDEBA</a>
     <div class="nav-links">

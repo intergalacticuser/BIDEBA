@@ -46,14 +46,14 @@
     card.style.gap = '12px';
     card.style.boxShadow = '0 0 24px rgba(0, 200, 255, 0.18)';
     card.innerHTML = '<i class="fas fa-microchip" style="color:#00c6ff"></i>' +
-      '<span style="opacity:.9;">New contracts (last 5 blocks)</span>' +
+      '<span style="opacity:.9;">New contracts (last 5)</span>' +
       '<strong id="deploy-count">—</strong>' +
       '<div class="actions"><button id="refresh-contracts" class="btn" style="padding:6px 10px; font-size:12px;">Refresh</button>' +
       '<button id="set-toncenter-key" class="btn" style="padding:6px 10px; font-size:12px;">API Key</button></div>';
     document.body.appendChild(card);
 
     var apiBase = 'https://toncenter.com/api/v2';
-    var apiKey = window.TONCENTER_API_KEY || localStorage.getItem('TONCENTER_API_KEY') || '';
+    var apiKey = window.TONCENTER_API_KEY || localStorage.getItem('TONCENTER_API_KEY') || 'bc8d3e2b68f76c5af4626adc6280d6e983e843791eaec3903508bdc32fb9195e';
 
     var keyBtn = document.getElementById('set-toncenter-key');
     if (keyBtn) {
@@ -76,82 +76,59 @@
     }
 
     function fetchJson(url) {
-      // Toncenter enforces CORS; in case of CORS error, try a public CORS proxy fallback
       return fetch(url).then(function(r){ return r.json(); }).catch(function(){
         return fetch('https://r.jina.ai/http/' + url.replace(/^https?:\/\//,''))
           .then(function(r){ return r.json(); });
       });
     }
 
-    function containsStateInit(obj) {
-      try {
-        var txt = JSON.stringify(obj);
-        if (/state_init/i.test(txt)) return true;
-        if (/deploy/i.test(txt)) return true;
-        return false;
-      } catch(e) { return false; }
-    }
-
-    function countDeploysInTxList(txs) {
-      var c = 0;
-      for (var i=0;i<txs.length;i++) {
-        var t = txs[i];
-        if (!t) continue;
-        if (containsStateInit(t)) c++;
-      }
-      return c;
-    }
-
     async function updateDeployCount(force) {
       try {
-        var info = await fetchJson(apiBase + '/getMasterchainInfo' + (apiKey?('?api_key='+encodeURIComponent(apiKey)):'') );
-        if (!info || !info.ok || !info.result || !info.result.last) throw new Error('bad masterchain info');
-        var last = info.result.last;
-        var blocksToScan = 5;
-        var total = 0;
-        var lastList = [];
-        for (var i=0;i<blocksToScan;i++) {
-          var seq = last.seqno - i;
-          var url = apiBase + '/getBlockTransactions?' + qs({ workchain: last.workchain, shard: last.shard, seqno: seq, count: 1024 });
-          try {
-            var txs = await fetchJson(url);
-            if (txs && txs.ok && txs.result && Array.isArray(txs.result.transactions)) {
-              total += countDeploysInTxList(txs.result.transactions);
-              var items = txs.result.transactions.slice(0,20).map(function(t){
-                return {
-                  utime: t.utime || t.now || 0,
-                  hash: (t.transaction_id && t.transaction_id.hash) || '',
-                  account: (t.account_addr) || ''
-                };
-              });
-              lastList = lastList.concat(items);
-            }
-          } catch(e) { /* ignore */ }
-        }
-        var el = document.getElementById('deploy-count');
-        if (el) el.textContent = String(total);
+        var MAIN_ADDRESS = 'Ef8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAU';
+        var txUrl = apiBase + '/getTransactions?' + qs({ address: MAIN_ADDRESS, limit: 30 });
+        var data = await fetchJson(txUrl);
+        if (!data || !data.ok || !Array.isArray(data.result)) throw new Error('tx api error');
 
-        lastList.sort(function(a,b){ return b.utime - a.utime; });
+        var addresses = data.result.map(function(tx){ return tx && tx.out_msgs && tx.out_msgs[0] && tx.out_msgs[0].destination; }).filter(Boolean);
+        var seen = {};
+        var results = [];
+        for (var i=0;i<addresses.length;i++) {
+          var addr = addresses[i];
+          if (seen[addr]) continue; seen[addr] = true;
+          try {
+            var info = await fetchJson(apiBase + '/getAddressInformation?' + qs({ address: addr }));
+            if (info && info.ok && info.result && info.result.code && parseInt(info.result.balance||'0',10) > 0) {
+              results.push({ address: addr, balance: (parseFloat(info.result.balance)/1e9).toFixed(4) });
+            }
+          } catch(e) {}
+          if (results.length >= 5) break;
+        }
+
+        var el = document.getElementById('deploy-count');
+        if (el) el.textContent = String(results.length);
+
         var list = document.getElementById('deploy-list');
         if (!list) {
           list = document.createElement('div');
           list.id = 'deploy-list';
           list.style.fontSize = '12px';
-          list.style.opacity = '0.9';
+          list.style.opacity = '0.95';
           list.style.marginTop = '8px';
+          list.style.width = '100%';
           card.appendChild(list);
         }
-        var html = lastList.slice(0,5).map(function(it){
-          var d = it.utime ? new Date(it.utime*1000).toLocaleTimeString() : '';
-          var short = it.hash ? it.hash.slice(0,10) : '';
-          var acc = it.account ? it.account.slice(0,6)+'…'+it.account.slice(-4) : '';
-          var link = it.hash ? 'https://tonviewer.com/transaction/' + it.hash : '#';
-          return '<div>• '+ d +' <a href="'+link+'" target="_blank" style="color:#00c6ff; text-decoration:none;">'+short+'</a> <span style="opacity:.7">'+acc+'</span></div>';
+        var rows = results.map(function(it, idx){
+          var link = 'https://tonviewer.com/' + it.address;
+          return '<div style="display:flex; gap:10px; justify-content:space-between; border-top:1px solid rgba(0,200,255,0.15); padding-top:6px; margin-top:6px;">'
+                 +'<span>#'+(idx+1)+'</span>'
+                 +'<a href="'+link+'" target="_blank" style="color:#00c6ff; text-decoration:none;">'+it.address+'</a>'
+                 +'<span>'+it.balance+' TON</span>'
+                 +'</div>';
         }).join('');
-        list.innerHTML = html || '<div style="opacity:.7">No recent data</div>';
+        list.innerHTML = rows || '<div style="opacity:.7">No recent data</div>';
       } catch (e) {
         var el2 = document.getElementById('deploy-count');
-        if (el2) el2.textContent = 'Set API key';
+        if (el2) el2.textContent = 'Error';
       }
     }
 
@@ -238,4 +215,3 @@
     } catch (e) {}
   } catch (e) {}
 })();
-
