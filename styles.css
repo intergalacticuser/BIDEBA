@@ -95,6 +95,22 @@ html { overflow-x: hidden; }
 /* Floating stats card specific tweaks */
 #deploy-stats-card {
   backdrop-filter: blur(8px);
+  cursor: default;
+}
+
+#deploy-stats-card.expanded {
+  padding: 16px 18px;
+}
+
+#deploy-stats-card .actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+#deploy-list {
+  margin-top: 10px;
+}
 }
 
 /* Spacing helper to offset fixed navbar */
