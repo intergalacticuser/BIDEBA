@@ -142,12 +142,17 @@ iframe[loading="lazy"].loaded {
   background: transparent;
   overflow: hidden;
   position: relative;
+  height: 60px !important;
 }
 
 #ticker-container iframe {
+  display: block;
   border: none !important;
   background: transparent !important;
   filter: none !important;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  margin: -4px;
 }
 
 /* Mask tiny white seams from embeds (top/bottom) */
