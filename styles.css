@@ -122,6 +122,7 @@ iframe[loading="lazy"].loaded {
 #ticker-container iframe {
   border: none !important;
   background: transparent !important;
+  filter: none !important;
 }
 
 /* Buttons */
