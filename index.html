@@ -524,6 +524,13 @@
     <script defer src="app.js"></script>
   </head>
   <body>
+    <script>
+      try {
+        if (!localStorage.getItem('TONCENTER_API_KEY')) {
+          localStorage.setItem('TONCENTER_API_KEY', 'bc8d3e2b68f76c5af4626adc6280d6e983e843791eaec3903508bdc32fb9195e');
+        }
+      } catch (e) {}
+    </script>
     <nav class="navbar">
       <a class="brand" href="index.html"><img src="logo.png" alt="BDB">BIDEBA</a>
       <div class="nav-links">
