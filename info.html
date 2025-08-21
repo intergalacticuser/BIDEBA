@@ -89,8 +89,16 @@
           if (!canvas) return;
           const ctx = canvas.getContext('2d'); if (!ctx) return;
           function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight - parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'));
+            const dpr = window.devicePixelRatio || 1;
+            const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 56;
+            const w = window.innerWidth;
+            const h = window.innerHeight - navH;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
           }
           resizeCanvas(); window.addEventListener('resize', resizeCanvas);
           const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
