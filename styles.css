@@ -89,6 +89,11 @@ html { overflow-x: hidden; }
   box-shadow: var(--shadow);
 }
 
+/* Floating stats card specific tweaks */
+#deploy-stats-card {
+  backdrop-filter: blur(8px);
+}
+
 /* Spacing helper to offset fixed navbar */
 .nav-spacer { height: 56px; }
 

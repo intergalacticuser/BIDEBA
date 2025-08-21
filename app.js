@@ -21,21 +21,37 @@
     var ticker = document.getElementById('ticker-container');
     if (!ticker) return;
 
-    // Create card under ticker
+    // Create floating card above canvas
     var card = document.createElement('div');
     card.className = 'card';
     card.id = 'deploy-stats-card';
-    card.style.margin = '10px auto 0';
-    card.style.maxWidth = '1000px';
-    card.style.padding = '12px 16px';
+    card.style.position = 'absolute';
+    card.style.top = 'calc(var(--nav-h) + 90px)';
+    card.style.left = '50%';
+    card.style.transform = 'translateX(-50%)';
+    card.style.zIndex = '20';
+    card.style.padding = '14px 18px';
     card.style.display = 'flex';
     card.style.alignItems = 'center';
-    card.style.justifyContent = 'space-between';
-    card.innerHTML = '<span style="opacity:.9;">New contracts (recent blocks)</span><strong id="deploy-count">—</strong>';
-    ticker.insertAdjacentElement('afterend', card);
+    card.style.gap = '12px';
+    card.style.boxShadow = '0 0 24px rgba(0, 200, 255, 0.18)';
+    card.innerHTML = '<i class="fas fa-microchip" style="color:#00c6ff"></i><span style="opacity:.9;">New contracts (last 5 blocks)</span><strong id="deploy-count">—</strong><button id="set-toncenter-key" class="btn" style="padding:6px 10px; font-size:12px;">API Key</button>';
+    document.body.appendChild(card);
 
     var apiBase = 'https://toncenter.com/api/v2';
-    var apiKey = window.TONCENTER_API_KEY || '';
+    var apiKey = window.TONCENTER_API_KEY || localStorage.getItem('TONCENTER_API_KEY') || '';
+
+    var keyBtn = document.getElementById('set-toncenter-key');
+    if (keyBtn) {
+      keyBtn.addEventListener('click', function(){
+        var v = prompt('Enter Toncenter API key (kept in this browser only):', apiKey || '');
+        if (v != null) {
+          apiKey = v.trim();
+          try { localStorage.setItem('TONCENTER_API_KEY', apiKey); } catch(e) {}
+          updateDeployCount();
+        }
+      });
+    }
 
     function qs(params) {
       var s = Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
@@ -48,7 +64,10 @@
     function containsStateInit(obj) {
       try {
         var txt = JSON.stringify(obj);
-        return /state_init/i.test(txt);
+        // Heuristic markers for deploy
+        if (/state_init/i.test(txt)) return true;
+        if (/deploy/i.test(txt)) return true;
+        return false;
       } catch(e) { return false; }
     }
 
@@ -83,7 +102,7 @@
         if (el) el.textContent = String(total);
       } catch (e) {
         var el2 = document.getElementById('deploy-count');
-        if (el2) el2.textContent = 'API limit';
+        if (el2) el2.textContent = 'Set API key';
       }
     }
 
