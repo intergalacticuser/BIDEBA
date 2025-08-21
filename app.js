@@ -12,6 +12,86 @@
   } catch (e) {}
 })();
 
+// Index page: Live counter of newly deployed contracts via Toncenter (approximate)
+(function () {
+  try {
+    var isIndex = (location.pathname || '').split('/').pop() === '' || (location.pathname || '').split('/').pop() === 'index.html';
+    if (!isIndex) return;
+
+    var ticker = document.getElementById('ticker-container');
+    if (!ticker) return;
+
+    // Create card under ticker
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'deploy-stats-card';
+    card.style.margin = '10px auto 0';
+    card.style.maxWidth = '1000px';
+    card.style.padding = '12px 16px';
+    card.style.display = 'flex';
+    card.style.alignItems = 'center';
+    card.style.justifyContent = 'space-between';
+    card.innerHTML = '<span style="opacity:.9;">New contracts (recent blocks)</span><strong id="deploy-count">—</strong>';
+    ticker.insertAdjacentElement('afterend', card);
+
+    var apiBase = 'https://toncenter.com/api/v2';
+    var apiKey = window.TONCENTER_API_KEY || '';
+
+    function qs(params) {
+      var s = Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+      if (apiKey) s += (s ? '&' : '') + 'api_key=' + encodeURIComponent(apiKey);
+      return s;
+    }
+
+    function fetchJson(url) { return fetch(url).then(function(r){ return r.json(); }); }
+
+    function containsStateInit(obj) {
+      try {
+        var txt = JSON.stringify(obj);
+        return /state_init/i.test(txt);
+      } catch(e) { return false; }
+    }
+
+    function countDeploysInTxList(txs) {
+      var c = 0;
+      for (var i=0;i<txs.length;i++) {
+        var t = txs[i];
+        if (!t) continue;
+        if (containsStateInit(t)) c++;
+      }
+      return c;
+    }
+
+    async function updateDeployCount() {
+      try {
+        var info = await fetchJson(apiBase + '/getMasterchainInfo' + (apiKey?('?api_key='+encodeURIComponent(apiKey)):'') );
+        if (!info || !info.ok || !info.result || !info.result.last) throw new Error('bad masterchain info');
+        var last = info.result.last;
+        var blocksToScan = 5;
+        var total = 0;
+        for (var i=0;i<blocksToScan;i++) {
+          var seq = last.seqno - i;
+          var url = apiBase + '/getBlockTransactions?' + qs({ workchain: last.workchain, shard: last.shard, seqno: seq, count: 1024 });
+          try {
+            var txs = await fetchJson(url);
+            if (txs && txs.ok && txs.result && Array.isArray(txs.result.transactions)) {
+              total += countDeploysInTxList(txs.result.transactions);
+            }
+          } catch(e) { /* ignore individual block errors */ }
+        }
+        var el = document.getElementById('deploy-count');
+        if (el) el.textContent = String(total);
+      } catch (e) {
+        var el2 = document.getElementById('deploy-count');
+        if (el2) el2.textContent = 'API limit';
+      }
+    }
+
+    updateDeployCount();
+    setInterval(updateDeployCount, 60000);
+  } catch (e) {}
+})();
+
 // Mark lazy iframes as loaded when content finishes loading
 (function () {
   try {
