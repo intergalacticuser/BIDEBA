@@ -30,8 +30,9 @@
     var page = (location.pathname || '').split('/').pop();
     var isIndex = page === '' || page === 'index.html';
     if (!isIndex) return;
+    if (document.getElementById('contracts-widget')) return; // use embedded widget if present
 
-    // Floating high-tech card above canvas
+    // Floating high-tech card above canvas (legacy fallback)
     var card = document.createElement('div');
     card.className = 'card';
     card.id = 'deploy-stats-card';
@@ -153,6 +154,7 @@
       copyBtn.id = 'copy-contract';
       copyBtn.textContent = 'Copy address';
       copyBtn.style.marginTop = '10px';
+      copyBtn.style.marginBottom = '20px';
       contract.insertAdjacentElement('afterend', copyBtn);
       copyBtn.addEventListener('click', function () {
         try {
