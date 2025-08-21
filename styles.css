@@ -109,16 +109,16 @@ iframe[loading="lazy"].loaded {
   text-align: center;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  box-shadow: 0 0 24px rgba(0, 200, 255, 0.12);
-  background: rgba(0,0,0,0.35);
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
   overflow: hidden;
 }
 
 #ticker-container iframe {
-  border-radius: 12px;
+  border: none !important;
+  background: transparent !important;
 }
 
 /* Buttons */
