@@ -679,6 +679,7 @@
           
           // Фиксированные цены (в реальном приложении будут получены из API)
           let bdbPriceInUSD = 0.000012;
+          try { window.__BDB_PRICE_USD__ = bdbPriceInUSD; } catch (e) {}
           let tonPriceInUSD = 5.23;
           let bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
           

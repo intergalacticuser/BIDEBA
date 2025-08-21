@@ -98,6 +98,7 @@
         transition: all 0.3s ease;
       }
 
+      #magazine-container { overflow: hidden; }
       #magazine-container iframe {
         position: absolute;
         top: 0; /* attach to top */
@@ -105,7 +106,7 @@
         width: 100%;
         height: 100%;
         border: none;
-        transform: scale(0.92); /* sides and bottom visible, top covered */
+        transform: scale(0.92) translateY(10px); /* sides visible, cover top and bottom */
         transform-origin: center top;
         transition: transform 0.3s ease;
         background: transparent;
@@ -184,7 +185,7 @@
     <canvas id="background-canvas"></canvas>
     
     <!-- Telegram floating button (restore) placed over RSS area -->
-    <a id="logo-link" href="https://t.me/cwc_network" target="_blank" aria-label="Telegram channel" style="position:absolute; top: calc(var(--nav-h) + 12px); left: 72px; z-index: 20;">
+    <a id="logo-link" href="https://t.me/cwc_network" target="_blank" aria-label="Telegram channel" style="position:absolute; top: calc(var(--nav-h) + 12px); left: 86px; z-index: 20;">
       <img src="https://github.com/intergalacticuser/BIDEBA/blob/4370b9ff2f68a70dbef987324ee0990ad9d870ca/image_0Beg3SIa_1724276448994_512.png?raw=true" alt="Telegram">
     </a>
 

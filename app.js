@@ -84,5 +84,29 @@
     }
     fetchTONPrice();
     setInterval(fetchTONPrice, 30000);
+
+    // Insert BDB price card (below TON price), sourcing price from main page script defaults
+    if (document.getElementById('ton-price-card')) {
+      var bdbCard = document.createElement('div');
+      bdbCard.className = 'card';
+      bdbCard.id = 'bdb-price-card';
+      bdbCard.style.marginTop = '12px';
+      bdbCard.style.padding = '16px';
+      bdbCard.style.display = 'flex';
+      bdbCard.style.alignItems = 'center';
+      bdbCard.style.justifyContent = 'space-between';
+      bdbCard.innerHTML = '<span style="opacity:.9;">BDB Price (USD)</span><strong id="bdb-usd-price">$0.000012</strong>';
+      document.getElementById('ton-price-card').insertAdjacentElement('afterend', bdbCard);
+
+      // Try to read BDB price from opener (if navigated from index) or fallback constant
+      var bdbPrice = 0.000012;
+      try {
+        if (window.opener && window.opener.__BDB_PRICE_USD__) {
+          bdbPrice = Number(window.opener.__BDB_PRICE_USD__);
+        }
+      } catch (e) {}
+      var bdbEl = document.getElementById('bdb-usd-price');
+      if (bdbEl) bdbEl.textContent = '$' + bdbPrice.toFixed(6);
+    }
   } catch (e) {}
 })();
