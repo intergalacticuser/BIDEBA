@@ -24,117 +24,14 @@
   } catch (e) {}
 })();
 
-// Index page: Live counter of newly deployed contracts via Toncenter
+// Index page: disable contracts widget (explicitly turned off)
 (function () {
   try {
     var page = (location.pathname || '').split('/').pop();
     var isIndex = page === '' || page === 'index.html';
     if (!isIndex) return;
-    if (document.getElementById('contracts-widget')) return; // use embedded widget if present
-
-    // Floating high-tech card above canvas (legacy fallback)
-    var card = document.createElement('div');
-    card.className = 'card';
-    card.id = 'deploy-stats-card';
-    card.style.position = 'fixed';
-    card.style.top = 'calc(var(--nav-h) + 90px)';
-    card.style.left = '50%';
-    card.style.transform = 'translateX(-50%)';
-    card.style.zIndex = '2000';
-    card.style.padding = '14px 18px';
-    card.style.display = 'flex';
-    card.style.alignItems = 'center';
-    card.style.gap = '12px';
-    card.style.boxShadow = '0 0 24px rgba(0, 200, 255, 0.18)';
-    card.innerHTML = '<i class="fas fa-microchip" style="color:#00c6ff"></i>' +
-      '<span style="opacity:.9;">New contracts (last 5)</span>' +
-      '<strong id="deploy-count">—</strong>' +
-      '<div class="actions"><button id="refresh-contracts" class="btn" style="padding:6px 10px; font-size:12px;">Refresh</button>' +
-      '<button id="set-toncenter-key" class="btn" style="padding:6px 10px; font-size:12px;">API Key</button></div>';
-    document.body.appendChild(card);
-
-    var apiBase = 'https://toncenter.com/api/v2';
-    var apiKey = window.TONCENTER_API_KEY || localStorage.getItem('TONCENTER_API_KEY') || 'bc8d3e2b68f76c5af4626adc6280d6e983e843791eaec3903508bdc32fb9195e';
-
-    var keyBtn = document.getElementById('set-toncenter-key');
-    if (keyBtn) {
-      keyBtn.addEventListener('click', function(){
-        var v = prompt('Enter Toncenter API key (kept in this browser only):', apiKey || '');
-        if (v != null) {
-          apiKey = v.trim();
-          try { localStorage.setItem('TONCENTER_API_KEY', apiKey); } catch(e) {}
-          updateDeployCount(true);
-        }
-      });
-    }
-    var refreshBtn = document.getElementById('refresh-contracts');
-    if (refreshBtn) refreshBtn.addEventListener('click', function(){ updateDeployCount(true); });
-
-    function qs(params) {
-      var s = Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
-      if (apiKey) s += (s ? '&' : '') + 'api_key=' + encodeURIComponent(apiKey);
-      return s;
-    }
-
-    function fetchJson(url) {
-      return fetch(url).then(function(r){ return r.json(); }).catch(function(){
-        return fetch('https://r.jina.ai/http/' + url.replace(/^https?:\/\//,''))
-          .then(function(r){ return r.json(); });
-      });
-    }
-
-    async function updateDeployCount(force) {
-      try {
-        var MAIN_ADDRESS = 'Ef8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAU';
-        var txUrl = apiBase + '/getTransactions?' + qs({ address: MAIN_ADDRESS, limit: 30 });
-        var data = await fetchJson(txUrl);
-        if (!data || !data.ok || !Array.isArray(data.result)) throw new Error('tx api error');
-
-        var addresses = data.result.map(function(tx){ return tx && tx.out_msgs && tx.out_msgs[0] && tx.out_msgs[0].destination; }).filter(Boolean);
-        var seen = {};
-        var results = [];
-        for (var i=0;i<addresses.length;i++) {
-          var addr = addresses[i];
-          if (seen[addr]) continue; seen[addr] = true;
-          try {
-            var info = await fetchJson(apiBase + '/getAddressInformation?' + qs({ address: addr }));
-            if (info && info.ok && info.result && info.result.code && parseInt(info.result.balance||'0',10) > 0) {
-              results.push({ address: addr, balance: (parseFloat(info.result.balance)/1e9).toFixed(4) });
-            }
-          } catch(e) {}
-          if (results.length >= 5) break;
-        }
-
-        var el = document.getElementById('deploy-count');
-        if (el) el.textContent = String(results.length);
-
-        var list = document.getElementById('deploy-list');
-        if (!list) {
-          list = document.createElement('div');
-          list.id = 'deploy-list';
-          list.style.fontSize = '12px';
-          list.style.opacity = '0.95';
-          list.style.marginTop = '8px';
-          list.style.width = '100%';
-          card.appendChild(list);
-        }
-        var rows = results.map(function(it, idx){
-          var link = 'https://tonviewer.com/' + it.address;
-          return '<div style="display:flex; gap:10px; justify-content:space-between; border-top:1px solid rgba(0,200,255,0.15); padding-top:6px; margin-top:6px;">'
-                 +'<span>#'+(idx+1)+'</span>'
-                 +'<a href="'+link+'" target="_blank" style="color:#00c6ff; text-decoration:none;">'+it.address+'</a>'
-                 +'<span>'+it.balance+' TON</span>'
-                 +'</div>';
-        }).join('');
-        list.innerHTML = rows || '<div style="opacity:.7">No recent data</div>';
-      } catch (e) {
-        var el2 = document.getElementById('deploy-count');
-        if (el2) el2.textContent = 'Error';
-      }
-    }
-
-    updateDeployCount();
-    setInterval(updateDeployCount, 60000);
+    // Widget disabled by request
+    return;
   } catch (e) {}
 })();
 
@@ -192,7 +89,6 @@
 
     async function fetchTONPrice() {
       try {
-        // Try TonAPI first
         var r1 = await fetch('https://tonapi.io/v2/rates?tokens=ton&currencies=usd');
         var d1 = await r1.json();
         var v1 = d1 && d1.rates && (d1.rates.TON || d1.rates.ton) && ((d1.rates.TON||d1.rates.ton).prices || (d1.rates.TON||d1.rates.ton).PRICES);
@@ -203,7 +99,6 @@
         }
       } catch (e) {}
       try {
-        // Fallback to CoinGecko
         var r2 = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         var d2 = await r2.json();
         var usd2 = d2 && d2['the-open-network'] && d2['the-open-network'].usd;
