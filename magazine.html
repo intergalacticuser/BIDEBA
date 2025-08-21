@@ -92,7 +92,7 @@
       #magazine-container {
         position: relative;
         width: 100%;
-        height: 100vh;
+        height: calc(100vh - var(--nav-h));
         z-index: 5;
         overflow: hidden;
         transition: all 0.3s ease;
@@ -106,8 +106,8 @@
         width: 100%;
         height: 100%;
         border: none;
-        transform: scale(0.92) translateY(10px); /* sides visible, cover top and bottom */
-        transform-origin: center top;
+        transform: scaleX(0.92); /* show background on sides only */
+        transform-origin: center center;
         transition: transform 0.3s ease;
         background: transparent;
       }
@@ -149,22 +149,10 @@
       }
 
       /* Прокрутка для контейнера */
-      #magazine-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      #magazine-container::-webkit-scrollbar-track {
-        background: rgba(0, 20, 40, 0.5);
-      }
-
-      #magazine-container::-webkit-scrollbar-thumb {
-        background: rgba(0, 198, 255, 0.5);
-        border-radius: 4px;
-      }
-
-      #magazine-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 198, 255, 0.7);
-      }
+      #magazine-container::-webkit-scrollbar { width: 8px; }
+      #magazine-container::-webkit-scrollbar-track { background: rgba(0, 20, 40, 0.5); }
+      #magazine-container::-webkit-scrollbar-thumb { background: rgba(0, 198, 255, 0.5); border-radius: 4px; }
+      #magazine-container::-webkit-scrollbar-thumb:hover { background: rgba(0, 198, 255, 0.7); }
     </style>
     <script defer src="app.js"></script>
   </head>
@@ -184,12 +172,10 @@
     <!-- Background Canvas -->
     <canvas id="background-canvas"></canvas>
     
-    <!-- Telegram floating button (restore) placed over RSS area -->
-    <a id="logo-link" href="https://t.me/cwc_network" target="_blank" aria-label="Telegram channel" style="position:absolute; top: calc(var(--nav-h) + 12px); left: 100px; z-index: 20; transform: translateX(-120%); transition: transform 0.3s ease;">
+    <!-- Telegram floating button over RSS area with slide-in/out -->
+    <a id="logo-link" href="https://t.me/cwc_network" target="_blank" aria-label="Telegram channel" style="position:absolute; top: calc(var(--nav-h) + 12px); left: 100px; z-index: 20; transform: translateX(-120%); transition: transform 0.25s ease; will-change: transform;">
       <img src="https://github.com/intergalacticuser/BIDEBA/blob/4370b9ff2f68a70dbef987324ee0990ad9d870ca/image_0Beg3SIa_1724276448994_512.png?raw=true" alt="Telegram">
     </a>
-
-    
 
     <!-- Magazine Container -->
     <div id="magazine-container">
@@ -217,7 +203,6 @@
           return;
         }
 
-        // Показываем индикатор загрузки
         loadingOverlay.classList.add('show');
 
         function resizeCanvas() {
@@ -236,35 +221,16 @@
           iframe.style.transform = `scale(${currentScale}) translate(${offsetX}px, ${offsetY}px)`;
         }
 
-        function zoomIn() {
-          if (currentScale < 3) {
-            currentScale += 0.1;
-            updateTransform();
-          }
-        }
-
-        function zoomOut() {
-          if (currentScale > 0.5) {
-            currentScale -= 0.1;
-            updateTransform();
-          }
-        }
-
-        function resetZoom() {
-          currentScale = 1;
-          offsetX = 0;
-          offsetY = 0;
-          updateTransform();
-        }
+        function zoomIn() { if (currentScale < 3) { currentScale += 0.1; updateTransform(); } }
+        function zoomOut() { if (currentScale > 0.5) { currentScale -= 0.1; updateTransform(); } }
+        function resetZoom() { currentScale = 1; offsetX = 0; offsetY = 0; updateTransform(); }
 
         let hideTimer;
         function showTelegram() {
           const tgl = document.getElementById('logo-link');
           if (tgl) tgl.style.transform = 'translateX(0)';
           clearTimeout(hideTimer);
-          hideTimer = setTimeout(() => {
-            if (tgl) tgl.style.transform = 'translateX(-120%)';
-          }, 2000);
+          hideTimer = setTimeout(() => { if (tgl) tgl.style.transform = 'translateX(-120%)'; }, 2000);
         }
 
         container.addEventListener('wheel', (e) => {
@@ -276,17 +242,11 @@
           const mouseY = e.clientY - rect.top;
 
           const oldScale = currentScale;
-
-          if (e.deltaY < 0) {
-            zoomIn();
-          } else {
-            zoomOut();
-          }
+          if (e.deltaY < 0) { zoomIn(); } else { zoomOut(); }
 
           const scaleRatio = currentScale / oldScale;
           offsetX = mouseX - (mouseX - offsetX) * scaleRatio;
           offsetY = mouseY - (mouseY - offsetY) * scaleRatio;
-
           updateTransform();
         });
 
@@ -316,12 +276,13 @@
           }
         });
 
-        window.addEventListener('mouseup', () => {
-          isDragging = false;
-          iframe.style.cursor = 'default';
-        });
-
+        window.addEventListener('mouseup', () => { isDragging = false; iframe.style.cursor = 'default'; });
         container.addEventListener('dblclick', resetZoom);
+
+        // Reveal icon on general movement/scroll, hide after 2s idle
+        container.addEventListener('mousemove', () => showTelegram());
+        container.addEventListener('touchstart', () => showTelegram(), { passive: true });
+        container.addEventListener('touchmove', () => showTelegram(), { passive: true });
 
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
@@ -332,9 +293,7 @@
         let pulseFactor = 1;
         let pulseDirection = 1;
 
-        for (let i = 0; i < columns; i++) {
-          drops[i] = { y: 1, trail: [] };
-        }
+        for (let i = 0; i < columns; i++) { drops[i] = { y: 1, trail: [] }; }
 
         let speedState = 0;
         const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
@@ -344,9 +303,7 @@
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.font = `${fontSize}px Arial`;
           pulseFactor += pulseDirection * 0.05;
-          if (pulseFactor >= 1.5 || pulseFactor <= 0.5) {
-            pulseDirection *= -1;
-          }
+          if (pulseFactor >= 1.5 || pulseFactor <= 0.5) { pulseDirection *= -1; }
           for (let i = 0; i < drops.length; i++) {
             const text = letters[Math.floor(Math.random() * letters.length)];
             const x = i * fontSize * 0.7;
@@ -360,9 +317,7 @@
             ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`;
             ctx.fillText(text, x, y);
             drops[i].trail.push({ x, y, alpha: 1 });
-            while (drops[i].trail.length > trailLength) {
-              drops[i].trail.shift();
-            }
+            while (drops[i].trail.length > trailLength) { drops[i].trail.shift(); }
             drops[i].trail.forEach((point, index) => {
               const alpha = 0.4 - (index / trailLength);
               ctx.globalAlpha = alpha;
@@ -370,26 +325,16 @@
               ctx.fillText(text, point.x, point.y);
             });
             ctx.globalAlpha = 1;
-            if (y > canvas.height || Math.random() > 0.97) {
-              drops[i].y = 0;
-              drops[i].trail = [];
-            }
+            if (y > canvas.height || Math.random() > 0.97) { drops[i].y = 0; drops[i].trail = []; }
             drops[i].y += speedLevels[speedState];
           }
           ctx.shadowBlur = 0;
           ctx.shadowColor = 'transparent';
         }
 
-        canvas.addEventListener('mousedown', () => {
-          speedState = (speedState + 1) % speedLevels.length;
-          console.log(`Current speed state: ${speedState}`);
-        });
-
+        canvas.addEventListener('mousedown', () => { speedState = (speedState + 1) % speedLevels.length; });
         setInterval(drawFallingLetters, 30);
-
-        setTimeout(() => {
-          loadingOverlay.classList.remove('show');
-        }, 1000);
+        setTimeout(() => { loadingOverlay.classList.remove('show'); }, 1000);
       });
     </script>
      <!-- GDPR + Crypto Disclaimer Consent Banner with Checkbox -->
@@ -422,9 +367,7 @@
     const acceptBtn = document.getElementById('accept-cookies');
     const investmentCheckbox = document.getElementById('investment-checkbox');
 
-    if (!localStorage.getItem('cookiesAccepted')) {
-      cookieBanner.style.display = 'block';
-    }
+    if (!localStorage.getItem('cookiesAccepted')) { cookieBanner.style.display = 'block'; }
 
     investmentCheckbox.addEventListener('change', function () {
       acceptBtn.disabled = !this.checked;
@@ -433,16 +376,12 @@
 
     acceptBtn.addEventListener('click', function () {
       if (!investmentCheckbox.checked) return;
-
       localStorage.setItem('cookiesAccepted', 'true');
       cookieBanner.style.display = 'none';
-
-      // ✅ Enable analytics or Tag Manager after consent
       const gtmScript = document.createElement('script');
       gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N8MXJRMB';
       gtmScript.async = true;
       document.head.appendChild(gtmScript);
-
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ 'event': 'cookie_consent_given' });
     });
