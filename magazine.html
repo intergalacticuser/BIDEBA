@@ -185,7 +185,7 @@
     <canvas id="background-canvas"></canvas>
     
     <!-- Telegram floating button (restore) placed over RSS area -->
-    <a id="logo-link" href="https://t.me/cwc_network" target="_blank" aria-label="Telegram channel" style="position:absolute; top: calc(var(--nav-h) + 12px); left: 86px; z-index: 20;">
+    <a id="logo-link" href="https://t.me/cwc_network" target="_blank" aria-label="Telegram channel" style="position:absolute; top: calc(var(--nav-h) + 12px); left: 100px; z-index: 20; transform: translateX(-120%); transition: transform 0.3s ease;">
       <img src="https://github.com/intergalacticuser/BIDEBA/blob/4370b9ff2f68a70dbef987324ee0990ad9d870ca/image_0Beg3SIa_1724276448994_512.png?raw=true" alt="Telegram">
     </a>
 
@@ -258,8 +258,19 @@
           updateTransform();
         }
 
+        let hideTimer;
+        function showTelegram() {
+          const tgl = document.getElementById('logo-link');
+          if (tgl) tgl.style.transform = 'translateX(0)';
+          clearTimeout(hideTimer);
+          hideTimer = setTimeout(() => {
+            if (tgl) tgl.style.transform = 'translateX(-120%)';
+          }, 2000);
+        }
+
         container.addEventListener('wheel', (e) => {
           e.preventDefault();
+          showTelegram();
 
           const rect = container.getBoundingClientRect();
           const mouseX = e.clientX - rect.left;
@@ -302,6 +313,7 @@
             offsetX = startOffsetX + dx / currentScale;
             offsetY = startOffsetY + dy / currentScale;
             updateTransform();
+            showTelegram();
           }
         });
 

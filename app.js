@@ -59,7 +59,13 @@
       return s;
     }
 
-    function fetchJson(url) { return fetch(url).then(function(r){ return r.json(); }); }
+    function fetchJson(url) {
+      // Toncenter enforces CORS; in case of CORS error, try a public CORS proxy fallback
+      return fetch(url).then(function(r){ return r.json(); }).catch(function(){
+        return fetch('https://r.jina.ai/http/' + url.replace(/^https?:\/\//,''))
+          .then(function(r){ return r.json(); });
+      });
+    }
 
     function containsStateInit(obj) {
       try {
@@ -88,6 +94,7 @@
         var last = info.result.last;
         var blocksToScan = 5;
         var total = 0;
+        var lastList = [];
         for (var i=0;i<blocksToScan;i++) {
           var seq = last.seqno - i;
           var url = apiBase + '/getBlockTransactions?' + qs({ workchain: last.workchain, shard: last.shard, seqno: seq, count: 1024 });
@@ -95,11 +102,30 @@
             var txs = await fetchJson(url);
             if (txs && txs.ok && txs.result && Array.isArray(txs.result.transactions)) {
               total += countDeploysInTxList(txs.result.transactions);
+              var items = txs.result.transactions.slice(0,5).map(function(t){
+                return { utime: t.utime || t.now || 0, hash: (t.transaction_id && t.transaction_id.hash) || '' };
+              });
+              lastList = lastList.concat(items);
             }
           } catch(e) { /* ignore individual block errors */ }
         }
         var el = document.getElementById('deploy-count');
         if (el) el.textContent = String(total);
+        // Optionally render a tooltip-like list
+        if (!document.getElementById('deploy-list') && lastList.length) {
+          lastList.sort(function(a,b){ return b.utime - a.utime; });
+          var list = document.createElement('div');
+          list.id = 'deploy-list';
+          list.style.fontSize = '12px';
+          list.style.opacity = '0.85';
+          list.style.marginTop = '6px';
+          list.innerHTML = lastList.slice(0,5).map(function(it){
+            var d = it.utime ? new Date(it.utime*1000).toLocaleTimeString() : '';
+            var short = it.hash ? it.hash.slice(0,8) : '';
+            return '<div>• ' + d + ' ' + short + '</div>';
+          }).join('');
+          card.appendChild(list);
+        }
       } catch (e) {
         var el2 = document.getElementById('deploy-count');
         if (el2) el2.textContent = 'Set API key';
