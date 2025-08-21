@@ -99,16 +99,22 @@
             canvas.height = Math.floor(h * dpr);
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.scale(dpr, dpr);
+            canvas._cssW = w; // store CSS pixel size
+            canvas._cssH = h;
           }
           resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+
           const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
           const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
-          const columns = Math.floor(canvas.width / (fontSize * 0.7));
+          const columns = () => Math.floor((canvas._cssW || window.innerWidth) / (fontSize * 0.7));
           const drops = []; const trailLength = 3; const glowIntensity = 10; let pulseFactor = 1; let pulseDirection = 1;
-          for (let i = 0; i < columns; i++) { drops[i] = { y: 1, trail: [] }; }
+          for (let i = 0; i < (columns()); i++) { drops[i] = { y: 1, trail: [] }; }
+
           let speedState = 0; const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
           function drawFallingLetters() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const drawW = canvas._cssW || (canvas.width / (window.devicePixelRatio||1));
+            const drawH = canvas._cssH || (canvas.height / (window.devicePixelRatio||1));
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; ctx.fillRect(0, 0, drawW, drawH);
             ctx.font = `${fontSize}px Arial`; pulseFactor += pulseDirection * 0.05; if (pulseFactor >= 1.5 || pulseFactor <= 0.5) { pulseDirection *= -1; }
             for (let i = 0; i < drops.length; i++) {
               const text = letters[Math.floor(Math.random() * letters.length)];
@@ -118,7 +124,7 @@
               ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`; ctx.fillText(text, x, y);
               drops[i].trail.push({ x, y, alpha: 1 }); while (drops[i].trail.length > trailLength) { drops[i].trail.shift(); }
               drops[i].trail.forEach((point, index) => { const alpha = 0.4 - (index / trailLength); ctx.globalAlpha = alpha; ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${alpha})`; ctx.fillText(text, point.x, point.y); });
-              ctx.globalAlpha = 1; if (y > canvas.height || Math.random() > 0.97) { drops[i].y = 0; drops[i].trail = []; }
+              ctx.globalAlpha = 1; if (y > drawH || Math.random() > 0.97) { drops[i].y = 0; drops[i].trail = []; }
               drops[i].y += speedLevels[speedState];
             }
             ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
