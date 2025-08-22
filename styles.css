@@ -141,7 +141,7 @@ iframe[loading="lazy"].loaded {
   background: #000;
   overflow: hidden;
   position: relative;
-  height: 60px !important;
+  height: 69px !important;
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -176,8 +176,8 @@ iframe[loading="lazy"].loaded {
 
 /* Adjust canvas area to account for navbar + ticker */
 #falling-letters {
-  top: calc(var(--nav-h) + 8px + 60px + 10px) !important;
-  height: calc(100% - (var(--nav-h) + 8px + 60px + 20px)) !important;
+  top: calc(var(--nav-h) + 8px + 69px + 10px) !important;
+  height: calc(100% - (var(--nav-h) + 8px + 69px + 20px)) !important;
 }
 
 /* Reposition floating purchase button to bottom-right, above content */
