@@ -33,14 +33,15 @@
         overflow: hidden;
       }
       .hidden { opacity: 0; pointer-events: none; }
+      /* Match index.html canvas placement exactly */
       #falling-letters {
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        height: calc(100% - 80px);
-        display: block;
-        z-index: 5;
+        position: absolute !important;
+        top: 70px !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: calc(100% - 80px) !important;
+        display: block !important;
+        z-index: 5 !important;
       }
       .info-content { position: relative; margin: 90px auto 80px; z-index: 15; text-align: center; line-height: 2.0; width: 82%; max-width: 1000px; background: rgba(0, 0, 0, 0.8); padding: 64px 64px 72px; border-radius: 16px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
       .info-content h1 { font-size: 3rem; margin-bottom: 36px; }
@@ -97,45 +98,59 @@
           if (!canvas) return;
           const ctx = canvas.getContext('2d'); if (!ctx) return;
           function resizeCanvas() {
-            const dpr = window.devicePixelRatio || 1;
-            const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 56;
-            const w = window.innerWidth;
-            const h = window.innerHeight - navH;
-            canvas.style.width = w + 'px';
-            canvas.style.height = h + 'px';
-            canvas.width = Math.floor(w * dpr);
-            canvas.height = Math.floor(h * dpr);
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.scale(dpr, dpr);
-            canvas._cssW = w; // store CSS pixel size
-            canvas._cssH = h;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - 80;
           }
-          resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+          resizeCanvas();
+          window.addEventListener('resize', resizeCanvas);
 
           const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
           const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
-          const columns = () => Math.floor((canvas._cssW || window.innerWidth) / (fontSize * 0.7));
-          const drops = []; const trailLength = 3; const glowIntensity = 10; let pulseFactor = 1; let pulseDirection = 1;
-          for (let i = 0; i < (columns()); i++) { drops[i] = { y: 1, trail: [] }; }
+          const columns = Math.floor(canvas.width / (fontSize * 0.7));
+          const drops = [];
+          const trailLength = 3;
+          const glowIntensity = 10;
+          let pulseFactor = 1;
+          let pulseDirection = 1;
 
-          let speedState = 0; const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
+          for (let i = 0; i < columns; i++) {
+            drops[i] = { y: 1, trail: [] };
+          }
+
+          let speedState = 0;
+          const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
           function drawFallingLetters() {
-            const drawW = canvas._cssW || (canvas.width / (window.devicePixelRatio||1));
-            const drawH = canvas._cssH || (canvas.height / (window.devicePixelRatio||1));
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; ctx.fillRect(0, 0, drawW, drawH);
-            ctx.font = `${fontSize}px Arial`; pulseFactor += pulseDirection * 0.05; if (pulseFactor >= 1.5 || pulseFactor <= 0.5) { pulseDirection *= -1; }
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = `${fontSize}px Arial`;
+            pulseFactor += pulseDirection * 0.05;
+            if (pulseFactor >= 1.5 || pulseFactor <= 0.5) { pulseDirection *= -1; }
             for (let i = 0; i < drops.length; i++) {
               const text = letters[Math.floor(Math.random() * letters.length)];
-              const x = i * fontSize * 0.7; const y = drops[i].y * fontSize;
-              const h = Math.random() * 360; const s = 70 + Math.random() * 30; const l = 50 + Math.random() * 20;
-              const glowSize = glowIntensity * pulseFactor; ctx.shadowBlur = glowSize; ctx.shadowColor = `hsl(${h}, ${s}%, ${l}%)`;
-              ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`; ctx.fillText(text, x, y);
-              drops[i].trail.push({ x, y, alpha: 1 }); while (drops[i].trail.length > trailLength) { drops[i].trail.shift(); }
-              drops[i].trail.forEach((point, index) => { const alpha = 0.4 - (index / trailLength); ctx.globalAlpha = alpha; ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${alpha})`; ctx.fillText(text, point.x, point.y); });
-              ctx.globalAlpha = 1; if (y > drawH || Math.random() > 0.97) { drops[i].y = 0; drops[i].trail = []; }
+              const x = i * fontSize * 0.7;
+              const y = drops[i].y * fontSize;
+              const h = Math.random() * 360;
+              const s = 70 + Math.random() * 30;
+              const l = 50 + Math.random() * 20;
+              const glowSize = glowIntensity * pulseFactor;
+              ctx.shadowBlur = glowSize;
+              ctx.shadowColor = `hsl(${h}, ${s}%, ${l}%)`;
+              ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`;
+              ctx.fillText(text, x, y);
+              drops[i].trail.push({ x, y, alpha: 1 });
+              while (drops[i].trail.length > trailLength) { drops[i].trail.shift(); }
+              drops[i].trail.forEach((point, index) => {
+                const alpha = 0.4 - (index / trailLength);
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${alpha})`;
+                ctx.fillText(text, point.x, point.y);
+              });
+              ctx.globalAlpha = 1;
+              if (y > canvas.height || Math.random() > 0.97) { drops[i].y = 0; drops[i].trail = []; }
               drops[i].y += speedLevels[speedState];
             }
-            ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowColor = 'transparent';
           }
           canvas.addEventListener('mousedown', () => { speedState = (speedState + 1) % speedLevels.length; });
           setInterval(drawFallingLetters, 30);

@@ -97,14 +97,16 @@
 
       /* Magazine Container */
       #magazine-container {
-        position: relative;
-        width: 100%;
-        height: calc(100vh - var(--nav-h));
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        bottom: 0;
         z-index: 5;
         overflow: hidden;
         transition: all 0.3s ease;
       }
-
+      
       #magazine-container { overflow: hidden; }
       #magazine-container iframe {
         position: absolute;
