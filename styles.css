@@ -1,0 +1,201 @@
+/* Base high-tech theme */
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --accent: #00c6ff;
+  --accent-2: #7c4dff;
+  --card-bg: rgba(10, 10, 20, 0.85);
+  --border: rgba(0, 200, 255, 0.3);
+  --shadow: 0 0 24px rgba(0, 200, 255, 0.15);
+  --nav-h: 56px;
+}
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+html { overflow-x: hidden; }
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar a.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--fg);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar a.brand img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-links a {
+  color: var(--fg);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background: rgba(0, 200, 255, 0.12);
+  color: var(--accent);
+}
+
+/* Utilities */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+/* Floating stats card specific tweaks */
+#deploy-stats-card {
+  backdrop-filter: blur(8px);
+  cursor: default;
+}
+
+#deploy-stats-card.expanded {
+  padding: 16px 18px;
+}
+
+#deploy-stats-card .actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+#deploy-list {
+  margin-top: 10px;
+}
+}
+
+/* Spacing helper to offset fixed navbar */
+.nav-spacer { height: 56px; }
+
+/* Iframe enhancements */
+iframe[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+iframe[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Normalize embedded RSS iframes to blend with dark theme */
+#ticker-container,
+#magazine-container iframe {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Ticker container: no visible border, heavy overscan to hide any white */
+#ticker-container {
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+  position: relative;
+  height: 69px !important;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#ticker-container iframe {
+  display: block;
+  border: none !important;
+  background: transparent !important;
+  filter: none !important;
+  width: calc(100% + 240px);
+  height: calc(100% + 160px);
+  margin: -80px -120px; /* cover edges on all sides */
+}
+
+/* Buttons */
+.btn {
+  background: linear-gradient(135deg, var(--accent), #0072ff);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 198, 255, 0.4); }
+.btn:active { transform: translateY(0); }
+
+/* Place the top ticker below fixed navbar on pages that use it */
+#ticker-container { top: calc(var(--nav-h) + 8px) !important; }
+
+/* Adjust canvas area to account for navbar + ticker */
+#falling-letters {
+  top: calc(var(--nav-h) + 8px + 69px + 10px) !important;
+  height: calc(100% - (var(--nav-h) + 8px + 69px + 20px)) !important;
+}
+
+/* Reposition floating purchase button to bottom-right, above content */
+.purchase-button {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  z-index: 900 !important;
+  box-shadow: 0 0 12px rgba(0, 198, 255, 0.5) !important;
+}
+
+.purchase-button:focus { outline: none; }
+
+@media (max-width: 768px) {
+  .purchase-button { bottom: 18px !important; right: 18px !important; width: 60px; height: 60px; font-size: 22px; }
+  .nav-links { max-width: 75vw; }
+}
+

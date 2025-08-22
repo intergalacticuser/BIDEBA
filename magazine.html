@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-     <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-N8MXJRMB');</script>
-<!-- End Google Tag Manager -->
+     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Magazine</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
-    <link rel="shortcut icon" type="image/x-icon" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8MXJRMB');</script>
+    <!-- End Google Tag Manager -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://rss.app">
+    <link rel="preconnect" href="https://rss.app" crossorigin>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="canonical" href="https://bideba.com/magazine">
+    <meta name="description" content="Лента новостей BIDEBA (BDB) из Telegram и RSS.">
+    <meta property="og:title" content="BIDEBA (BDB) — Magazine">
+    <meta property="og:description" content="Новости и апдейты сообщества BIDEBA.">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:url" content="https://bideba.com/magazine">
+    <meta name="theme-color" content="#00c6ff">
     <style>
       body {
         margin: 0;
@@ -86,24 +97,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
       /* Magazine Container */
       #magazine-container {
-        position: relative;
-        width: 100%;
-        height: 100vh;
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        bottom: 0;
         z-index: 5;
         overflow: hidden;
         transition: all 0.3s ease;
       }
-
+      
+      #magazine-container { overflow: hidden; }
       #magazine-container iframe {
         position: absolute;
-        top: -20px;
-        left: -20px;
-        width: calc(100% + 40px);
-        height: calc(100% + 40px);
+        top: 0; /* attach to top */
+        left: 0;
+        width: 100%;
+        height: 100%;
         border: none;
-        transform: scale(1);
+        transform: scaleX(0.92); /* show background on sides only */
         transform-origin: center center;
         transition: transform 0.3s ease;
+        background: transparent;
       }
 
       /* Loading indicator */
@@ -143,40 +158,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       }
 
       /* Прокрутка для контейнера */
-      #magazine-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      #magazine-container::-webkit-scrollbar-track {
-        background: rgba(0, 20, 40, 0.5);
-      }
-
-      #magazine-container::-webkit-scrollbar-thumb {
-        background: rgba(0, 198, 255, 0.5);
-        border-radius: 4px;
-      }
-
-      #magazine-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 198, 255, 0.7);
-      }
+      #magazine-container::-webkit-scrollbar { width: 8px; }
+      #magazine-container::-webkit-scrollbar-track { background: rgba(0, 20, 40, 0.5); }
+      #magazine-container::-webkit-scrollbar-thumb { background: rgba(0, 198, 255, 0.5); border-radius: 4px; }
+      #magazine-container::-webkit-scrollbar-thumb:hover { background: rgba(0, 198, 255, 0.7); }
     </style>
+    <script defer src="app.js"></script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8MXJRMB"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8MXJRMB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <nav class="navbar">
+      <a class="brand" href="index.html"><img src="logo.png" alt="BDB">BIDEBA</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="magazine.html">Magazine</a>
+        <a href="info.html">Info</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="Terms.html">Terms</a>
+      </div>
+    </nav>
+    <div class="nav-spacer"></div>
+    
     <!-- Background Canvas -->
     <canvas id="background-canvas"></canvas>
-
-    <!-- Back Button -->
-    <div id="back-button">
-      <button onclick="location.href='index.html'">Back</button>
-    </div>
-
-    <!-- Круглое изображение -->
-    <a id="logo-link" href="https://t.me/cwc_network" target="_blank">
-      <img src="https://github.com/intergalacticuser/BIDEBA/blob/4370b9ff2f68a70dbef987324ee0990ad9d870ca/image_0Beg3SIa_1724276448994_512.png?raw=true" alt="Crypto World Logo">
+    
+    <!-- Telegram floating button over RSS area with slide-in/out -->
+    <a id="logo-link" href="https://t.me/cwc_network" target="_blank" aria-label="Telegram channel" style="position:absolute; top: calc(var(--nav-h) + 12px); left: 100px; z-index: 20; transform: translateX(-120%); transition: transform 0.25s ease; will-change: transform;">
+      <img src="https://github.com/intergalacticuser/BIDEBA/blob/4370b9ff2f68a70dbef987324ee0990ad9d870ca/image_0Beg3SIa_1724276448994_512.png?raw=true" alt="Telegram">
     </a>
 
     <!-- Magazine Container -->
@@ -245,25 +255,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           updateTransform();
         }
 
+        let hideTimer;
+        function showTelegram() {
+          const tgl = document.getElementById('logo-link');
+          if (tgl) tgl.style.transform = 'translateX(0)';
+          clearTimeout(hideTimer);
+          hideTimer = setTimeout(() => { if (tgl) tgl.style.transform = 'translateX(-120%)'; }, 2000);
+        }
+
         container.addEventListener('wheel', (e) => {
           e.preventDefault();
+          showTelegram();
 
           const rect = container.getBoundingClientRect();
           const mouseX = e.clientX - rect.left;
           const mouseY = e.clientY - rect.top;
 
           const oldScale = currentScale;
-
-          if (e.deltaY < 0) {
-            zoomIn();
-          } else {
-            zoomOut();
-          }
+          if (e.deltaY < 0) { zoomIn(); } else { zoomOut(); }
 
           const scaleRatio = currentScale / oldScale;
           offsetX = mouseX - (mouseX - offsetX) * scaleRatio;
           offsetY = mouseY - (mouseY - offsetY) * scaleRatio;
-
           updateTransform();
         });
 
@@ -289,15 +302,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             offsetX = startOffsetX + dx / currentScale;
             offsetY = startOffsetY + dy / currentScale;
             updateTransform();
+            showTelegram();
           }
         });
 
-        window.addEventListener('mouseup', () => {
-          isDragging = false;
-          iframe.style.cursor = 'default';
-        });
-
+        window.addEventListener('mouseup', () => { isDragging = false; iframe.style.cursor = 'default'; });
         container.addEventListener('dblclick', resetZoom);
+
+        // Reveal icon on general movement/scroll, hide after 2s idle
+        container.addEventListener('mousemove', () => showTelegram());
+        container.addEventListener('touchstart', () => showTelegram(), { passive: true });
+        container.addEventListener('touchmove', () => showTelegram(), { passive: true });
 
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
@@ -358,7 +373,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         canvas.addEventListener('mousedown', () => {
           speedState = (speedState + 1) % speedLevels.length;
-          console.log(`Current speed state: ${speedState}`);
         });
 
         setInterval(drawFallingLetters, 30);
@@ -412,12 +426,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       localStorage.setItem('cookiesAccepted', 'true');
       cookieBanner.style.display = 'none';
-
-      // ✅ Enable analytics or Tag Manager after consent
-      const gtmScript = document.createElement('script');
-      gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N8MXJRMB';
-      gtmScript.async = true;
-      document.head.appendChild(gtmScript);
 
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ 'event': 'cookie_consent_given' });

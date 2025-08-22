@@ -1,20 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-N8MXJRMB');</script>
-<!-- End Google Tag Manager -->
+  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Official</title>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8MXJRMB');</script>
+    <!-- End Google Tag Manager -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://rss.app">
+    <link rel="preconnect" href="https://rss.app" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
-    <link rel="shortcut icon" type="image/x-icon" href="https://raw.githubusercontent.com/intergalacticuser/BIDEBA/1b5c9a1d37ab0c97b5522b30750821cb2e7dcd21/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="canonical" href="https://bideba.com/">
+    <meta name="description" content="BIDEBA (BDB) — мем-койн на TON. Юмор, фановая комьюнити и быстрые транзакции.">
+    <meta property="og:title" content="BIDEBA (BDB) — Official">
+    <meta property="og:description" content="Мем-койн на TON. Развлечение и обучение. Не инвестиция.">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:url" content="https://bideba.com/">
+    <meta name="theme-color" content="#00c6ff">
     <style>
       body {
         margin: 0;
@@ -485,23 +495,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         scroll-behavior: smooth;
       }
       
-      /* Стили для полосы прокрутки всей страницы */
-      ::-webkit-scrollbar {
-        width: 10px;
-      }
       
-      ::-webkit-scrollbar-track {
-        background: rgba(0, 10, 20, 0.5);
-      }
-      
-      ::-webkit-scrollbar-thumb {
-        background: rgba(0, 150, 255, 0.5);
-        border-radius: 5px;
-      }
-      
-      ::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 150, 255, 0.7);
-      }
       
       /* Добавляем контент для возможности прокрутки */
       .content-spacer {
@@ -534,19 +528,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
       }
     </style>
+    <script defer src="app.js"></script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8MXJRMB"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8MXJRMB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <nav class="navbar">
+      <a class="brand" href="index.html"><img src="logo.png" alt="BDB">BIDEBA</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="magazine.html">Magazine</a>
+        <a href="info.html">Info</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="Terms.html">Terms</a>
+      </div>
+    </nav>
+    <div class="nav-spacer"></div>
+    
     <!-- Home Page -->
-    <div id="menu">
-      <button onclick="location.href='magazine.html'">Magazine</button>
-    </div>
-    <div id="info-button">
-      <button onclick="location.href='info.html'">Info</button>
-    </div>
+    
     <div id="ticker-container">
       <iframe 
         width="100%" 
@@ -557,6 +558,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         allowfullscreen
       ></iframe>
     </div>
+
     <div class="welcome-container" id="welcome-text">BIDEBA Coin Official <br> @BDBcoin</div>
     <canvas id="falling-letters"></canvas>
 
@@ -663,8 +665,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p>For more information, visit our <a href="https://bdbcoin.com" target="_blank">official website</a>.</p>
     </div>
 
-    <!-- Добавляем элемент для возможности прокрутки -->
-    <div class="content-spacer"></div>
+    
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -688,6 +689,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           
           // Фиксированные цены (в реальном приложении будут получены из API)
           let bdbPriceInUSD = 0.000012;
+          try { window.__BDB_PRICE_USD__ = bdbPriceInUSD; } catch (e) {}
           let tonPriceInUSD = 5.23;
           let bdbPriceInTON = bdbPriceInUSD / tonPriceInUSD;
           
