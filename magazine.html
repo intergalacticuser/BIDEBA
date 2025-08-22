@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDB Coin Magazine</title>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-N8MXJRMB');</script>
+    <!-- End Google Tag Manager -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://rss.app">
     <link rel="preconnect" href="https://rss.app" crossorigin>
@@ -157,6 +164,9 @@
     <script defer src="app.js"></script>
   </head>
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8MXJRMB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <nav class="navbar">
       <a class="brand" href="index.html"><img src="logo.png" alt="BDB">BIDEBA</a>
       <div class="nav-links">
@@ -167,7 +177,7 @@
         <a href="Terms.html">Terms</a>
       </div>
     </nav>
-    
+    <div class="nav-spacer"></div>
     
     <!-- Background Canvas -->
     <canvas id="background-canvas"></canvas>
@@ -178,7 +188,7 @@
     </a>
 
     <!-- Magazine Container -->
-    <div id="magazine-container" style="position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0;">
+    <div id="magazine-container">
       <div class="loading-overlay" id="loading-overlay">
         <div class="loading-spinner"></div>
       </div>
@@ -203,6 +213,7 @@
           return;
         }
 
+        // Показываем индикатор загрузки
         loadingOverlay.classList.add('show');
 
         function resizeCanvas() {
@@ -221,9 +232,26 @@
           iframe.style.transform = `scale(${currentScale}) translate(${offsetX}px, ${offsetY}px)`;
         }
 
-        function zoomIn() { if (currentScale < 3) { currentScale += 0.1; updateTransform(); } }
-        function zoomOut() { if (currentScale > 0.5) { currentScale -= 0.1; updateTransform(); } }
-        function resetZoom() { currentScale = 1; offsetX = 0; offsetY = 0; updateTransform(); }
+        function zoomIn() {
+          if (currentScale < 3) {
+            currentScale += 0.1;
+            updateTransform();
+          }
+        }
+
+        function zoomOut() {
+          if (currentScale > 0.5) {
+            currentScale -= 0.1;
+            updateTransform();
+          }
+        }
+
+        function resetZoom() {
+          currentScale = 1;
+          offsetX = 0;
+          offsetY = 0;
+          updateTransform();
+        }
 
         let hideTimer;
         function showTelegram() {
@@ -293,7 +321,9 @@
         let pulseFactor = 1;
         let pulseDirection = 1;
 
-        for (let i = 0; i < columns; i++) { drops[i] = { y: 1, trail: [] }; }
+        for (let i = 0; i < columns; i++) {
+          drops[i] = { y: 1, trail: [] };
+        }
 
         let speedState = 0;
         const speedLevels = [0.6, 0.8, 1.0, 1.2, 0.4];
@@ -303,7 +333,9 @@
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.font = `${fontSize}px Arial`;
           pulseFactor += pulseDirection * 0.05;
-          if (pulseFactor >= 1.5 || pulseFactor <= 0.5) { pulseDirection *= -1; }
+          if (pulseFactor >= 1.5 || pulseFactor <= 0.5) {
+            pulseDirection *= -1;
+          }
           for (let i = 0; i < drops.length; i++) {
             const text = letters[Math.floor(Math.random() * letters.length)];
             const x = i * fontSize * 0.7;
@@ -317,7 +349,9 @@
             ctx.fillStyle = `hsl(${h}, ${s}%, ${l - 10}%)`;
             ctx.fillText(text, x, y);
             drops[i].trail.push({ x, y, alpha: 1 });
-            while (drops[i].trail.length > trailLength) { drops[i].trail.shift(); }
+            while (drops[i].trail.length > trailLength) {
+              drops[i].trail.shift();
+            }
             drops[i].trail.forEach((point, index) => {
               const alpha = 0.4 - (index / trailLength);
               ctx.globalAlpha = alpha;
@@ -325,16 +359,25 @@
               ctx.fillText(text, point.x, point.y);
             });
             ctx.globalAlpha = 1;
-            if (y > canvas.height || Math.random() > 0.97) { drops[i].y = 0; drops[i].trail = []; }
+            if (y > canvas.height || Math.random() > 0.97) {
+              drops[i].y = 0;
+              drops[i].trail = [];
+            }
             drops[i].y += speedLevels[speedState];
           }
           ctx.shadowBlur = 0;
           ctx.shadowColor = 'transparent';
         }
 
-        canvas.addEventListener('mousedown', () => { speedState = (speedState + 1) % speedLevels.length; });
+        canvas.addEventListener('mousedown', () => {
+          speedState = (speedState + 1) % speedLevels.length;
+        });
+
         setInterval(drawFallingLetters, 30);
-        setTimeout(() => { loadingOverlay.classList.remove('show'); }, 1000);
+
+        setTimeout(() => {
+          loadingOverlay.classList.remove('show');
+        }, 1000);
       });
     </script>
      <!-- GDPR + Crypto Disclaimer Consent Banner with Checkbox -->
@@ -367,7 +410,9 @@
     const acceptBtn = document.getElementById('accept-cookies');
     const investmentCheckbox = document.getElementById('investment-checkbox');
 
-    if (!localStorage.getItem('cookiesAccepted')) { cookieBanner.style.display = 'block'; }
+    if (!localStorage.getItem('cookiesAccepted')) {
+      cookieBanner.style.display = 'block';
+    }
 
     investmentCheckbox.addEventListener('change', function () {
       acceptBtn.disabled = !this.checked;
@@ -376,12 +421,10 @@
 
     acceptBtn.addEventListener('click', function () {
       if (!investmentCheckbox.checked) return;
+
       localStorage.setItem('cookiesAccepted', 'true');
       cookieBanner.style.display = 'none';
-      const gtmScript = document.createElement('script');
-      gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N8MXJRMB';
-      gtmScript.async = true;
-      document.head.appendChild(gtmScript);
+
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ 'event': 'cookie_consent_given' });
     });
