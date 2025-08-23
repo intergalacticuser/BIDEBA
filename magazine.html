@@ -176,7 +176,7 @@
         <a href="index.html">Home</a>
         <a href="magazine.html">Magazine</a>
         <a href="info.html">Info</a>
-        <a href="privacy-policy.html">Privacy</a>
+        <a href="Privacy.html">Privacy</a>
         <a href="Terms.html">Terms</a>
         <a href="https://x.com/bdbcoin?s=21" target="_blank" rel="noopener" aria-label="X (Twitter)" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
         <a href="https://t.me/BIDEBAcoin" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
@@ -266,6 +266,7 @@
           hideTimer = setTimeout(() => { if (tgl) tgl.style.transform = 'translateX(-120%)'; }, 2000);
         }
 
+        // Wheel zoom still on container
         container.addEventListener('wheel', (e) => {
           e.preventDefault();
           showTelegram();
@@ -305,17 +306,18 @@
             offsetX = startOffsetX + dx / currentScale;
             offsetY = startOffsetY + dy / currentScale;
             updateTransform();
-            showTelegram();
           }
         });
 
         window.addEventListener('mouseup', () => { isDragging = false; iframe.style.cursor = 'default'; });
         container.addEventListener('dblclick', resetZoom);
 
-        // Reveal icon on general movement/scroll, hide after 2s idle
-        container.addEventListener('mousemove', () => showTelegram());
-        container.addEventListener('touchstart', () => showTelegram(), { passive: true });
-        container.addEventListener('touchmove', () => showTelegram(), { passive: true });
+        // Reveal/hide icon on global user movement (works on mobile and desktop)
+        const revealEvents = ['pointermove', 'touchstart', 'touchmove', 'scroll'];
+        revealEvents.forEach((evt) => {
+          window.addEventListener(evt, () => showTelegram(), { passive: true });
+          document.addEventListener(evt, () => showTelegram(), { passive: true });
+        });
 
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const fontSize = Math.max(12, Math.min(25, window.innerWidth / 40));
