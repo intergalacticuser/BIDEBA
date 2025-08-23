@@ -79,8 +79,9 @@ html { overflow-x: hidden; }
 
 /* Force social icons to be visible on dark navbar */
 .nav-links i.fa-x-twitter,
+.nav-links i.fa-twitter,
 .nav-links i.fa-telegram {
-  color: #fff;
+  color: #fff !important;
 }
 
 /* Utilities */
