@@ -77,6 +77,13 @@ html { overflow-x: hidden; }
   color: var(--accent);
 }
 
+/* Force social icons to be visible on dark navbar */
+.nav-links i.fa-x-twitter,
+.nav-links i.fa-twitter,
+.nav-links i.fa-telegram {
+  color: #fff !important;
+}
+
 /* Utilities */
 .container {
   width: 100%;
