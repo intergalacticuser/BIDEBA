@@ -261,29 +261,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     acceptBtn.addEventListener('click', function () {
       if (!investmentCheckbox.checked) return;
 
-      // 1. Сохраняем согласие
+      // Сохраняем согласие
       localStorage.setItem('cookiesAccepted', 'true');
       cookieBanner.style.display = 'none';
 
-      // 2. Отправляем consent в dataLayer
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        'event': 'consent_given',
+      // Включаем аналитику
+      gtag('consent', 'update', {
         'ad_storage': 'granted',
         'ad_user_data': 'granted',
         'ad_personalization': 'granted',
         'analytics_storage': 'granted'
       });
 
-      // 3. ЗАГРУЖАЕМ Google Tag Manager
-      (function(w,d,s,l,i){
-        w[l]=w[l]||[];
-        w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
-        var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
-        j.async=true;
-        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-        f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-N8MXJRMB'); // ← Замени, если нужно
+      // Опционально: событие в dataLayer
+      window.dataLayer.push({ 'event': 'cookie_consent_given' });
     });
   })();
 </script>
