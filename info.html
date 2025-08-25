@@ -246,26 +246,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     const acceptBtn = document.getElementById('accept-cookies');
     const investmentCheckbox = document.getElementById('investment-checkbox');
 
-    // Показываем баннер, если нет согласия
     if (!localStorage.getItem('cookiesAccepted')) {
       cookieBanner.style.display = 'block';
     }
 
-    // Активируем кнопку только при чекбоксе
     investmentCheckbox.addEventListener('change', function () {
       acceptBtn.disabled = !this.checked;
       acceptBtn.style.cursor = this.checked ? 'pointer' : 'not-allowed';
     });
 
-    // Обработка согласия
     acceptBtn.addEventListener('click', function () {
       if (!investmentCheckbox.checked) return;
 
-      // Сохраняем согласие
       localStorage.setItem('cookiesAccepted', 'true');
       cookieBanner.style.display = 'none';
 
-      // Включаем аналитику
+      // Разрешаем аналитику
       gtag('consent', 'update', {
         'ad_storage': 'granted',
         'ad_user_data': 'granted',
@@ -273,7 +269,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'analytics_storage': 'granted'
       });
 
-      // Опционально: событие в dataLayer
+      // Событие для GTM
       window.dataLayer.push({ 'event': 'cookie_consent_given' });
     });
   })();
