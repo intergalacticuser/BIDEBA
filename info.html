@@ -227,15 +227,18 @@
     const acceptBtn = document.getElementById('accept-cookies');
     const investmentCheckbox = document.getElementById('investment-checkbox');
 
+    // Показываем баннер, если нет согласия
     if (!localStorage.getItem('cookiesAccepted')) {
       cookieBanner.style.display = 'block';
     }
 
+    // Активируем кнопку только при чекбоксе
     investmentCheckbox.addEventListener('change', function () {
       acceptBtn.disabled = !this.checked;
       acceptBtn.style.cursor = this.checked ? 'pointer' : 'not-allowed';
     });
 
+    // Обработка согласия
     acceptBtn.addEventListener('click', function () {
       if (!investmentCheckbox.checked) return;
 
@@ -243,7 +246,7 @@
       localStorage.setItem('cookiesAccepted', 'true');
       cookieBanner.style.display = 'none';
 
-      // 2. Правильно отправляем consent через dataLayer (до загрузки GTM!)
+      // 2. Отправляем consent в dataLayer
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         'event': 'consent_given',
@@ -253,7 +256,7 @@
         'analytics_storage': 'granted'
       });
 
-      // 3. Загружаем GTM (теперь он увидит все предыдущие события)
+      // 3. ЗАГРУЖАЕМ Google Tag Manager
       (function(w,d,s,l,i){
         w[l]=w[l]||[];
         w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
@@ -261,7 +264,7 @@
         j.async=true;
         j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
         f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-N8MXJRMB');
+      })(window,document,'script','dataLayer','GTM-N8MXJRMB'); // ← Замени, если нужно
     });
   })();
 </script>
